@@ -70,6 +70,8 @@ public class SQLiteManager {
 
 
     /**
+     * Closes SQLite database connection
+     *
      * @return if disconnected or not
      */
     public static boolean disconnectAndCloseDB() {
@@ -89,23 +91,26 @@ public class SQLiteManager {
         return disconnected;
     }
 
-    public static boolean addTableToDB(String tableName, String[] columnNames) {
+    /**
+     * If the table does not exist, add a new table with the provided name and columns
+     * Columns include column names, constraints and checks
+     *
+     * @param tableName name of table to be added
+     * @param columns   columns of table including name, constraints and checks
+     * @return
+     */
+    public static boolean addTableToDB(String tableName, String[] columns) {
         boolean result = false;
         try {
             connection.setAutoCommit(true);
             // Add column names by concatenation since they cannot be passed to the prepared statement
-            StringBuilder tableQuery = new StringBuilder(Constants.SQL_CREATE_TABLE + tableName);
-            // Populate values
-            tableQuery.append("(");
-            for (String columnName : columnNames) {
-                tableQuery.append(columnName);
-                tableQuery.append(",");
-            }
-            tableQuery.delete(tableQuery.length() - 1, tableQuery.length());
-            tableQuery.append(")");
+            String tableQuery = Constants.SQL_CREATE_TABLE
+                    + tableName
+                    + Utils.argumentsDynamicConstructor(columns);
             // Prepared statement for new table
-            preparedStatement = connection.prepareStatement(tableQuery.toString());
+            preparedStatement = connection.prepareStatement(tableQuery);
             preparedStatement.executeUpdate();
+            // Close prepared statement
             preparedStatement.close();
             result = true;
             System.out.println(Constants.MESSAGE_TABLE_ADDED);

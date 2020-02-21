@@ -3,13 +3,13 @@ package com.company;
 public class Utils {
 
     /**
-     * Dynamically builds "values(?, ... )" string
+     * Dynamically builds "values(?, ... )" string of placeholders
      * needed for an SQL prepared statement based on number of values
      *
      * @param size number of values characters
      * @return "values(?, ... )" string with proper number of values
      */
-    public static String valuesDynamicConstructor(int size) {
+    public static String valuesPlaceholderDynamicConstructor(int size) {
 
         // Use string builder for higher performance when appending
         StringBuilder valuesBuilder = new StringBuilder("(");
@@ -24,5 +24,27 @@ public class Utils {
         String values = valuesBuilder.toString();
         values += ")";
         return values;
+    }
+
+    /**
+     * Dynamically builds (args1,arg2, ...) string of arguments
+     * Needed for SQL table columns for new tables
+     *
+     * @param args list of string arguments
+     * @return (arg1, arg2, ... ) string with all arguments
+     */
+    public static String argumentsDynamicConstructor(String[] args) {
+
+        // Use string builder for higher performance when appending
+        StringBuilder arguments = new StringBuilder("(");
+        // Append values
+        for (String arg : args) {
+            arguments.append(arg);
+            arguments.append(",");
+        }
+        // Remove last comma
+        arguments.delete(arguments.length() - 1, arguments.length());
+        arguments.append(")");
+        return arguments.toString();
     }
 }
