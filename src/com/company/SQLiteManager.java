@@ -1,10 +1,7 @@
 package com.company;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 /**
@@ -18,6 +15,12 @@ public class SQLiteManager {
      * Database connection object
      */
     private static Connection connection = null;
+
+    /**
+     * Prepared statement object for various SQL statements
+     * Usually more recommended than regular statement
+     */
+    private static PreparedStatement preparedStatement = null;
 
     /**
      * Opens sqlite database or starts a new database with provided name if it does not already exist
@@ -84,5 +87,32 @@ public class SQLiteManager {
             System.out.println(e.getMessage());
         }
         return disconnected;
+    }
+
+    public static boolean addTableToDB(String tableName, String[] columnNames) {
+        boolean result = false;
+        try {
+            connection.setAutoCommit(true);
+            // Add column names by concatenation since they cannot be passed to the prepared statement
+            StringBuilder tableQuery = new StringBuilder(Constants.SQL_CREATE_TABLE + tableName);
+            // Populate values
+            tableQuery.append("(");
+            for (String columnName : columnNames) {
+                tableQuery.append(columnName);
+                tableQuery.append(",");
+            }
+            tableQuery.delete(tableQuery.length() - 1, tableQuery.length());
+            tableQuery.append(")");
+            // Prepared statement for new table
+            preparedStatement = connection.prepareStatement(tableQuery.toString());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            result = true;
+            System.out.println(Constants.MESSAGE_TABLE_ADDED);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
