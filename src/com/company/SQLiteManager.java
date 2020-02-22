@@ -121,4 +121,46 @@ public class SQLiteManager {
         }
         return result;
     }
+
+    public static boolean insertDataInTable(String tableName, Object[] values) {
+        boolean result = false;
+        try {
+            connection.setAutoCommit(true);
+            // Construct sql statement : INSERT INTO <tablename> (?, ... )
+            String insertQuery = Constants.SQL_INSERT_INTO_TABLE
+                    + tableName
+                    + Constants.SQL_VALUES
+                    + Utils.valuesPlaceholderDynamicConstructor(values.length);
+            // Prepared statement for new table
+            preparedStatement = connection.prepareStatement(insertQuery);
+            int i = 1;
+            // Bind values dynamically based on type to '?' placeholders
+            for (Object value : values) {
+                if (value instanceof Date) {
+                    preparedStatement.setTimestamp(i++, new Timestamp(((Date) value).getTime()));
+                } else if (value instanceof Integer) {
+                    preparedStatement.setInt(i++, (Integer) value);
+                } else if (value instanceof Long) {
+                    preparedStatement.setLong(i++, (Long) value);
+                } else if (value instanceof Double) {
+                    preparedStatement.setDouble(i++, (Double) value);
+                } else {
+                    preparedStatement.setString(i++, (String) value);
+                }
+            }
+            preparedStatement.executeUpdate();
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            if (rs.next()) {
+                long id = rs.getLong(1);
+                System.out.println("Inserted ID -" + id); // display inserted record
+            }
+            // Close prepared statement
+            preparedStatement.close();
+            result = true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

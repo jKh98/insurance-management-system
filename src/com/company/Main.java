@@ -1,5 +1,10 @@
 package com.company;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Map.entry;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -9,7 +14,18 @@ public class Main {
         setUpTables();
         // 3. Add corresponding table triggers if they do not exist
         setUpTableTriggers();
-        // 4. Close database
+        // 4. Insert table values
+        InsertToTable.addTravelPolicy(Map.ofEntries(
+                entry(Constants.TABLE_COLUMN_EFFECTIVE, System.currentTimeMillis() / 1000L),
+                entry(Constants.TABLE_COLUMN_EXPIRY, System.currentTimeMillis() / 1000L + 100),
+                entry(Constants.TABLE_COLUMN_PREMIUM, 0.0),
+                entry(Constants.TABLE_COLUMN_IS_VALID, 1),
+                entry(Constants.TABLE_COLUMN_POLICY_TYPE, "travel"),
+                entry(Constants.TABLE_COLUMN_DEPARTURE, "Beirut"),
+                entry(Constants.TABLE_COLUMN_DESTINATION, "Paris"),
+                entry(Constants.TABLE_COLUMN_FAMILY, 1)
+        ));
+        // 5. Close database
         SQLiteManager.disconnectAndCloseDB();
     }
 
@@ -19,50 +35,15 @@ public class Main {
     private static void setUpTables() {
 
         // Policy table that stores all policies regardless what type
-        SQLiteManager.addTableToDB("policy", new String[]
-                {"id INTEGER PRIMARY KEY AUTOINCREMENT"
-                        , "effective BIGINT NOT NULL"
-                        , "expiry BIGINT NOT NULL CHECK (expiry > effective)"
-                        , "premium DECIMAL NOT NULL"
-                        , "is_valid INTEGER NOT NULL CHECK (is_valid = 0 OR is_valid = 1)"
-                        , "policy_type TEXT NOT NULL CHECK (" +
-                        "(LOWER(policy_type) = 'travel' AND ((expiry - effective)/86400 <= 30)) " +
-                        "OR LOWER(policy_type) = 'motor' " +
-                        "OR LOWER(policy_type) = 'medical')"
-                        , "policy_no INT GENERATED ALWAYS AS (id+1) STORED"
-
-                });
+        SQLiteManager.addTableToDB(Constants.TABLE_NAME_POLICY, Constants.TABLE_COLUMN_VALUES_POLICY);
         // Table that stores data related to travel policies
-        SQLiteManager.addTableToDB("travel", new String[]
-                {"id INTEGER PRIMARY KEY AUTOINCREMENT"
-                        , "policy_no TEXT NOT NULL UNIQUE REFERENCES policy(policy_no)"
-                        , "departure TEXT NOT NULL"
-                        , "destination TEXT NOT NULL"
-                        , "family INTEGER NOT NULL CHECK (family = 0 OR family = 1)"
-                });
+        SQLiteManager.addTableToDB(Constants.TABLE_NAME_TRAVEL, Constants.TABLE_COLUMN_VALUES_TRAVEL);
         // Table that stores data related to motor policies
-        SQLiteManager.addTableToDB("motor", new String[]
-                {"id INTEGER PRIMARY KEY AUTOINCREMENT"
-                        , "policy_no TEXT NOT NULL UNIQUE REFERENCES policy(policy_no)"
-                        , "vehicle_price DECIMAL NOT NULL"
-                });
+        SQLiteManager.addTableToDB(Constants.TABLE_NAME_MOTOR, Constants.TABLE_COLUMN_VALUES_MOTOR);
         // Claims table
-        SQLiteManager.addTableToDB("claim", new String[]
-                {"id INTEGER PRIMARY KEY AUTOINCREMENT"
-                        , "policy_no TEXT NOT NULL REFERENCES policy(policy_no)"
-                        , "incurred_date BIGINT NOT NULL"
-                        , "claimed_amount DECIMAL NOT NULL"
-                });
+        SQLiteManager.addTableToDB(Constants.TABLE_NAME_CLAIM, Constants.TABLE_COLUMN_VALUES_CLAIM);
         // Beneficiaries table
-        SQLiteManager.addTableToDB("beneficiaries", new String[]
-                {"id INTEGER PRIMARY KEY AUTOINCREMENT"
-                        , "name TEXT NOT NULL"
-                        , "relation TEXT NOT NULL CHECK (LOWER(relation) = 'self' OR LOWER(relation) = 'spouse'" +
-                        " OR LOWER(relation) = 'son' OR LOWER(relation) = 'daughter')"
-                        , "gender TEXT NOT NULL CHECK (LOWER(gender) = 'male' OR LOWER(gender) = 'female')"
-                        , "birth_date BIGINT NOT NULL"
-                        , "policy_no TEXT NOT NULL REFERENCES policy(policy_no)"
-                });
+        SQLiteManager.addTableToDB(Constants.TABLE_NAME_BENEFICIARY, Constants.TABLE_COLUMN_VALUES_BENEFICIARY);
     }
 
     public static void setUpTableTriggers() {
