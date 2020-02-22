@@ -7,5 +7,5 @@ class Constants {
     public static final String MESSAGE_OPENED_DB = "Opened connection to database :";
     public static final String MESSAGE_DB_DRIVER = "Using the database driver :";
     public static final String MESSAGE_CLOSED_DB = "Closed connection to database";
-    public static final String MESSAGE_TABLE_ADDED = "New table added to database";
+    public static final String MESSAGE_TABLE_ADDED = " table added to database";
 }

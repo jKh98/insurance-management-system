@@ -18,7 +18,8 @@ public class SQLiteManager {
 
     /**
      * Prepared statement object for various SQL statements
-     * Usually more recommended than regular statement
+     * Usually more recommended than regular statement object
+     * Less prone to SQL injection attacks
      */
     private static PreparedStatement preparedStatement = null;
 
@@ -113,7 +114,7 @@ public class SQLiteManager {
             // Close prepared statement
             preparedStatement.close();
             result = true;
-            System.out.println(Constants.MESSAGE_TABLE_ADDED);
+            System.out.println(tableName + Constants.MESSAGE_TABLE_ADDED);
 
         } catch (SQLException e) {
             e.printStackTrace();

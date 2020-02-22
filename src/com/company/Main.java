@@ -7,7 +7,9 @@ public class Main {
         SQLiteManager.setUpConnectionToDB("test.db");
         // 2. Add tables if they do not exist
         setUpTables();
-        // 3. Close database
+        // 3. Add corresponding table triggers if they do not exist
+        setUpTableTriggers();
+        // 4. Close database
         SQLiteManager.disconnectAndCloseDB();
     }
 
@@ -16,8 +18,6 @@ public class Main {
      */
     private static void setUpTables() {
 
-        //CHECK (LOWER(policy_type) = 'travel' OR LOWER(policy_type) = 'motor' OR LOWER(policy_type) = 'medical')
-
         // Policy table that stores all policies regardless what type
         SQLiteManager.addTableToDB("policy", new String[]
                 {"id INTEGER PRIMARY KEY AUTOINCREMENT"
@@ -25,8 +25,11 @@ public class Main {
                         , "expiry BIGINT NOT NULL CHECK (expiry > effective)"
                         , "premium DECIMAL NOT NULL"
                         , "is_valid INTEGER NOT NULL CHECK (is_valid = 0 OR is_valid = 1)"
-                        , "policy_type TEXT NOT NULL"
-                        , "policy_no TEXT UNIQUE NOT NULL"
+                        , "policy_type TEXT NOT NULL CHECK (" +
+                        "(LOWER(policy_type) = 'travel' AND ((expiry - effective)/86400 <= 30)) " +
+                        "OR LOWER(policy_type) = 'motor' " +
+                        "OR LOWER(policy_type) = 'medical')"
+                        , "policy_no INT GENERATED ALWAYS AS (id+1) STORED"
 
                 });
         // Table that stores data related to travel policies
@@ -60,5 +63,9 @@ public class Main {
                         , "birth_date BIGINT NOT NULL"
                         , "policy_no TEXT NOT NULL REFERENCES policy(policy_no)"
                 });
+    }
+
+    public static void setUpTableTriggers() {
+
     }
 }
