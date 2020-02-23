@@ -2,8 +2,7 @@ package com.company;
 
 import java.io.File;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 
 /**
@@ -142,21 +141,9 @@ public class SQLiteManager {
                     + Utils.valuesPlaceholderDynamicConstructor(values.length);
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(insertQuery);
-            int i = 1;
-            // Bind values dynamically based on type to '?' placeholders
-            for (Object value : values) {
-                if (value instanceof Date) {
-                    preparedStatement.setTimestamp(i++, new Timestamp(((Date) value).getTime()));
-                } else if (value instanceof Integer) {
-                    preparedStatement.setInt(i++, (Integer) value);
-                } else if (value instanceof Long) {
-                    preparedStatement.setLong(i++, (Long) value);
-                } else if (value instanceof Double) {
-                    preparedStatement.setDouble(i++, (Double) value);
-                } else {
-                    preparedStatement.setString(i++, (String) value);
-                }
-            }
+            // Bind values to prepared statement
+            Utils.bindValuesToPreparedStatement(preparedStatement, values);
+            // Execute insert update
             preparedStatement.executeUpdate();
             // Get id of the row inserted
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -174,8 +161,17 @@ public class SQLiteManager {
         return result;
     }
 
-    public static ResultSet selectDataFromTable(String[] tableNames, String[] selections, String[] conditions, Object[] values) {
-        ResultSet result = null;
+    /**
+     * Selects dynamically required results from a set of tables based on a set of conditions
+     *
+     * @param tableNames names of tables to get results from
+     * @param selections names of selected columns from tables
+     * @param conditions conditions of data retrieval
+     * @param values     left hand side values of condition statements
+     * @return 2d array of query results
+     */
+    static ArrayList<Object[]> selectDataFromTable(String[] tableNames, String[] selections, String[] conditions, Object[] values) {
+        ArrayList<Object[]> result = null;
         // Check if selecting specific column or all table columns
         String selectionsString;
         if (selections == null || selections.length == 0) {
@@ -200,24 +196,14 @@ public class SQLiteManager {
             System.out.println(selectQuery.toString());
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(selectQuery.toString());
-            int i = 1;
-            // Bind values dynamically based on type to '?' placeholders
-            for (Object value : values) {
-                if (value instanceof Date) {
-                    preparedStatement.setTimestamp(i++, new Timestamp(((Date) value).getTime()));
-                } else if (value instanceof Integer) {
-                    preparedStatement.setInt(i++, (Integer) value);
-                } else if (value instanceof Long) {
-                    preparedStatement.setLong(i++, (Long) value);
-                } else if (value instanceof Double) {
-                    preparedStatement.setDouble(i++, (Double) value);
-                } else {
-                    preparedStatement.setString(i++, (String) value);
-                }
-            }
-            result = preparedStatement.executeQuery();
+            // Bind values to prepared statement
+            Utils.bindValuesToPreparedStatement(preparedStatement, values);
+            // Execute Query and get result
+            ResultSet resultSet = preparedStatement.executeQuery();
+            // Store result in 2d Array
+            result = Utils.resultSetToArray(resultSet);
             // Close result set
-//            result.close();
+            resultSet.close();
             // Close prepared statement
             preparedStatement.close();
 

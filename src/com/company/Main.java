@@ -18,7 +18,6 @@ public class Main {
         InsertToTable.addTravelPolicy(Map.ofEntries(
                 entry(Constants.TABLE_COLUMN_EFFECTIVE, System.currentTimeMillis() / 1000L),
                 entry(Constants.TABLE_COLUMN_EXPIRY, System.currentTimeMillis() / 1000L + 100),
-                entry(Constants.TABLE_COLUMN_PREMIUM, 0.0),
                 entry(Constants.TABLE_COLUMN_IS_VALID, 1),
                 entry(Constants.TABLE_COLUMN_POLICY_TYPE, "travel"),
                 entry(Constants.TABLE_COLUMN_DEPARTURE, "Beirut"),
