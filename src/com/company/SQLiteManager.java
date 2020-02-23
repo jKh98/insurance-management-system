@@ -2,6 +2,8 @@ package com.company;
 
 import java.io.File;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -107,7 +109,7 @@ public class SQLiteManager {
             // Add column names by concatenation since they cannot be passed to the prepared statement
             String tableQuery = Constants.SQL_CREATE_TABLE
                     + tableName
-                    + Utils.argumentsDynamicConstructor(columns);
+                    + Utils.argumentsDynamicConstructor(columns, true);
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(tableQuery);
             preparedStatement.executeUpdate();
@@ -122,8 +124,15 @@ public class SQLiteManager {
         return result;
     }
 
-    public static boolean insertDataInTable(String tableName, Object[] values) {
-        boolean result = false;
+    /**
+     * General dynamic insert for any table in database
+     *
+     * @param tableName name of the table to insert into
+     * @param values    insertion objects, each type will be added according to instance (String, Long etc..)
+     * @return ID of the inserted row
+     */
+    public static Long insertDataInTable(String tableName, Object[] values) {
+        long result = 0L;
         try {
             connection.setAutoCommit(true);
             // Construct sql statement : INSERT INTO <tablename> (?, ... )
@@ -149,18 +158,73 @@ public class SQLiteManager {
                 }
             }
             preparedStatement.executeUpdate();
-            ResultSet rs = preparedStatement.getGeneratedKeys();
-            if (rs.next()) {
-                long id = rs.getLong(1);
-                System.out.println("Inserted ID -" + id); // display inserted record
+            // Get id of the row inserted
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next()) {
+                result = resultSet.getLong(1);
             }
+            // Close result set
+            resultSet.close();
             // Close prepared statement
             preparedStatement.close();
-            result = true;
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return result;
+    }
+
+    public static ResultSet selectDataFromTable(String[] tableNames, String[] selections, String[] conditions, Object[] values) {
+        ResultSet result = null;
+        // Check if selecting specific column or all table columns
+        String selectionsString;
+        if (selections == null || selections.length == 0) {
+            selectionsString = Constants.SQL_ALL;
+        } else {
+            selectionsString = Utils.argumentsDynamicConstructor(selections, false);
+        }
+        try {
+            connection.setAutoCommit(true);
+            // Construct sql statement : SELECT <selection1, ...> FROM <tablename1, ...> WHERE (...)
+            StringBuilder selectQuery = new StringBuilder(Constants.SQL_SELECT
+                    + selectionsString
+                    + Constants.SQL_FROM
+                    + Utils.argumentsDynamicConstructor(tableNames, false));
+            // Check if there are any selection conditions
+            if (conditions != null && conditions.length > 0) {
+                selectQuery.append(Constants.SQL_WHERE);
+                for (String condition : conditions) {
+                    selectQuery.append(condition).append(" ");
+                }
+            }
+            System.out.println(selectQuery.toString());
+            // Prepared statement for new table
+            preparedStatement = connection.prepareStatement(selectQuery.toString());
+            int i = 1;
+            // Bind values dynamically based on type to '?' placeholders
+            for (Object value : values) {
+                if (value instanceof Date) {
+                    preparedStatement.setTimestamp(i++, new Timestamp(((Date) value).getTime()));
+                } else if (value instanceof Integer) {
+                    preparedStatement.setInt(i++, (Integer) value);
+                } else if (value instanceof Long) {
+                    preparedStatement.setLong(i++, (Long) value);
+                } else if (value instanceof Double) {
+                    preparedStatement.setDouble(i++, (Double) value);
+                } else {
+                    preparedStatement.setString(i++, (String) value);
+                }
+            }
+            result = preparedStatement.executeQuery();
+            // Close result set
+//            result.close();
+            // Close prepared statement
+            preparedStatement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return result;
     }
 }

@@ -1,6 +1,6 @@
 package com.company;
 
-public class Utils {
+class Utils {
 
     /**
      * Dynamically builds "values(?, ... )" string of placeholders
@@ -9,7 +9,7 @@ public class Utils {
      * @param size number of values characters
      * @return "values(?, ... )" string with proper number of values
      */
-    public static String valuesPlaceholderDynamicConstructor(int size) {
+    static String valuesPlaceholderDynamicConstructor(int size) {
 
         // Use string builder for higher performance when appending
         StringBuilder valuesBuilder = new StringBuilder("(");
@@ -31,12 +31,13 @@ public class Utils {
      * Needed for SQL table columns for new tables
      *
      * @param args list of string arguments
-     * @return (arg1, arg2, ... ) string with all arguments
+     * @return (arg1, arg2, ...) string with all arguments
      */
-    public static String argumentsDynamicConstructor(String[] args) {
+    static String argumentsDynamicConstructor(String[] args, boolean addParenthesis) {
 
         // Use string builder for higher performance when appending
-        StringBuilder arguments = new StringBuilder("(");
+        StringBuilder arguments = new StringBuilder();
+        if (addParenthesis) arguments.append("(");
         // Append values
         for (String arg : args) {
             arguments.append(arg);
@@ -44,7 +45,7 @@ public class Utils {
         }
         // Remove last comma
         arguments.delete(arguments.length() - 1, arguments.length());
-        arguments.append(")");
+        if (addParenthesis) arguments.append(")");
         return arguments.toString();
     }
 }

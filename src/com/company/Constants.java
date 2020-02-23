@@ -7,6 +7,10 @@ class Constants {
     static final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS ";
     static final String SQL_INSERT_INTO_TABLE = "INSERT INTO ";
     static final String SQL_VALUES = " VALUES";
+    static final String SQL_SELECT = "SELECT ";
+    static final String SQL_ALL = "*";
+    static final String SQL_FROM = " FROM ";
+    static final String SQL_WHERE = " WHERE ";
     static final String PARAM_JDBC_DB_PREFIX = "jdbc:sqlite:";
     static final String MESSAGE_OPENED_DB = "Opened connection to database :";
     static final String MESSAGE_DB_DRIVER = "Using the database driver :";
@@ -14,8 +18,8 @@ class Constants {
     static final String MESSAGE_TABLE_ADDED = " table added to database";
 
     // Database specific values
-    public static final String TABLE_COLUMN_ID = "id";
-    public static final String TABLE_AUTO_ID = TABLE_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT";
+    static final String TABLE_COLUMN_ID = "id";
+    static final String TABLE_AUTO_ID = TABLE_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT";
 
     // *************************** Parameters for policy table ***************************
     static final String TABLE_NAME_POLICY = "policy";
