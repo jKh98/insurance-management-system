@@ -123,6 +123,37 @@ public class SQLiteManager {
         return result;
     }
 
+    static boolean addTriggerToTable(String tableName, String triggerName, String[] statements) {
+        boolean result = false;
+        try {
+            connection.setAutoCommit(true);
+            //
+            StringBuilder triggerQuery = new StringBuilder(Constants.SQL_CREATE_TRIGGER
+                    + triggerName
+                    + Constants.SQL_AFTER_INSERT_ON
+                    + tableName);
+            triggerQuery.append(Constants.SQL_BEGIN);
+            for (String statement : statements) {
+                triggerQuery.append(statement);
+            }
+            triggerQuery.append(Constants.SQL_END);
+            // Prepared statement for new table
+            System.out.println(triggerQuery.toString());
+            preparedStatement = connection.prepareStatement(triggerQuery.toString());
+            preparedStatement.executeUpdate();
+            // Close prepared statement
+            preparedStatement.close();
+            result = true;
+            System.out.println(Constants.MESSAGE_TRIGGER + triggerName + Constants.MESSAGE_TRIGGER_ADDED + tableName);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    ;
+
     /**
      * General dynamic insert for any table in database
      *
@@ -171,7 +202,7 @@ public class SQLiteManager {
      * @return 2d array of query results
      */
     static ArrayList<Object[]> selectDataFromTable(String[] tableNames, String[] selections, String[] conditions, Object[] values) {
-        ArrayList<Object[]> result = null;
+        ArrayList<Object[]> result = new ArrayList<>();
         // Check if selecting specific column or all table columns
         String selectionsString;
         if (selections == null || selections.length == 0) {
@@ -193,7 +224,6 @@ public class SQLiteManager {
                     selectQuery.append(condition).append(" ");
                 }
             }
-            System.out.println(selectQuery.toString());
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(selectQuery.toString());
             // Bind values to prepared statement
@@ -211,6 +241,46 @@ public class SQLiteManager {
             e.printStackTrace();
         }
 
+        return result;
+    }
+
+    /**
+     * Deletes row/s from a table based on specified conditions
+     *
+     * @param tableName  name of table to delete from
+     * @param conditions conditions of data deletion
+     * @param values     left hand side values of condition statements
+     * @return deleted or not
+     */
+    static boolean deleteDataFromTable(String tableName, String[] conditions, Object[] values) {
+        boolean result = false;
+        try {
+            connection.setAutoCommit(true);
+            // Construct sql statement : DELETE FROM <tablename> WHERE (?, ... )
+            StringBuilder deleteQuery = new StringBuilder(
+                    Constants.SQL_DELETE_FROM_TABLE
+                            + tableName);
+            // Check if there are any selection conditions
+            if (conditions.length > 0) {
+                deleteQuery.append(Constants.SQL_WHERE);
+                for (String condition : conditions) {
+                    deleteQuery.append(condition).append(" ");
+                }
+            }
+            // Prepared statement for new table
+            preparedStatement = connection.prepareStatement(deleteQuery.toString());
+            // Bind values to prepared statement
+            Utils.bindValuesToPreparedStatement(preparedStatement, values);
+            // Execute Query and get result
+            preparedStatement.executeUpdate();
+            // Store result in 2d Array
+            result = true;
+            // Close prepared statement
+            preparedStatement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return result;
     }
 }
