@@ -56,9 +56,9 @@ public class SQLiteManager {
                 connection.createStatement().execute(Constants.PARAM_JDBC_DB_ENABLE_FK);
                 DatabaseMetaData meta = connection.getMetaData();
                 // Print driver name
-                System.out.println(Constants.MESSAGE_DB_DRIVER + meta.getDriverName());
+                Printer.printDriverName(meta.getDriverName());
                 //Print database URL
-                System.out.println(Constants.MESSAGE_OPENED_DB + meta.getURL());
+                Printer.printDBConnection(meta.getURL());
             }
 
             connected = true;
@@ -83,7 +83,7 @@ public class SQLiteManager {
             // Close database connection
             connection.close();
             // Print disconnection message
-            System.out.println(Constants.MESSAGE_CLOSED_DB);
+            Printer.printCloseDBMessage();
             // Set connection to null
             connection = null;
             disconnected = true;
@@ -111,13 +111,12 @@ public class SQLiteManager {
                     + tableName
                     + Utils.argumentsDynamicConstructor(columns, true);
             // Prepared statement for new table
-            System.out.println(tableQuery);
             preparedStatement = connection.prepareStatement(tableQuery);
             preparedStatement.executeUpdate();
             // Close prepared statement
             preparedStatement.close();
             result = true;
-            System.out.println(tableName + Constants.MESSAGE_TABLE_ADDED);
+            Printer.printTableAddedMessage(tableName);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -140,14 +139,12 @@ public class SQLiteManager {
             }
             triggerQuery.append(Constants.SQL_END);
             // Prepared statement for new table
-            System.out.println(triggerQuery);
             preparedStatement = connection.prepareStatement(triggerQuery.toString());
             preparedStatement.executeUpdate();
             // Close prepared statement
             preparedStatement.close();
             result = true;
-            System.out.println(Constants.MESSAGE_TRIGGER + triggerName + Constants.MESSAGE_TRIGGER_ADDED + tableName);
-
+            Printer.printTriggerAddedMessage(tableName,triggerName);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -56,7 +56,7 @@ class Constants {
                     "OR LOWER(" + TABLE_COLUMN_POLICY_TYPE + ") = 'medical')"
                     , TABLE_COLUMN_POLICY_NO + " TEXT UNIQUE NOT NULL GENERATED ALWAYS AS " +
                     "( STRFTIME('%Y',datetime(" + TABLE_COLUMN_EFFECTIVE + ", 'unixepoch')) || '-' || "
-                    + TABLE_COLUMN_POLICY_TYPE + " || '-' || " + TABLE_COLUMN_ID + " )"
+                    + TABLE_COLUMN_POLICY_TYPE + " || '-' || " + TABLE_COLUMN_ID + " ) STORED"
 
             };
 
@@ -126,16 +126,6 @@ class Constants {
                     , " CONSTRAINT " + TABLE_CONSTRAINT_CLAIM + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_NO + ") REFERENCES " +
                     Constants.TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
                     ") ON DELETE CASCADE"
-            };
-
-    // *************************** Parameters for travel triggers ***************************
-    static final String TRIGGER_TRAVEL_PREMIUM = "travel_premium";
-    static final String[] TRIGGER_STATEMENTS_TRAVEL_PREMIUM = new String[]
-            {"UPDATE " + TABLE_NAME_POLICY + " SET " + TABLE_COLUMN_PREMIUM +
-                    " = CASE " +
-                    "WHEN NEW." + TABLE_COLUMN_FAMILY + " = 1 THEN 10*(" + TABLE_COLUMN_EXPIRY + " - " + TABLE_COLUMN_EFFECTIVE + ")/86400 " +
-                    "WHEN NEW." + TABLE_COLUMN_FAMILY + " = 0 THEN 5*(" + TABLE_COLUMN_EXPIRY + " - " + TABLE_COLUMN_EFFECTIVE + ")/86400 " +
-                    "END WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ";",
             };
 
     // *************************** Parameters for travel triggers ***************************

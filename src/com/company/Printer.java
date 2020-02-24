@@ -10,4 +10,23 @@ class Printer {
         }
     }
 
+    public static void printDriverName(String driverName) {
+        System.out.println(Constants.MESSAGE_DB_DRIVER + driverName);
+    }
+
+    public static void printDBConnection(String url) {
+        System.out.println(Constants.MESSAGE_OPENED_DB + url);
+    }
+
+    public static void printCloseDBMessage() {
+        System.out.println(Constants.MESSAGE_CLOSED_DB);
+    }
+
+    public static void printTableAddedMessage(String tableName) {
+        System.out.println(tableName + Constants.MESSAGE_TABLE_ADDED);
+    }
+
+    public static void printTriggerAddedMessage(String tableName, String triggerName) {
+        System.out.println(Constants.MESSAGE_TRIGGER + triggerName + Constants.MESSAGE_TRIGGER_ADDED + tableName);
+    }
 }
