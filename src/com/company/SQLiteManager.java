@@ -53,6 +53,7 @@ public class SQLiteManager {
             // Try connecting to the database
             connection = DriverManager.getConnection(Constants.PARAM_JDBC_DB_PREFIX + dbPathURL + dbName);
             if (connection != null) {
+                connection.createStatement().execute(Constants.PARAM_JDBC_DB_ENABLE_FK);
                 DatabaseMetaData meta = connection.getMetaData();
                 // Print driver name
                 System.out.println(Constants.MESSAGE_DB_DRIVER + meta.getDriverName());
@@ -110,6 +111,7 @@ public class SQLiteManager {
                     + tableName
                     + Utils.argumentsDynamicConstructor(columns, true);
             // Prepared statement for new table
+            System.out.println(tableQuery);
             preparedStatement = connection.prepareStatement(tableQuery);
             preparedStatement.executeUpdate();
             // Close prepared statement
@@ -123,14 +125,14 @@ public class SQLiteManager {
         return result;
     }
 
-    static boolean addTriggerToTable(String tableName, String triggerName, String[] statements) {
+    static boolean addTriggerToTable(String tableName, String triggerName, String executeOn, String[] statements) {
         boolean result = false;
         try {
             connection.setAutoCommit(true);
             //
             StringBuilder triggerQuery = new StringBuilder(Constants.SQL_CREATE_TRIGGER
                     + triggerName
-                    + Constants.SQL_AFTER_INSERT_ON
+                    + executeOn
                     + tableName);
             triggerQuery.append(Constants.SQL_BEGIN);
             for (String statement : statements) {
@@ -138,7 +140,7 @@ public class SQLiteManager {
             }
             triggerQuery.append(Constants.SQL_END);
             // Prepared statement for new table
-            System.out.println(triggerQuery.toString());
+            System.out.println(triggerQuery);
             preparedStatement = connection.prepareStatement(triggerQuery.toString());
             preparedStatement.executeUpdate();
             // Close prepared statement

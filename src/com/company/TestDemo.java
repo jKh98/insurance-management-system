@@ -62,8 +62,11 @@ public class TestDemo {
 
     private static void setUpTableTriggers() {
         // Travel premium trigger that computes travel policy premium
-        SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_TRAVEL, Constants.TRIGGER_TRAVEL_PREMIUM, Constants.TRIGGER_STATEMENTS_TRAVEL_PREMIUM);
-        SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_MOTOR, Constants.TRIGGER_MOTOR_PREMIUM, Constants.TRIGGER_STATEMENTS_MOTOR_PREMIUM);
-        SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_BENEFICIARY, Constants.TRIGGER_MEDICAL_PREMIUM, Constants.TRIGGER_STATEMENTS_MEDICAL_PREMIUM);
+        SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_TRAVEL, Constants.TRIGGER_TRAVEL_PREMIUM, Constants.SQL_AFTER_INSERT_ON, Constants.TRIGGER_STATEMENTS_TRAVEL_PREMIUM);
+        SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_TRAVEL, Constants.TRIGGER_TRAVEL_DELETE, Constants.SQL_AFTER_DELETE_ON, Constants.TRIGGER_STATEMENTS_TRAVEL_DELETE);
+        SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_MOTOR, Constants.TRIGGER_MOTOR_PREMIUM, Constants.SQL_AFTER_INSERT_ON, Constants.TRIGGER_STATEMENTS_MOTOR_PREMIUM);
+        SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_MOTOR, Constants.TRIGGER_MOTOR_DELETE, Constants.SQL_AFTER_DELETE_ON, Constants.TRIGGER_STATEMENTS_MOTOR_DELETE);
+        SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_BENEFICIARY, Constants.TRIGGER_MEDICAL_PREMIUM, Constants.SQL_AFTER_INSERT_ON, Constants.TRIGGER_STATEMENTS_MEDICAL_PREMIUM);
+        SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_BENEFICIARY, Constants.TRIGGER_MEDICAL_DELETE, Constants.SQL_AFTER_DELETE_ON, Constants.TRIGGER_STATEMENTS_MEDICAL_DELETE);
     }
 }

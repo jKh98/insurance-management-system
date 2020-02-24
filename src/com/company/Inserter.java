@@ -25,7 +25,7 @@ public class Inserter {
                 values.get(Constants.TABLE_COLUMN_EXPIRY),
                 0.0,
                 values.get(Constants.TABLE_COLUMN_IS_VALID),
-                values.get(Constants.TABLE_COLUMN_POLICY_TYPE),
+                values.get(Constants.TABLE_COLUMN_POLICY_TYPE)
         });
         // Use returned policy id to get thew new policyNo
         ArrayList<Object[]> result = SQLiteManager.selectDataFromTable(
