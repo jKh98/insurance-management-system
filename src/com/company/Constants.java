@@ -136,10 +136,10 @@ class Constants {
     static final String[] TRIGGER_STATEMENTS_MEDICAL_PREMIUM = new String[]
             {"UPDATE " + TABLE_NAME_POLICY + " SET " + TABLE_COLUMN_PREMIUM +
                     " = ( SELECT SUM( CASE " +
-                    "WHEN (STRFTIME('%Y','now', 'unixepoch') - STRFTIME('%Y',datetime(" + TABLE_NAME_BENEFICIARY + "." + TABLE_COLUMN_BIRTH_DATE + ", 'unixepoch'))) < 10 THEN 15 " +
-                    "WHEN (STRFTIME('%Y','now', 'unixepoch') - STRFTIME('%Y',datetime(" + TABLE_NAME_BENEFICIARY + "." + TABLE_COLUMN_BIRTH_DATE + ", 'unixepoch'))) BETWEEN 11 AND 45 THEN 30 " +
-                    "WHEN (STRFTIME('%Y','now', 'unixepoch') - STRFTIME('%Y',datetime(" + TABLE_NAME_BENEFICIARY + "." + TABLE_COLUMN_BIRTH_DATE + ", 'unixepoch'))) > 45 THEN 45 " +
-                    " END) FROM " + TABLE_NAME_BENEFICIARY + " WHERE " + TABLE_NAME_BENEFICIARY + "." + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ")" +
+                    "WHEN (STRFTIME('%Y','now') - STRFTIME('%Y',datetime(T." + TABLE_COLUMN_BIRTH_DATE + ", 'unixepoch'))) < 10 THEN 15 " +
+                    "WHEN (STRFTIME('%Y','now') - STRFTIME('%Y',datetime(T." + TABLE_COLUMN_BIRTH_DATE + ", 'unixepoch'))) BETWEEN 11 AND 45 THEN 30 " +
+                    "WHEN (STRFTIME('%Y','now') - STRFTIME('%Y',datetime(T." + TABLE_COLUMN_BIRTH_DATE + ", 'unixepoch'))) > 45 THEN 45 " +
+                    " END) FROM " + TABLE_NAME_BENEFICIARY + " AS T WHERE T." + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ")" +
                     " WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ";",
             };
 }
