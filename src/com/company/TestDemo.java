@@ -16,7 +16,7 @@ public class TestDemo {
         // 4. Insert table values
         Inserter.addTravelPolicy(Map.ofEntries(
                 entry(Constants.TABLE_COLUMN_EFFECTIVE, System.currentTimeMillis() / 1000L),
-                entry(Constants.TABLE_COLUMN_EXPIRY, System.currentTimeMillis() / 1000L + 3*86400),
+                entry(Constants.TABLE_COLUMN_EXPIRY, System.currentTimeMillis() / 1000L + 3 * 86400),
                 entry(Constants.TABLE_COLUMN_IS_VALID, 1),
                 entry(Constants.TABLE_COLUMN_POLICY_TYPE, "travel"),
                 entry(Constants.TABLE_COLUMN_DEPARTURE, "Beirut"),
@@ -63,7 +63,7 @@ public class TestDemo {
     private static void setUpTableTriggers() {
         // Travel premium trigger that computes travel policy premium
         SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_TRAVEL, Constants.TRIGGER_TRAVEL_PREMIUM, Constants.TRIGGER_STATEMENTS_TRAVEL_PREMIUM);
-//        SQLiteManager.addTriggerTTable(Constants.TABLE_NAME_MOTOR, Constants.TRIGGER_MOTOR_PREMIUM, Constants.TRIGGER_STATEMENTS_MOTOR_PREMIUM);
-//        SQLiteManager.addTriggerTTable(Constants.TABLE_NAME_BENEFICIARY, Constants.TRIGGER_MEDICAL_PREMIUM, Constants.TRIGGER_STATEMENTS_MEDICAL_PREMIUM);
+        SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_MOTOR, Constants.TRIGGER_MOTOR_PREMIUM, Constants.TRIGGER_STATEMENTS_MOTOR_PREMIUM);
+//        SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_BENEFICIARY, Constants.TRIGGER_MEDICAL_PREMIUM, Constants.TRIGGER_STATEMENTS_MEDICAL_PREMIUM);
     }
 }

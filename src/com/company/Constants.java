@@ -120,19 +120,26 @@ class Constants {
     static final String[] TRIGGER_STATEMENTS_TRAVEL_PREMIUM = new String[]
             {"UPDATE " + TABLE_NAME_POLICY + " SET " + TABLE_COLUMN_PREMIUM +
                     " = CASE " +
-                    "WHEN NEW." + TABLE_COLUMN_FAMILY + " = 1 then 10*(" + TABLE_COLUMN_EXPIRY + " - " + TABLE_COLUMN_EFFECTIVE + ")/86400 " +
+                    "WHEN NEW." + TABLE_COLUMN_FAMILY + " = 1 THEN 10*(" + TABLE_COLUMN_EXPIRY + " - " + TABLE_COLUMN_EFFECTIVE + ")/86400 " +
                     "WHEN NEW." + TABLE_COLUMN_FAMILY + " = 0 THEN 5*(" + TABLE_COLUMN_EXPIRY + " - " + TABLE_COLUMN_EFFECTIVE + ")/86400 " +
                     "END WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ";",
             };
     // *************************** Parameters for motor premium trigger ***************************
     static final String TRIGGER_MOTOR_PREMIUM = "motor_premium";
     static final String[] TRIGGER_STATEMENTS_MOTOR_PREMIUM = new String[]
-            {Constants.TABLE_AUTO_ID,
+            {"UPDATE " + TABLE_NAME_POLICY + " SET " + TABLE_COLUMN_PREMIUM +
+                    " = 0.2*NEW." + TABLE_COLUMN_VEHICLE_PRICE +
+                    " WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ";",
             };
     // *************************** Parameters for medical premium trigger ***************************
     static final String TRIGGER_MEDICAL_PREMIUM = "medical_premium";
     static final String[] TRIGGER_STATEMENTS_MEDICAL_PREMIUM = new String[]
-            {Constants.TABLE_AUTO_ID,
+            {"UPDATE " + TABLE_NAME_POLICY + " SET " + TABLE_COLUMN_PREMIUM +
+                    " = ( SELECT SUM( CASE " +
+                    "WHEN (STRFTIME('%Y','now', 'unixepoch') - STRFTIME('%Y',datetime(" + TABLE_NAME_BENEFICIARY + "." + TABLE_COLUMN_BIRTH_DATE + ", 'unixepoch'))) < 10 THEN 15 " +
+                    "WHEN (STRFTIME('%Y','now', 'unixepoch') - STRFTIME('%Y',datetime(" + TABLE_NAME_BENEFICIARY + "." + TABLE_COLUMN_BIRTH_DATE + ", 'unixepoch'))) BETWEEN 11 AND 45 THEN 30 " +
+                    "WHEN (STRFTIME('%Y','now', 'unixepoch') - STRFTIME('%Y',datetime(" + TABLE_NAME_BENEFICIARY + "." + TABLE_COLUMN_BIRTH_DATE + ", 'unixepoch'))) > 45 THEN 45 " +
+                    " END) FROM " + TABLE_NAME_BENEFICIARY + " WHERE " + TABLE_NAME_BENEFICIARY + "." + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ")" +
+                    " WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ";",
             };
-
 }
