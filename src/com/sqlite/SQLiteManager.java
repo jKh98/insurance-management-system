@@ -51,7 +51,6 @@ public class SQLiteManager {
         if (!dbDirectory.exists()) {
             dbDirectory.mkdir();
         }
-
         try {
             // Try connecting to the database
             connection = DriverManager.getConnection(Constants.PARAM_JDBC_DB_PREFIX + dbPathURL + dbName);
@@ -68,7 +67,7 @@ public class SQLiteManager {
 
         } catch (SQLException e) {
             // Print db connection exception
-            System.out.println(e.getMessage());
+//            e.printStackTrace();
         }
 
         return connected;
@@ -92,7 +91,7 @@ public class SQLiteManager {
             disconnected = true;
         } catch (Exception e) {
             // Print db disconnection exception
-            System.out.println(e.getMessage());
+//            e.printStackTrace();
         }
         return disconnected;
     }
@@ -122,7 +121,7 @@ public class SQLiteManager {
             Printer.printTableAddedMessage(tableName);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return result;
     }
@@ -149,7 +148,7 @@ public class SQLiteManager {
             result = true;
             Printer.printTriggerAddedMessage(tableName, triggerName);
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return result;
     }
@@ -189,7 +188,7 @@ public class SQLiteManager {
             preparedStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return result;
     }
@@ -241,9 +240,8 @@ public class SQLiteManager {
             preparedStatement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
-
         return result;
     }
 
@@ -283,9 +281,8 @@ public class SQLiteManager {
             result = true;
             // Close prepared statement
             preparedStatement.close();
-
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return result;
     }

@@ -69,23 +69,45 @@ class Printer {
     }
 
     /**
+     * Prints query result which consists of a 2D array into list form
+     *
+     * @param header table header or column names
+     * @param result 2D array containing query result
+     */
+    public static void printAsList(String[] header, ArrayList<Object[]> result) {
+        System.out.println("\n");
+        if (result.size() > 0) {
+            // Print table data row by row
+            for (Object[] row : result) {
+                for (int i = 0; i < row.length; i++) {
+                    System.out.format("%-20s%-20s\n", header[i] + ": ", row[i]);
+                }
+                System.out.println("\n");
+            }
+        } else {
+            System.out.println(Constants.MESSAGE_NO_RESULTS);
+        }
+    }
+
+    /**
      * Prints query result which consists of a 2D array into table form
      *
      * @param header table header or column names
      * @param result 2D array containing query result
      */
-    public static void printTable(String[] header, ArrayList<Object[]> result) {
+    public static void printAsTable(String[] header, ArrayList<Object[]> result) {
+        System.out.println("\n");
         if (result.size() > 0) {
             // Get column spacing based on number of columns
             String spacing = getFormatSpacing(result.get(0).length);
             // Print header
-            System.out.format(spacing + "\n", header);
+            System.out.format(spacing + "\n", (Object) header);
             // Print table data row by row
             for (Object[] row : result) {
                 System.out.format(spacing + "\n", row);
             }
         } else {
-            System.out.println("Error");
+            System.out.println(Constants.MESSAGE_NO_RESULTS);
         }
         System.out.println("\n");
     }
@@ -102,5 +124,19 @@ class Printer {
             s.append("%-20s");
         }
         return s.toString();
+    }
+
+    /**
+     * Prints message if beneficiary is added and error otherwise
+     *
+     * @param result result of INSERT query. Value is 0L if insert was not successful
+     */
+    public static void showBeneficiaryAddedMessage(Long result) {
+        // If result is inserted notify with a message
+        if (result != 0L) {
+            System.out.println(Constants.TABLE_NAME_BENEFICIARY + Constants.MESSAGE_SUCCESSFULLY_ADDED);
+        } else {
+            System.out.println(Constants.MESSAGE_INVALID_BENEFICIARY);
+        }
     }
 }

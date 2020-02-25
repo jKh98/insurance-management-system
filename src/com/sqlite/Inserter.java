@@ -4,6 +4,7 @@ package com.sqlite;
 import com.others.Constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -35,9 +36,10 @@ public class Inserter {
                 new String[]{Constants.TABLE_COLUMN_ID + " = ?",},
                 new Object[]{id}
         );
-        // Return new policy number from result
-        return (String) result.get(0)[0];
-
+        // Return new policy number from result if found
+        if (result != null && result.size() > 0)
+            return (String) result.get(0)[0];
+        return null;
     }
 
     /**
@@ -47,17 +49,21 @@ public class Inserter {
      * @param values values of travel policy to add
      */
     public static void addTravelPolicy(Map<String, Object> values) {
-
+        Map<String, Object> valuesMap = new HashMap<>(values);
+        valuesMap.put(Constants.TABLE_COLUMN_POLICY_TYPE, "travel");
         // Add new policy to policy data and get its new policy number
-        String policyNo = addGenericPolicy(values);
-        // Use received policyNo to add travel policy specific info
-        Long result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_TRAVEL, new Object[]{
-                null,
-                policyNo,
-                values.get(Constants.TABLE_COLUMN_DEPARTURE),
-                values.get(Constants.TABLE_COLUMN_DESTINATION),
-                values.get(Constants.TABLE_COLUMN_FAMILY),
-        });
+        String policyNo = addGenericPolicy(valuesMap);
+        Long result = 0L;
+        if (policyNo != null) {
+            // Use received policyNo to add travel policy specific info
+            result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_TRAVEL, new Object[]{
+                    null,
+                    policyNo,
+                    valuesMap.get(Constants.TABLE_COLUMN_DEPARTURE),
+                    valuesMap.get(Constants.TABLE_COLUMN_DESTINATION),
+                    valuesMap.get(Constants.TABLE_COLUMN_FAMILY),
+            });
+        }
         // If result is inserted notify with a message
         Printer.showPolicyAddedMessage(result, policyNo);
     }
@@ -69,14 +75,19 @@ public class Inserter {
      * @param values values of motor policy to add
      */
     public static void addMotorPolicy(Map<String, Object> values) {
+        Map<String, Object> valuesMap = new HashMap<>(values);
+        valuesMap.put(Constants.TABLE_COLUMN_POLICY_TYPE, "motor");
         // Add new policy to policy data and get its new policy number
-        String policyNo = addGenericPolicy(values);
-        // Use received policyNo to add motor policy specific info
-        Long result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_MOTOR, new Object[]{
-                null,
-                policyNo,
-                values.get(Constants.TABLE_COLUMN_VEHICLE_PRICE),
-        });
+        String policyNo = addGenericPolicy(valuesMap);
+        Long result = 0L;
+        if (policyNo != null) {
+            // Use received policyNo to add motor policy specific info
+            result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_MOTOR, new Object[]{
+                    null,
+                    policyNo,
+                    valuesMap.get(Constants.TABLE_COLUMN_VEHICLE_PRICE),
+            });
+        }
         // If result is inserted notify with a message
         Printer.showPolicyAddedMessage(result, policyNo);
     }
@@ -90,19 +101,24 @@ public class Inserter {
      * @param values of medical policy and correlated beneficiary to add
      */
     public static void addMedicalPolicy(Map<String, Object> values) {
+        Long result = 0L;
+        Map<String, Object> valuesMap = new HashMap<>(values);
+        valuesMap.put(Constants.TABLE_COLUMN_POLICY_TYPE, "medical");
         // Add new policy to policy data and get its new policy number
-        String policyNo = addGenericPolicy(values);
-        // Use received policyNo to add beneficiary since each medical policy
-        // requires at least one beneficiary
-        Long result = addBeneficiary(Map.ofEntries(
-                Map.entry(Constants.TABLE_COLUMN_NAME, values.get(Constants.TABLE_COLUMN_NAME)),
-                Map.entry(Constants.TABLE_COLUMN_RELATION, values.get(Constants.TABLE_COLUMN_RELATION)),
-                Map.entry(Constants.TABLE_COLUMN_GENDER, values.get(Constants.TABLE_COLUMN_GENDER)),
-                Map.entry(Constants.TABLE_COLUMN_BIRTH_DATE, values.get(Constants.TABLE_COLUMN_BIRTH_DATE)),
-                Map.entry(Constants.TABLE_COLUMN_POLICY_NO, policyNo)
-        ));
-        // If result is inserted notify with a message
-        Printer.showPolicyAddedMessage(result, policyNo);
+        String policyNo = addGenericPolicy(valuesMap);
+        if (policyNo != null) {
+            // Use received policyNo to add beneficiary since each medical policy
+            // requires at least one beneficiary
+            result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_BENEFICIARY, new Object[]{
+                    null,
+                    values.get(Constants.TABLE_COLUMN_NAME),
+                    values.get(Constants.TABLE_COLUMN_RELATION),
+                    values.get(Constants.TABLE_COLUMN_GENDER),
+                    values.get(Constants.TABLE_COLUMN_BIRTH_DATE),
+                    policyNo,
+            });
+
+        }
         // If beneficiary was not added correctly delete the policy
         if (result == 0F) {
             SQLiteManager.deleteDataFromTable(Constants.TABLE_NAME_POLICY,
@@ -110,6 +126,8 @@ public class Inserter {
                     new Object[]{policyNo,}
             );
         }
+        // If result is inserted notify with a message
+        Printer.showPolicyAddedMessage(result, policyNo);
     }
 
     /**
@@ -117,23 +135,10 @@ public class Inserter {
      *
      * @param values of beneficiary to add
      */
-    private static Long addBeneficiary(Map<String, Object> values) {
-        // Check there is already a 'self' relation for the current policyNo
-        if (values.get(Constants.TABLE_COLUMN_RELATION).equals("self")) {
-            // If number of records with relation 'self' and current policy number is greater than zero, abort.
-            ArrayList<Object[]> result = SQLiteManager.selectDataFromTable(
-                    new String[]{Constants.TABLE_NAME_BENEFICIARY,},
-                    new String[]{"COUNT(*)",},
-                    new String[]{Constants.TABLE_COLUMN_POLICY_NO + " = ? AND ", Constants.TABLE_COLUMN_RELATION + " = ? "},
-                    new Object[]{values.get(Constants.TABLE_COLUMN_POLICY_NO), "self"}
-            );
-            if ((int) result.get(0)[0] > 0) {
-                System.out.println(Constants.MESSAGE_BENEFICIARY_SELF_ERROR);
-                return 0L;
-            }
-        }
+    private static void addBeneficiary(Map<String, Object> values) {
+        Long result = 0L;
         // Return ID of added beneficiary
-        return SQLiteManager.insertDataInTable(Constants.TABLE_NAME_BENEFICIARY, new Object[]{
+        result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_BENEFICIARY, new Object[]{
                 null,
                 values.get(Constants.TABLE_COLUMN_NAME),
                 values.get(Constants.TABLE_COLUMN_RELATION),
@@ -141,6 +146,8 @@ public class Inserter {
                 values.get(Constants.TABLE_COLUMN_BIRTH_DATE),
                 values.get(Constants.TABLE_COLUMN_POLICY_NO),
         });
+        // If result is inserted notify with a message
+        Printer.showBeneficiaryAddedMessage(result);
     }
 
     /**
