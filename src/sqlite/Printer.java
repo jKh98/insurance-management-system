@@ -101,7 +101,7 @@ class Printer {
             // Get column spacing based on number of columns
             String spacing = getFormatSpacing(result.get(0).length);
             // Print header
-            System.out.format(spacing + "\n",header);
+            System.out.format(spacing + "\n", (Object[]) header);
             // Print table data row by row
             for (Object[] row : result) {
                 System.out.format(spacing + "\n", row);
