@@ -67,4 +67,67 @@ public class TestValues {
     public static final String MEDICAL_3_RELATION = "son";
     public static final long MEDICAL_3_BIRTH_DATE = Instant.now().getEpochSecond();
 
+    // Claim 1
+    public static final String CLAIM_1_POLICY_NO = "";
+    public static final long CLAIM_1_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_1_CLAIMED_AMOUNT = 0.0;
+
+    // Claim 1
+    public static final String CLAIM_2_POLICY_NO = "";
+    public static final long CLAIM_2_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_2_CLAIMED_AMOUNT = 0.0;
+    // Claim 1
+    public static final String CLAIM_3_POLICY_NO = "";
+    public static final long CLAIM_3_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_3_CLAIMED_AMOUNT = 0.0;
+    // Claim 1
+    public static final String CLAIM_4_POLICY_NO = "";
+    public static final long CLAIM_4_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_4_CLAIMED_AMOUNT = 0.0;
+    // Claim 1
+    public static final String CLAIM_5_POLICY_NO = "";
+    public static final long CLAIM_5_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_5_CLAIMED_AMOUNT = 0.0;
+    // Claim 1
+    public static final String CLAIM_6_POLICY_NO = "";
+    public static final long CLAIM_6_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_6_CLAIMED_AMOUNT = 0.0;
+    // Claim 1
+    public static final String CLAIM_7_POLICY_NO = "";
+    public static final long CLAIM_7_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_7_CLAIMED_AMOUNT = 0.0;
+    // Claim 1
+    public static final String CLAIM_8_POLICY_NO = "";
+    public static final long CLAIM_8_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_8_CLAIMED_AMOUNT = 0.0;
+    // Claim 1
+    public static final String CLAIM_9_POLICY_NO = "";
+    public static final long CLAIM_9_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_9_CLAIMED_AMOUNT = 0.0;
+    // Claim 1
+    public static final String CLAIM_10_POLICY_NO = "";
+    public static final long CLAIM_10_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_10_CLAIMED_AMOUNT = 0.0;
+    // Claim 1
+    public static final String CLAIM_11_POLICY_NO = "";
+    public static final long CLAIM_11_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_11_CLAIMED_AMOUNT = 0.0;
+    // Claim 1
+    public static final String CLAIM_12_POLICY_NO = "";
+    public static final long CLAIM_12_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_12_CLAIMED_AMOUNT = 0.0;
+    // Claim 1
+    public static final String CLAIM_13_POLICY_NO = "";
+    public static final long CLAIM_13_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_13_CLAIMED_AMOUNT = 0.0;
+    // Claim 1
+    public static final String CLAIM_14_POLICY_NO = "";
+    public static final long CLAIM_14_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_14_CLAIMED_AMOUNT = 0.0;
+    // Claim 1
+    public static final String CLAIM_15_POLICY_NO = "";
+    public static final long CLAIM_15_INCURRED = Instant.now().getEpochSecond();
+    public static final double CLAIM_15_CLAIMED_AMOUNT = 0.0;
+
+
 }
