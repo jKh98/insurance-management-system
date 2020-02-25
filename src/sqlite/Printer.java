@@ -1,7 +1,7 @@
-package com.sqlite;
+package sqlite;
 
 
-import com.others.Constants;
+import others.Constants;
 
 import java.util.ArrayList;
 
@@ -101,7 +101,7 @@ class Printer {
             // Get column spacing based on number of columns
             String spacing = getFormatSpacing(result.get(0).length);
             // Print header
-            System.out.format(spacing + "\n", (Object) header);
+            System.out.format(spacing + "\n",header);
             // Print table data row by row
             for (Object[] row : result) {
                 System.out.format(spacing + "\n", row);

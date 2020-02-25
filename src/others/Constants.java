@@ -1,4 +1,4 @@
-package com.others;
+package others;
 
 public class Constants {
 

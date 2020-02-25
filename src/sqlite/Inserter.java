@@ -1,7 +1,7 @@
-package com.sqlite;
+package sqlite;
 
 
-import com.others.Constants;
+import others.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;

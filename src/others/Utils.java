@@ -1,7 +1,4 @@
-package com.others;
-
-import java.sql.*;
-import java.util.ArrayList;
+package others;
 
 public class Utils {
 

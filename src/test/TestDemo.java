@@ -1,9 +1,9 @@
-package com.test;
+package test;
 
-import com.others.Constants;
-import com.sqlite.Inserter;
-import com.sqlite.SQLiteManager;
-import com.sqlite.Selector;
+import others.Constants;
+import sqlite.Inserter;
+import sqlite.SQLiteManager;
+import sqlite.Selector;
 
 import java.util.Map;
 

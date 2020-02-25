@@ -1,6 +1,5 @@
-package com.test;
+package test;
 
-import java.nio.file.LinkOption;
 import java.time.Instant;
 
 public class TestValues {

@@ -1,7 +1,7 @@
-package com.sqlite;
+package sqlite;
 
-import com.others.Constants;
-import com.others.Utils;
+import others.Constants;
+import others.Utils;
 
 import java.io.File;
 import java.sql.*;
