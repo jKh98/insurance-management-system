@@ -1,7 +1,8 @@
-package com.company;
+package com.sqlite;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import com.others.Constants;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -45,7 +46,7 @@ public class Inserter {
      *
      * @param values values of travel policy to add
      */
-    static void addTravelPolicy(Map<String, Object> values) {
+    public static void addTravelPolicy(Map<String, Object> values) {
 
         // Add new policy to policy data and get its new policy number
         String policyNo = addGenericPolicy(values);
@@ -67,7 +68,7 @@ public class Inserter {
      *
      * @param values values of motor policy to add
      */
-    static void addMotorPolicy(Map<String, Object> values) {
+    public static void addMotorPolicy(Map<String, Object> values) {
         // Add new policy to policy data and get its new policy number
         String policyNo = addGenericPolicy(values);
         // Use received policyNo to add motor policy specific info

@@ -1,4 +1,7 @@
-package com.company;
+package com.sqlite;
+
+import com.others.Constants;
+import com.others.Utils;
 
 import java.io.File;
 import java.sql.*;
@@ -124,7 +127,7 @@ public class SQLiteManager {
         return result;
     }
 
-    static boolean addTriggerToTable(String tableName, String triggerName, String executeOn, String[] statements) {
+    public static boolean addTriggerToTable(String tableName, String triggerName, String executeOn, String[] statements) {
         boolean result = false;
         try {
             connection.setAutoCommit(true);
@@ -144,7 +147,7 @@ public class SQLiteManager {
             // Close prepared statement
             preparedStatement.close();
             result = true;
-            Printer.printTriggerAddedMessage(tableName,triggerName);
+            Printer.printTriggerAddedMessage(tableName, triggerName);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -172,7 +175,7 @@ public class SQLiteManager {
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(insertQuery);
             // Bind values to prepared statement
-            Utils.bindValuesToPreparedStatement(preparedStatement, values);
+            DBUtils.bindValuesToPreparedStatement(preparedStatement, values);
             // Execute insert update
             preparedStatement.executeUpdate();
             // Get id of the row inserted
@@ -200,7 +203,7 @@ public class SQLiteManager {
      * @param values     left hand side values of condition statements
      * @return 2d array of query results
      */
-    static ArrayList<Object[]> selectDataFromTable(String[] tableNames, String[] selections, String[] conditions, Object[] values) {
+    public static ArrayList<Object[]> selectDataFromTable(String[] tableNames, String[] selections, String[] conditions, Object[] values) {
         ArrayList<Object[]> result = new ArrayList<>();
         // Check if selecting specific column or all table columns
         String selectionsString;
@@ -226,11 +229,12 @@ public class SQLiteManager {
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(selectQuery.toString());
             // Bind values to prepared statement
-            Utils.bindValuesToPreparedStatement(preparedStatement, values);
+            if (values != null && values.length > 0)
+                DBUtils.bindValuesToPreparedStatement(preparedStatement, values);
             // Execute Query and get result
             ResultSet resultSet = preparedStatement.executeQuery();
             // Store result in 2d Array
-            result = Utils.resultSetToArray(resultSet);
+            result = DBUtils.resultSetToArray(resultSet);
             // Close result set
             resultSet.close();
             // Close prepared statement
@@ -252,6 +256,9 @@ public class SQLiteManager {
      * @return deleted or not
      */
     static boolean deleteDataFromTable(String tableName, String[] conditions, Object[] values) {
+        if (conditions == null || values == null) {
+            return false;
+        }
         boolean result = false;
         try {
             connection.setAutoCommit(true);
@@ -269,7 +276,7 @@ public class SQLiteManager {
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(deleteQuery.toString());
             // Bind values to prepared statement
-            Utils.bindValuesToPreparedStatement(preparedStatement, values);
+            if (conditions.length > 0) DBUtils.bindValuesToPreparedStatement(preparedStatement, values);
             // Execute Query and get result
             preparedStatement.executeUpdate();
             // Store result in 2d Array
