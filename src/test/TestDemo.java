@@ -5,6 +5,7 @@ import sqlite.Inserter;
 import sqlite.SQLiteManager;
 import sqlite.Selector;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -66,80 +67,89 @@ public class TestDemo {
      */
     private static void insertTestPolicyRecords() {
         // 1. Insert Travel policy 1 (successful)
-        Inserter.addTravelPolicy(Map.ofEntries(
-                Map.entry(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.TRAVEL_1_EFFECTIVE),
-                Map.entry(Constants.TABLE_COLUMN_EXPIRY, TestValues.TRAVEL_1_EXPIRY),
-                Map.entry(Constants.TABLE_COLUMN_IS_VALID, TestValues.TRAVEL_1_IS_VALID),
-                Map.entry(Constants.TABLE_COLUMN_DEPARTURE, TestValues.TRAVEL_1_DEPARTURE),
-                Map.entry(Constants.TABLE_COLUMN_DESTINATION, TestValues.TRAVEL_1_DESTINATION),
-                Map.entry(Constants.TABLE_COLUMN_FAMILY, TestValues.TRAVEL_1_FAMILY)
-        ));
+        Inserter.addTravelPolicy(new HashMap<String, Object>() {
+            {
+                put(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.TRAVEL_1_EFFECTIVE);
+                put(Constants.TABLE_COLUMN_EXPIRY, TestValues.TRAVEL_1_EXPIRY);
+                put(Constants.TABLE_COLUMN_IS_VALID, TestValues.TRAVEL_1_IS_VALID);
+                put(Constants.TABLE_COLUMN_DEPARTURE, TestValues.TRAVEL_1_DEPARTURE);
+                put(Constants.TABLE_COLUMN_DESTINATION, TestValues.TRAVEL_1_DESTINATION);
+                put(Constants.TABLE_COLUMN_FAMILY, TestValues.TRAVEL_1_FAMILY);
+            }
+        });
 
         // 2. Insert Motor policy 1 (successful)
-        Inserter.addMotorPolicy(Map.ofEntries(
-                Map.entry(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.MOTOR_1_EFFECTIVE),
-                Map.entry(Constants.TABLE_COLUMN_EXPIRY, TestValues.MOTOR_1_EXPIRY),
-                Map.entry(Constants.TABLE_COLUMN_IS_VALID, TestValues.MOTOR_1_IS_VALID),
-                Map.entry(Constants.TABLE_COLUMN_VEHICLE_PRICE, TestValues.MOTOR_1_VEHICLE_PRICE)
-        ));
+        Inserter.addMotorPolicy(new HashMap<String, Object>() {{
+            put(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.MOTOR_1_EFFECTIVE);
+            put(Constants.TABLE_COLUMN_EXPIRY, TestValues.MOTOR_1_EXPIRY);
+            put(Constants.TABLE_COLUMN_IS_VALID, TestValues.MOTOR_1_IS_VALID);
+            put(Constants.TABLE_COLUMN_VEHICLE_PRICE, TestValues.MOTOR_1_VEHICLE_PRICE);
+        }});
 
         // 3. Insert Medical policy 1 (successful)
-        Inserter.addMedicalPolicy(Map.ofEntries(
-                Map.entry(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.MEDICAL_1_EFFECTIVE),
-                Map.entry(Constants.TABLE_COLUMN_EXPIRY, TestValues.MEDICAL_1_EXPIRY),
-                Map.entry(Constants.TABLE_COLUMN_IS_VALID, TestValues.MEDICAL_1_IS_VALID),
-                Map.entry(Constants.TABLE_COLUMN_NAME, TestValues.MEDICAL_1_NAME),
-                Map.entry(Constants.TABLE_COLUMN_GENDER, TestValues.MEDICAL_1_GENDER),
-                Map.entry(Constants.TABLE_COLUMN_RELATION, TestValues.MEDICAL_1_RELATION),
-                Map.entry(Constants.TABLE_COLUMN_BIRTH_DATE, TestValues.MEDICAL_1_BIRTH_DATE)));
+        Inserter.addMedicalPolicy(new HashMap<String, Object>() {{
+            put(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.MEDICAL_1_EFFECTIVE);
+            put(Constants.TABLE_COLUMN_EXPIRY, TestValues.MEDICAL_1_EXPIRY);
+            put(Constants.TABLE_COLUMN_IS_VALID, TestValues.MEDICAL_1_IS_VALID);
+            put(Constants.TABLE_COLUMN_NAME, TestValues.MEDICAL_1_NAME);
+            put(Constants.TABLE_COLUMN_GENDER, TestValues.MEDICAL_1_GENDER);
+            put(Constants.TABLE_COLUMN_RELATION, TestValues.MEDICAL_1_RELATION);
+            put(Constants.TABLE_COLUMN_BIRTH_DATE, TestValues.MEDICAL_1_BIRTH_DATE);
+        }});
 
         // 4. Insert Travel policy 2 (successful)
-        Inserter.addTravelPolicy(Map.ofEntries(
-                Map.entry(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.TRAVEL_2_EFFECTIVE),
-                Map.entry(Constants.TABLE_COLUMN_EXPIRY, TestValues.TRAVEL_2_EXPIRY),
-                Map.entry(Constants.TABLE_COLUMN_IS_VALID, TestValues.TRAVEL_2_IS_VALID),
-                Map.entry(Constants.TABLE_COLUMN_DEPARTURE, TestValues.TRAVEL_2_DEPARTURE),
-                Map.entry(Constants.TABLE_COLUMN_DESTINATION, TestValues.TRAVEL_2_DESTINATION),
-                Map.entry(Constants.TABLE_COLUMN_FAMILY, TestValues.TRAVEL_2_FAMILY)
-        ));
+        Inserter.addTravelPolicy(new HashMap<String, Object>() {{
+            put(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.TRAVEL_2_EFFECTIVE);
+            put(Constants.TABLE_COLUMN_EXPIRY, TestValues.TRAVEL_2_EXPIRY);
+            put(Constants.TABLE_COLUMN_IS_VALID, TestValues.TRAVEL_2_IS_VALID);
+            put(Constants.TABLE_COLUMN_DEPARTURE, TestValues.TRAVEL_2_DEPARTURE);
+            put(Constants.TABLE_COLUMN_DESTINATION, TestValues.TRAVEL_2_DESTINATION);
+            put(Constants.TABLE_COLUMN_FAMILY, TestValues.TRAVEL_2_FAMILY);
+        }});
 
         // 5. Insert Motor policy 2 (successful)
-        Inserter.addMotorPolicy(Map.ofEntries(
-                Map.entry(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.MOTOR_2_EFFECTIVE),
-                Map.entry(Constants.TABLE_COLUMN_EXPIRY, TestValues.MOTOR_2_EXPIRY),
-                Map.entry(Constants.TABLE_COLUMN_IS_VALID, TestValues.MOTOR_2_IS_VALID),
-                Map.entry(Constants.TABLE_COLUMN_VEHICLE_PRICE, TestValues.MOTOR_2_VEHICLE_PRICE)
-        ));
+        Inserter.addMotorPolicy(new HashMap<String, Object>() {
+            {
+                put(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.MOTOR_2_EFFECTIVE);
+                put(Constants.TABLE_COLUMN_EXPIRY, TestValues.MOTOR_2_EXPIRY);
+                put(Constants.TABLE_COLUMN_IS_VALID, TestValues.MOTOR_2_IS_VALID);
+                put(Constants.TABLE_COLUMN_VEHICLE_PRICE, TestValues.MOTOR_2_VEHICLE_PRICE);
+            }
+        });
 
         // 6. Insert Medical policy 2 (successful)
-        Inserter.addMedicalPolicy(Map.ofEntries(
-                Map.entry(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.MEDICAL_2_EFFECTIVE),
-                Map.entry(Constants.TABLE_COLUMN_EXPIRY, TestValues.MEDICAL_2_EXPIRY),
-                Map.entry(Constants.TABLE_COLUMN_IS_VALID, TestValues.MEDICAL_2_IS_VALID),
-                Map.entry(Constants.TABLE_COLUMN_NAME, TestValues.MEDICAL_2_NAME),
-                Map.entry(Constants.TABLE_COLUMN_GENDER, TestValues.MEDICAL_2_GENDER),
-                Map.entry(Constants.TABLE_COLUMN_RELATION, TestValues.MEDICAL_2_RELATION),
-                Map.entry(Constants.TABLE_COLUMN_BIRTH_DATE, TestValues.MEDICAL_2_BIRTH_DATE)));
+        Inserter.addMedicalPolicy(new HashMap<String, Object>() {{
+            put(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.MEDICAL_2_EFFECTIVE);
+            put(Constants.TABLE_COLUMN_EXPIRY, TestValues.MEDICAL_2_EXPIRY);
+            put(Constants.TABLE_COLUMN_IS_VALID, TestValues.MEDICAL_2_IS_VALID);
+            put(Constants.TABLE_COLUMN_NAME, TestValues.MEDICAL_2_NAME);
+            put(Constants.TABLE_COLUMN_GENDER, TestValues.MEDICAL_2_GENDER);
+            put(Constants.TABLE_COLUMN_RELATION, TestValues.MEDICAL_2_RELATION);
+            put(Constants.TABLE_COLUMN_BIRTH_DATE, TestValues.MEDICAL_2_BIRTH_DATE);
+        }});
 
         // 7. Insert Travel policy 3 (failure)
-        Inserter.addTravelPolicy(Map.ofEntries(
-                Map.entry(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.TRAVEL_3_EFFECTIVE),
-                Map.entry(Constants.TABLE_COLUMN_EXPIRY, TestValues.TRAVEL_3_EXPIRY),
-                Map.entry(Constants.TABLE_COLUMN_IS_VALID, TestValues.TRAVEL_3_IS_VALID),
-                Map.entry(Constants.TABLE_COLUMN_DEPARTURE, TestValues.TRAVEL_3_DEPARTURE),
-                Map.entry(Constants.TABLE_COLUMN_DESTINATION, TestValues.TRAVEL_3_DESTINATION),
-                Map.entry(Constants.TABLE_COLUMN_FAMILY, TestValues.TRAVEL_3_FAMILY)
-        ));
+        Inserter.addTravelPolicy(new HashMap<String, Object>() {
+            {
+                put(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.TRAVEL_3_EFFECTIVE);
+                put(Constants.TABLE_COLUMN_EXPIRY, TestValues.TRAVEL_3_EXPIRY);
+                put(Constants.TABLE_COLUMN_IS_VALID, TestValues.TRAVEL_3_IS_VALID);
+                put(Constants.TABLE_COLUMN_DEPARTURE, TestValues.TRAVEL_3_DEPARTURE);
+                put(Constants.TABLE_COLUMN_DESTINATION, TestValues.TRAVEL_3_DESTINATION);
+                put(Constants.TABLE_COLUMN_FAMILY, TestValues.TRAVEL_3_FAMILY);
+            }
+        });
 
         // 8. Insert Medical policy 3 (failure)
-        Inserter.addMedicalPolicy(Map.ofEntries(
-                Map.entry(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.MEDICAL_3_EFFECTIVE),
-                Map.entry(Constants.TABLE_COLUMN_EXPIRY, TestValues.MEDICAL_3_EXPIRY),
-                Map.entry(Constants.TABLE_COLUMN_IS_VALID, TestValues.MEDICAL_3_IS_VALID),
-                Map.entry(Constants.TABLE_COLUMN_NAME, TestValues.MEDICAL_3_NAME),
-                Map.entry(Constants.TABLE_COLUMN_GENDER, TestValues.MEDICAL_3_GENDER),
-                Map.entry(Constants.TABLE_COLUMN_RELATION, TestValues.MEDICAL_3_RELATION),
-                Map.entry(Constants.TABLE_COLUMN_BIRTH_DATE, TestValues.MEDICAL_3_BIRTH_DATE)));
+        Inserter.addMedicalPolicy(new HashMap<String, Object>() {{
+            put(Constants.TABLE_COLUMN_EFFECTIVE, TestValues.MEDICAL_3_EFFECTIVE);
+            put(Constants.TABLE_COLUMN_EXPIRY, TestValues.MEDICAL_3_EXPIRY);
+            put(Constants.TABLE_COLUMN_IS_VALID, TestValues.MEDICAL_3_IS_VALID);
+            put(Constants.TABLE_COLUMN_NAME, TestValues.MEDICAL_3_NAME);
+            put(Constants.TABLE_COLUMN_GENDER, TestValues.MEDICAL_3_GENDER);
+            put(Constants.TABLE_COLUMN_RELATION, TestValues.MEDICAL_3_RELATION);
+            put(Constants.TABLE_COLUMN_BIRTH_DATE, TestValues.MEDICAL_3_BIRTH_DATE);
+        }});
 
     }
 
