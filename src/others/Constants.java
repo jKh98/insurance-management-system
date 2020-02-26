@@ -19,6 +19,10 @@ public class Constants {
     public static final String SQL_BEGIN = " BEGIN ";
     public static final String SQL_END = " END ";
     public static final String SQL_BETWEEN = " BETWEEN";
+    public static final String SQL_COUNT = "count";
+    public static final String SQL_SUM = "sum";
+    public static final String SQL_MIN = "min";
+    public static final String SQL_MAX = "max";
     public static final String PARAM_JDBC_DB_PREFIX = "jdbc:sqlite:";
     public static final String PARAM_JDBC_DB_ENABLE_FK = "PRAGMA foreign_keys = ON";
     public static final String MESSAGE_OPENED_DB = "Opened connection to database :";
@@ -193,6 +197,5 @@ public class Constants {
                     "WHEN NOT EXISTS (SELECT " + TABLE_COLUMN_POLICY_NO + " FROM " + TABLE_NAME_POLICY + " WHERE " + TABLE_COLUMN_POLICY_NO +
                             " = NEW." + TABLE_COLUMN_POLICY_NO + ") THEN RAISE (ABORT, 'Cannot submit a claim for Policy#  because it does not exist!')",
                     " END;END;"};
-
 }
 //' || New." + TABLE_COLUMN_POLICY_NO + " || '

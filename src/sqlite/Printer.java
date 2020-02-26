@@ -102,12 +102,12 @@ class Printer {
     /**
      * Prints message if policy is added and error otherwise
      *
-     * @param result   result of INSERT query. Value is 0L if insert was not successful
+     * @param result   result of INSERT query.
      * @param policyNo string value of PolicyNo
      */
     static void printPolicyAddedMessage(Object result, String policyNo) {
-        // If result is Long then insert returned an ID and hence was successful
-        if (result instanceof Long) {
+        // If result is a number then insert returned an ID and hence was successful
+        if ((result instanceof Long || result instanceof Integer) && policyNo != null) {
             System.out.println(Constants.TABLE_NAME_POLICY + Constants.MESSAGE_SPACE + policyNo + Constants.MESSAGE_SUCCESSFULLY_ADDED);
         } else if (result instanceof String) {
             // if result is a string then it is definitely an error message
@@ -123,8 +123,8 @@ class Printer {
      * @param result result of INSERT query.
      */
     public static void printBeneficiaryAddedMessage(Object result) {
-        // If result is Long then insert returned an ID and hence was successful
-        if (result instanceof Long) {
+        // If result is a number then insert returned an ID and hence was successful
+        if (result instanceof Long || result instanceof Integer) {
             System.out.println(Constants.TABLE_NAME_BENEFICIARY + Constants.MESSAGE_SUCCESSFULLY_ADDED);
         } else if (result instanceof String) {
             // if result is a string then it is definitely an error message
@@ -135,8 +135,8 @@ class Printer {
     }
 
     public static void printClaimAddedMessage(Object result) {
-        // If result is Long then insert returned an ID and hence was successful
-        if (result instanceof Long) {
+        // If result is a number then insert returned an ID and hence was successful
+        if (result instanceof Long || result instanceof Integer) {
             System.out.println(Constants.TABLE_NAME_CLAIM + Constants.MESSAGE_SUCCESSFULLY_ADDED);
         } else if (result instanceof String) {
             // if result is a string then it is definitely an error message

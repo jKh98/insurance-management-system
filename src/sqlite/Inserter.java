@@ -160,9 +160,9 @@ public class Inserter {
         // Return ID of added beneficiary
         result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_CLAIM, new Object[]{
                 null,
-                Constants.TABLE_COLUMN_INCURRED_DATE,
-                Constants.TABLE_COLUMN_POLICY_NO,
-                Constants.TABLE_COLUMN_CLAIMED_AMOUNT,
+                values.get(Constants.TABLE_COLUMN_POLICY_NO),
+                values.get(Constants.TABLE_COLUMN_INCURRED_DATE),
+                values.get(Constants.TABLE_COLUMN_CLAIMED_AMOUNT),
         });
         // If result is inserted notify with a message
         Printer.printClaimAddedMessage(result);

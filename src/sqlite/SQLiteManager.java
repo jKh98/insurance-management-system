@@ -141,9 +141,9 @@ public class SQLiteManager {
             }
             triggerQuery.append(Constants.SQL_END);
             // Prepared statement for new table
-            System.out.println(triggerQuery.toString());
             preparedStatement = connection.prepareStatement(triggerQuery.toString());
             preparedStatement.executeUpdate();
+            System.out.println(triggerQuery.toString());
             // Close prepared statement
             preparedStatement.close();
             result = true;
@@ -175,6 +175,7 @@ public class SQLiteManager {
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(insertQuery);
             // Bind values to prepared statement
+            System.out.println(insertQuery);
             DBUtils.bindValuesToPreparedStatement(preparedStatement, values);
             // Execute insert update
             preparedStatement.executeUpdate();

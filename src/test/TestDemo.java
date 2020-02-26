@@ -6,9 +6,14 @@ import sqlite.SQLiteManager;
 import sqlite.Selector;
 
 import java.util.HashMap;
-import java.util.Map;
+
+import static sqlite.Selector.selectPoliciesClaimsData;
 
 
+/**
+ * Contains main methods that sets up database and tests against several inputs based on requirements
+ * Contains methods that call Inserter and Selector classes to handle inserting and selecting records
+ */
 public class TestDemo {
 
     public static void main(String[] args) {
@@ -24,6 +29,8 @@ public class TestDemo {
         selectTestPolicyRecords();
         // 6. Insert test claim records
         insertTestClaimRecords();
+        // 7. Select claim related data for each policy
+        selectPoliciesClaimsData();
         // 7. Close database
         SQLiteManager.disconnectAndCloseDB();
     }
