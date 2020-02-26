@@ -140,10 +140,12 @@ public class Constants {
     // *************************** Parameters for travel triggers ***************************
     public static final String TRIGGER_TRAVEL_PREMIUM = "travel_premium";
     public static final String[] TRIGGER_STATEMENTS_TRAVEL_PREMIUM = new String[]
-            {"UPDATE " + TABLE_NAME_POLICY + " SET " + TABLE_COLUMN_PREMIUM + " = CASE ",
+            {"UPDATE " + TABLE_NAME_POLICY + " SET " + TABLE_COLUMN_PREMIUM + " = ",
+                    "CASE ",
                     "WHEN NEW." + TABLE_COLUMN_FAMILY + " = 1 THEN 10*(" + TABLE_COLUMN_EXPIRY + " - " + TABLE_COLUMN_EFFECTIVE + ")/86400 ",
                     "WHEN NEW." + TABLE_COLUMN_FAMILY + " = 0 THEN 5*(" + TABLE_COLUMN_EXPIRY + " - " + TABLE_COLUMN_EFFECTIVE + ")/86400 ",
-                    "END WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ";",
+                    "END ",
+                    "WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ";",
             };
     public static final String TRIGGER_TRAVEL_DELETE = "travel_delete";
     public static final String[] TRIGGER_STATEMENTS_TRAVEL_DELETE = new String[]

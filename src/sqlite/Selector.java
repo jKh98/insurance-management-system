@@ -10,6 +10,19 @@ import java.util.ArrayList;
 public class Selector {
 
     /**
+     * manager object to access database methods
+     */
+    SQLiteManager manager;
+
+    /**
+     * Constructor that sets up the manager object
+     *
+     * @param manager
+     */
+    public Selector(SQLiteManager manager) {
+        this.manager = manager;
+    }
+    /**
      * Selects and prints all available travel policies
      * Prints following: PolicyNo, EffectiveDate, ExpiryDate, Premium, IsValid, DepartureCountry, DestinationCountry, Family
      *
@@ -25,10 +38,10 @@ public class Selector {
      *        travel
      * WHERE  policy.policy_no =  travel.policy_no
      */
-    public static void selectAllTravelPolicies() {
+    public void selectAllTravelPolicies() {
         // Array list to store query result
         ArrayList<Object[]> result;
-        result = SQLiteManager.selectDataFromTable(
+        result = manager.selectDataFromTable(
                 new String[]{
                         Constants.TABLE_NAME_POLICY,
                         Constants.TABLE_NAME_TRAVEL,
@@ -70,10 +83,10 @@ public class Selector {
      *          motor
      * WHERE    policy.policy_no =  motor.policy_no
      */
-    public static void selectAllMotorPolicies() {
+    public void selectAllMotorPolicies() {
         // Array list to store query result
         ArrayList<Object[]> result;
-        result = SQLiteManager.selectDataFromTable(new String[]{
+        result = manager.selectDataFromTable(new String[]{
                 Constants.TABLE_NAME_POLICY,
                 Constants.TABLE_NAME_MOTOR,
         }, new String[]{
@@ -109,10 +122,10 @@ public class Selector {
      *          beneficiary
      * WHERE    policy.policy_no =  beneficiary.policy_no
      */
-    public static void selectAllMedicalPolicies() {
+    public void selectAllMedicalPolicies() {
         // Array list to store query result
         ArrayList<Object[]> result;
-        result = SQLiteManager.selectDataFromTable(new String[]{
+        result = manager.selectDataFromTable(new String[]{
                 Constants.TABLE_NAME_POLICY,
                 Constants.TABLE_NAME_BENEFICIARY,
         }, new String[]{
@@ -149,10 +162,10 @@ public class Selector {
      * @param lower lower bound of range
      * @param upper upper bound of range
      */
-    public static void selectPoliciesPremiumRange(double lower, double upper) {
+    public void selectPoliciesPremiumRange(double lower, double upper) {
         String[] selections = new String[]{Constants.TABLE_COLUMN_POLICY_NO, Constants.TABLE_COLUMN_PREMIUM};
         ArrayList<Object[]> result;
-        result = SQLiteManager.selectDataFromTable(new String[]{Constants.TABLE_NAME_POLICY},
+        result = manager.selectDataFromTable(new String[]{Constants.TABLE_NAME_POLICY},
                 selections,
                 new String[]{Constants.TABLE_COLUMN_PREMIUM, Constants.SQL_BETWEEN, " ? AND ? "},
                 new Object[]{lower, upper});
@@ -184,9 +197,9 @@ public class Selector {
      *
      * FROM     policy
      */
-    public static void selectPoliciesClaimsData() {
+    public void selectPoliciesClaimsData() {
         ArrayList<Object[]> result;
-        result = SQLiteManager.selectDataFromTable(new String[]{Constants.TABLE_NAME_POLICY},
+        result = manager.selectDataFromTable(new String[]{Constants.TABLE_NAME_POLICY},
                 new String[]{
                         "" + Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_POLICY_NO + "",
                         "(" + Constants.SQL_SELECT + " " + Constants.SQL_COUNT + "(" + Constants.TABLE_COLUMN_CLAIMED_AMOUNT + ") from " + Constants.TABLE_NAME_CLAIM + " where " + Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_POLICY_NO + " = " + Constants.TABLE_NAME_CLAIM + "." + Constants.TABLE_COLUMN_POLICY_NO + ")",

@@ -12,16 +12,30 @@ import java.util.Map;
  */
 public class Inserter {
     /**
+     * SQLiteManager object to access database methods
+     */
+    SQLiteManager manager;
+
+    /**
+     * Constructor that sets up the SQLiteManager object
+     *
+     * @param manager
+     */
+    public Inserter(SQLiteManager manager) {
+        this.manager = manager;
+    }
+
+    /**
      * Adds general policy regardless of type to policy table and returns new policy number
      * Access is private since user can only add one of the given policy types
      *
      * @param values to add to tab;e
      * @return new policy number
      */
-    private static String addGenericPolicy(Map<String, Object> values) {
+    private String addGenericPolicy(Map<String, Object> values) {
         Object id = null;
         // Insert a new policy to policy table
-        id = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_POLICY, new Object[]{
+        id = manager.insertDataInTable(Constants.TABLE_NAME_POLICY, new Object[]{
                 null,
                 values.get(Constants.TABLE_COLUMN_EFFECTIVE),
                 values.get(Constants.TABLE_COLUMN_EXPIRY),
@@ -30,7 +44,7 @@ public class Inserter {
                 values.get(Constants.TABLE_COLUMN_POLICY_TYPE)
         });
         // Use returned policy id to get thew new policyNo
-        ArrayList<Object[]> result = SQLiteManager.selectDataFromTable(
+        ArrayList<Object[]> result = manager.selectDataFromTable(
                 new String[]{Constants.TABLE_NAME_POLICY,},
                 new String[]{Constants.TABLE_COLUMN_POLICY_NO,},
                 new String[]{Constants.TABLE_COLUMN_ID + " = ?",},
@@ -48,7 +62,7 @@ public class Inserter {
      *
      * @param values values of travel policy to add
      */
-    public static void addTravelPolicy(Map<String, Object> values) {
+    public void addTravelPolicy(Map<String, Object> values) {
         Map<String, Object> valuesMap = new HashMap<>(values);
         valuesMap.put(Constants.TABLE_COLUMN_POLICY_TYPE, "travel");
         // Add new policy to policy data and get its new policy number
@@ -56,7 +70,7 @@ public class Inserter {
         Object result = null;
         if (policyNo != null) {
             // Use received policyNo to add travel policy specific info
-            result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_TRAVEL, new Object[]{
+            result = manager.insertDataInTable(Constants.TABLE_NAME_TRAVEL, new Object[]{
                     null,
                     policyNo,
                     valuesMap.get(Constants.TABLE_COLUMN_DEPARTURE),
@@ -74,7 +88,7 @@ public class Inserter {
      *
      * @param values values of motor policy to add
      */
-    public static void addMotorPolicy(Map<String, Object> values) {
+    public void addMotorPolicy(Map<String, Object> values) {
         Map<String, Object> valuesMap = new HashMap<>(values);
         valuesMap.put(Constants.TABLE_COLUMN_POLICY_TYPE, "motor");
         // Add new policy to policy data and get its new policy number
@@ -82,7 +96,7 @@ public class Inserter {
         Object result = null;
         if (policyNo != null) {
             // Use received policyNo to add motor policy specific info
-            result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_MOTOR, new Object[]{
+            result = manager.insertDataInTable(Constants.TABLE_NAME_MOTOR, new Object[]{
                     null,
                     policyNo,
                     valuesMap.get(Constants.TABLE_COLUMN_VEHICLE_PRICE),
@@ -100,7 +114,7 @@ public class Inserter {
      *
      * @param values of medical policy and correlated beneficiary to add
      */
-    public static void addMedicalPolicy(Map<String, Object> values) {
+    public void addMedicalPolicy(Map<String, Object> values) {
         Object result = null;
         Map<String, Object> valuesMap = new HashMap<>(values);
         valuesMap.put(Constants.TABLE_COLUMN_POLICY_TYPE, "medical");
@@ -109,7 +123,7 @@ public class Inserter {
         if (policyNo != null) {
             // Use received policyNo to add beneficiary since each medical policy
             // requires at least one beneficiary
-            result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_BENEFICIARY, new Object[]{
+            result = manager.insertDataInTable(Constants.TABLE_NAME_BENEFICIARY, new Object[]{
                     null,
                     values.get(Constants.TABLE_COLUMN_NAME),
                     values.get(Constants.TABLE_COLUMN_RELATION),
@@ -121,7 +135,7 @@ public class Inserter {
         }
         // If beneficiary was not added correctly delete the policy
         if (result == null) {
-            SQLiteManager.deleteDataFromTable(Constants.TABLE_NAME_POLICY,
+            manager.deleteDataFromTable(Constants.TABLE_NAME_POLICY,
                     new String[]{Constants.TABLE_COLUMN_POLICY_NO + " = ?",},
                     new Object[]{policyNo,}
             );
@@ -135,10 +149,10 @@ public class Inserter {
      *
      * @param values of beneficiary to add
      */
-    private static void addBeneficiary(Map<String, Object> values) {
+    private void addBeneficiary(Map<String, Object> values) {
         Object result = null;
         // Return ID of added beneficiary
-        result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_BENEFICIARY, new Object[]{
+        result = manager.insertDataInTable(Constants.TABLE_NAME_BENEFICIARY, new Object[]{
                 null,
                 values.get(Constants.TABLE_COLUMN_NAME),
                 values.get(Constants.TABLE_COLUMN_RELATION),
@@ -155,10 +169,10 @@ public class Inserter {
      *
      * @param values of claim to add
      */
-    public static void addClaim(Map<String, Object> values) {
+    public void addClaim(Map<String, Object> values) {
         Object result;
         // Return ID of added beneficiary
-        result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_CLAIM, new Object[]{
+        result = manager.insertDataInTable(Constants.TABLE_NAME_CLAIM, new Object[]{
                 null,
                 values.get(Constants.TABLE_COLUMN_POLICY_NO),
                 values.get(Constants.TABLE_COLUMN_INCURRED_DATE),

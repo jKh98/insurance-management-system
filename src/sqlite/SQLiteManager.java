@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 /**
  * Class to manage SQLite database
- * Contains static methods for accessing db
+ * Contains  methods for accessing db
  */
 public class SQLiteManager {
 
@@ -18,26 +18,35 @@ public class SQLiteManager {
     /**
      * Database connection object
      */
-    private static Connection connection = null;
+    private Connection connection = null;
 
     /**
      * Prepared statement object for various SQL statements
      * Usually more recommended than regular statement object
      * Less prone to SQL injection attacks
      */
-    private static PreparedStatement preparedStatement = null;
+    private PreparedStatement preparedStatement = null;
+
+    /**
+     * Database name string
+     */
+    private String dbName;
+
+    /**
+     * Class constructor that sets the database name and sets up the connection to the database
+     *
+     * @param dbName name of the database
+     */
+    public SQLiteManager(String dbName) {
+        this.dbName = dbName;
+        setUpConnectionToDB();
+    }
 
     /**
      * Opens sqlite database or starts a new database with provided name if it does not already exist
      * Database is under "%AbsoluteUserHomeDirectory%/sqlite"
-     *
-     * @param dbName name of database to be used
-     * @return if connected or not
      */
-    public static boolean setUpConnectionToDB(String dbName) {
-
-        boolean connected = false;
-
+    private void setUpConnectionToDB() {
         // Locate DB on platform-independent user home path under the directory named "sqlite"
         // File.separator is used based on existing platform
         String dbPathURL =
@@ -62,25 +71,16 @@ public class SQLiteManager {
                 //Print database URL
                 Printer.printDBConnection(meta.getURL());
             }
-
-            connected = true;
-
         } catch (SQLException e) {
             // Print db connection exception
-//            e.printStackTrace();
+            System.out.println(e.getLocalizedMessage());
         }
-
-        return connected;
     }
-
 
     /**
      * Closes SQLite database connection
-     *
-     * @return if disconnected or not
      */
-    public static boolean disconnectAndCloseDB() {
-        boolean disconnected = false;
+    public void disconnectAndCloseDB() {
         try {
             // Close database connection
             connection.close();
@@ -88,12 +88,10 @@ public class SQLiteManager {
             Printer.printCloseDBMessage();
             // Set connection to null
             connection = null;
-            disconnected = true;
         } catch (Exception e) {
             // Print db disconnection exception
-//            e.printStackTrace();
+            System.out.println(e.getLocalizedMessage());
         }
-        return disconnected;
     }
 
     /**
@@ -102,10 +100,8 @@ public class SQLiteManager {
      *
      * @param tableName name of table to be added
      * @param columns   columns of table including name, constraints and checks
-     * @return
      */
-    public static boolean addTableToDB(String tableName, String[] columns) {
-        boolean result = false;
+    public void addTableToDB(String tableName, String[] columns) {
         try {
             connection.setAutoCommit(true);
             // Add column names by concatenation since they cannot be passed to the prepared statement
@@ -117,17 +113,22 @@ public class SQLiteManager {
             preparedStatement.executeUpdate();
             // Close prepared statement
             preparedStatement.close();
-            result = true;
             Printer.printTableAddedMessage(tableName);
 
         } catch (SQLException e) {
-//            e.printStackTrace();
+            System.out.println(e.getLocalizedMessage());
         }
-        return result;
     }
 
-    public static boolean addTriggerToTable(String tableName, String triggerName, String executeOn, String[] statements) {
-        boolean result = false;
+    /**
+     * If trigger does not exist, add trigger to specified table
+     *
+     * @param tableName   name of table to add trigger on
+     * @param triggerName name of the trigger
+     * @param executeOn   could be : 'before insert on', 'before update on' ...
+     * @param statements  SQL statements to be executed with the trigger
+     */
+    public void addTriggerToTable(String tableName, String triggerName, String executeOn, String[] statements) {
         try {
             connection.setAutoCommit(true);
             //
@@ -143,27 +144,22 @@ public class SQLiteManager {
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(triggerQuery.toString());
             preparedStatement.executeUpdate();
-            System.out.println(triggerQuery.toString());
             // Close prepared statement
             preparedStatement.close();
-            result = true;
             Printer.printTriggerAddedMessage(tableName, triggerName);
         } catch (SQLException e) {
-//            e.printStackTrace();
+            System.out.println(e.getLocalizedMessage());
         }
-        return result;
     }
-
-    ;
 
     /**
      * General dynamic insert for any table in database
      *
      * @param tableName name of the table to insert into
      * @param values    insertion objects, each type will be added according to instance (String, Long etc..)
-     * @return ID of the inserted row
+     * @return ID of the inserted row, or database raised error
      */
-    public static Object insertDataInTable(String tableName, Object[] values) {
+    public Object insertDataInTable(String tableName, Object[] values) {
         Object result = null;
         try {
             connection.setAutoCommit(true);
@@ -175,7 +171,6 @@ public class SQLiteManager {
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(insertQuery);
             // Bind values to prepared statement
-            System.out.println(insertQuery);
             DBUtils.bindValuesToPreparedStatement(preparedStatement, values);
             // Execute insert update
             preparedStatement.executeUpdate();
@@ -190,7 +185,7 @@ public class SQLiteManager {
             preparedStatement.close();
 
         } catch (SQLException e) {
-//            e.printStackTrace();
+            // On fail to insert, return failure reason
             result = e.getLocalizedMessage().split("[()]")[1];
         }
         return result;
@@ -205,7 +200,7 @@ public class SQLiteManager {
      * @param values     left hand side values of condition statements
      * @return 2d array of query results
      */
-    public static ArrayList<Object[]> selectDataFromTable(String[] tableNames, String[] selections, String[] conditions, Object[] values) {
+    public ArrayList<Object[]> selectDataFromTable(String[] tableNames, String[] selections, String[] conditions, Object[] values) {
         ArrayList<Object[]> result = new ArrayList<>();
         // Check if selecting specific column or all table columns
         String selectionsString;
@@ -254,11 +249,10 @@ public class SQLiteManager {
      * @param tableName  name of table to delete from
      * @param conditions conditions of data deletion
      * @param values     left hand side values of condition statements
-     * @return deleted or not
      */
-    static boolean deleteDataFromTable(String tableName, String[] conditions, Object[] values) {
+    void deleteDataFromTable(String tableName, String[] conditions, Object[] values) {
         if (conditions == null || values == null) {
-            return false;
+            return;
         }
         boolean result = false;
         try {
@@ -285,8 +279,7 @@ public class SQLiteManager {
             // Close prepared statement
             preparedStatement.close();
         } catch (SQLException e) {
-//            e.printStackTrace();
+            System.out.println(e.getLocalizedMessage());
         }
-        return result;
     }
 }
