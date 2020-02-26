@@ -129,5 +129,58 @@ public class TestValues {
     public static final long CLAIM_15_INCURRED = Instant.now().getEpochSecond();
     public static final double CLAIM_15_CLAIMED_AMOUNT = 0.0;
 
+    static String[] CLAIM_ALL_POLICY_NO = new String[]{
+            CLAIM_1_POLICY_NO,
+            CLAIM_2_POLICY_NO,
+            CLAIM_3_POLICY_NO,
+            CLAIM_4_POLICY_NO,
+            CLAIM_5_POLICY_NO,
+            CLAIM_6_POLICY_NO,
+            CLAIM_7_POLICY_NO,
+            CLAIM_8_POLICY_NO,
+            CLAIM_9_POLICY_NO,
+            CLAIM_10_POLICY_NO,
+            CLAIM_11_POLICY_NO,
+            CLAIM_12_POLICY_NO,
+            CLAIM_13_POLICY_NO,
+            CLAIM_14_POLICY_NO,
+            CLAIM_15_POLICY_NO,
+    };
+
+    static long[] CLAIM_ALL_INCURRED = new long[]{
+            CLAIM_1_INCURRED,
+            CLAIM_2_INCURRED,
+            CLAIM_3_INCURRED,
+            CLAIM_4_INCURRED,
+            CLAIM_5_INCURRED,
+            CLAIM_6_INCURRED,
+            CLAIM_7_INCURRED,
+            CLAIM_8_INCURRED,
+            CLAIM_9_INCURRED,
+            CLAIM_10_INCURRED,
+            CLAIM_11_INCURRED,
+            CLAIM_12_INCURRED,
+            CLAIM_13_INCURRED,
+            CLAIM_14_INCURRED,
+            CLAIM_15_INCURRED,
+    };
+
+    static double[] CLAIM_ALL_CLAIMED_AMOUNT = new double[]{
+            CLAIM_1_CLAIMED_AMOUNT,
+            CLAIM_2_CLAIMED_AMOUNT,
+            CLAIM_3_CLAIMED_AMOUNT,
+            CLAIM_4_CLAIMED_AMOUNT,
+            CLAIM_5_CLAIMED_AMOUNT,
+            CLAIM_6_CLAIMED_AMOUNT,
+            CLAIM_7_CLAIMED_AMOUNT,
+            CLAIM_8_CLAIMED_AMOUNT,
+            CLAIM_9_CLAIMED_AMOUNT,
+            CLAIM_10_CLAIMED_AMOUNT,
+            CLAIM_11_CLAIMED_AMOUNT,
+            CLAIM_12_CLAIMED_AMOUNT,
+            CLAIM_13_CLAIMED_AMOUNT,
+            CLAIM_14_CLAIMED_AMOUNT,
+            CLAIM_15_CLAIMED_AMOUNT,
+    };
 
 }

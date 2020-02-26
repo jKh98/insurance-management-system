@@ -33,6 +33,7 @@ public class Constants {
     public static final String MESSAGE_TRIGGER = "Trigger ";
     public static final String MESSAGE_TRIGGER_ADDED = " was added on table ";
     public static final String MESSAGE_NO_RESULTS = "No results";
+    public static final String MESSAGE_INVALID_CLAIM = "Cannot add beneficiary because it is invalid!";
 
     // Database specific values
     public static final String TABLE_COLUMN_ID = "id";
@@ -179,4 +180,19 @@ public class Constants {
                     " AND " + TABLE_NAME_BENEFICIARY + "." + TABLE_COLUMN_RELATION + " = 'self')>0 ",
                     "THEN RAISE (ABORT, 'Can only have one beneficiary as self') END;END;"};
 
+    // *************************** Parameters for claim triggers ***************************
+    public static final String TRIGGER_CLAIM_ABORT = "claim_abort";
+    public static final String[] TRIGGER_STATEMENTS_CLAIM_ABORT = new String[]
+            {"SELECT CASE WHEN ",
+                    " NEW." + TABLE_COLUMN_INCURRED_DATE + " NOT BETWEEN ",
+                    "(SELECT " + TABLE_COLUMN_EFFECTIVE + " FROM " + TABLE_NAME_POLICY,
+                    " WHERE " + TABLE_COLUMN_POLICY_NO + " = NEW." + TABLE_COLUMN_POLICY_NO + " )",
+                    " AND (SELECT " + TABLE_COLUMN_EXPIRY + " FROM " + TABLE_NAME_POLICY,
+                    " WHERE " + TABLE_COLUMN_POLICY_NO + " = NEW." + TABLE_COLUMN_POLICY_NO + " )",
+                    "THEN RAISE (ABORT, 'Claim is rejected because Policy# is inactive or expired!')",
+                    "WHEN NOT EXISTS (SELECT " + TABLE_COLUMN_POLICY_NO + " FROM " + TABLE_NAME_POLICY + " WHERE " + TABLE_COLUMN_POLICY_NO +
+                            " = NEW." + TABLE_COLUMN_POLICY_NO + ") THEN RAISE (ABORT, 'Cannot submit a claim for Policy#  because it does not exist!')",
+                    " END;END;"};
+
 }
+//' || New." + TABLE_COLUMN_POLICY_NO + " || '

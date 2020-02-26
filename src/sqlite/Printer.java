@@ -2,6 +2,7 @@ package sqlite;
 
 
 import others.Constants;
+import others.Utils;
 
 import java.util.ArrayList;
 
@@ -9,20 +10,6 @@ import java.util.ArrayList;
  * Contains methods used to print messages, errors, and query results
  */
 class Printer {
-    /**
-     * Prints message if policy is added and error otherwise
-     *
-     * @param result   result of INSERT query. Value is 0L if insert was not successful
-     * @param policyNo string value of PolicyNo
-     */
-    static void showPolicyAddedMessage(Long result, String policyNo) {
-        // If result is inserted notify with a message
-        if (result != 0L) {
-            System.out.println(Constants.TABLE_NAME_POLICY + Constants.MESSAGE_SPACE + policyNo + Constants.MESSAGE_SUCCESSFULLY_ADDED);
-        } else {
-            System.out.println(Constants.MESSAGE_INVALID_POLICY);
-        }
-    }
 
     /**
      * Prints the name of the jdbc driver
@@ -99,7 +86,7 @@ class Printer {
         System.out.println("\n");
         if (result.size() > 0) {
             // Get column spacing based on number of columns
-            String spacing = getFormatSpacing(result.get(0).length);
+            String spacing = Utils.getFormatSpacing(result.get(0).length);
             // Print header
             System.out.format(spacing + "\n", (Object[]) header);
             // Print table data row by row
@@ -113,30 +100,49 @@ class Printer {
     }
 
     /**
-     * Returns a formatting string based on given table
+     * Prints message if policy is added and error otherwise
      *
-     * @param length number of table columns
-     * @return format string
+     * @param result   result of INSERT query. Value is 0L if insert was not successful
+     * @param policyNo string value of PolicyNo
      */
-    private static String getFormatSpacing(int length) {
-        StringBuilder s = new StringBuilder("%-20s");
-        while (--length > 0) {
-            s.append("%-20s");
+    static void printPolicyAddedMessage(Object result, String policyNo) {
+        // If result is Long then insert returned an ID and hence was successful
+        if (result instanceof Long) {
+            System.out.println(Constants.TABLE_NAME_POLICY + Constants.MESSAGE_SPACE + policyNo + Constants.MESSAGE_SUCCESSFULLY_ADDED);
+        } else if (result instanceof String) {
+            // if result is a string then it is definitely an error message
+            System.out.println(result);
+        } else {
+            System.out.println(Constants.MESSAGE_INVALID_POLICY);
         }
-        return s.toString();
     }
 
     /**
      * Prints message if beneficiary is added and error otherwise
      *
-     * @param result result of INSERT query. Value is 0L if insert was not successful
+     * @param result result of INSERT query.
      */
-    public static void showBeneficiaryAddedMessage(Long result) {
-        // If result is inserted notify with a message
-        if (result != 0L) {
+    public static void printBeneficiaryAddedMessage(Object result) {
+        // If result is Long then insert returned an ID and hence was successful
+        if (result instanceof Long) {
             System.out.println(Constants.TABLE_NAME_BENEFICIARY + Constants.MESSAGE_SUCCESSFULLY_ADDED);
+        } else if (result instanceof String) {
+            // if result is a string then it is definitely an error message
+            System.out.println(result);
         } else {
             System.out.println(Constants.MESSAGE_INVALID_BENEFICIARY);
+        }
+    }
+
+    public static void printClaimAddedMessage(Object result) {
+        // If result is Long then insert returned an ID and hence was successful
+        if (result instanceof Long) {
+            System.out.println(Constants.TABLE_NAME_CLAIM + Constants.MESSAGE_SUCCESSFULLY_ADDED);
+        } else if (result instanceof String) {
+            // if result is a string then it is definitely an error message
+            System.out.println(result);
+        } else {
+            System.out.println(Constants.MESSAGE_INVALID_CLAIM);
         }
     }
 }

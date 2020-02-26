@@ -22,7 +22,9 @@ public class TestDemo {
         insertTestPolicyRecords();
         // 5. Select all policy records and print
         selectTestPolicyRecords();
-        // 5. Close database
+        // 6. Insert test claim records
+        insertTestClaimRecords();
+        // 7. Close database
         SQLiteManager.disconnectAndCloseDB();
     }
 
@@ -60,6 +62,8 @@ public class TestDemo {
         SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_BENEFICIARY, Constants.TRIGGER_MEDICAL_DELETE, Constants.SQL_AFTER_DELETE_ON, Constants.TRIGGER_STATEMENTS_MEDICAL_DELETE);
         // 7. Medical self trigger that makes sure there is one self per policy_no
         SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_BENEFICIARY, Constants.TRIGGER_MEDICAL_ONE_SELF, Constants.SQL_BEFORE_INSERT_ON, Constants.TRIGGER_STATEMENTS_MEDICAL_SELF);
+        // 8. Claim abort trigger that makes sure incurred date is within expiry and effective and that policy number is valid
+        SQLiteManager.addTriggerToTable(Constants.TABLE_NAME_CLAIM, Constants.TRIGGER_CLAIM_ABORT, Constants.SQL_BEFORE_INSERT_ON, Constants.TRIGGER_STATEMENTS_CLAIM_ABORT);
     }
 
     /**
@@ -165,5 +169,20 @@ public class TestDemo {
         Selector.selectAllMedicalPolicies();
         // 4. select and print all policies with premium between 500 and 2000
         Selector.selectPoliciesPremiumRange(500, 20000);
+    }
+
+    /**
+     * Inserts test claim records into claim table
+     */
+    private static void insertTestClaimRecords() {
+        // Insert 15 claims claim
+        for (int i = 0; i < 15; i++) {
+            int finalI = i;
+            Inserter.addClaim(new HashMap<String, Object>() {{
+                put(Constants.TABLE_COLUMN_POLICY_NO, TestValues.CLAIM_ALL_POLICY_NO[finalI]);
+                put(Constants.TABLE_COLUMN_INCURRED_DATE, TestValues.CLAIM_ALL_INCURRED[finalI]);
+                put(Constants.TABLE_COLUMN_CLAIMED_AMOUNT, TestValues.CLAIM_ALL_CLAIMED_AMOUNT[finalI]);
+            }});
+        }
     }
 }

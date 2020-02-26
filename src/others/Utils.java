@@ -48,4 +48,18 @@ public class Utils {
         if (addParenthesis) arguments.append(")");
         return arguments.toString();
     }
+
+    /**
+     * Returns a formatting string based on given table
+     *
+     * @param length number of table columns
+     * @return format string
+     */
+    public static String getFormatSpacing(int length) {
+        StringBuilder s = new StringBuilder("%-20s");
+        while (--length > 0) {
+            s.append("%-20s");
+        }
+        return s.toString();
+    }
 }

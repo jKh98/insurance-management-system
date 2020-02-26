@@ -141,6 +141,7 @@ public class SQLiteManager {
             }
             triggerQuery.append(Constants.SQL_END);
             // Prepared statement for new table
+            System.out.println(triggerQuery.toString());
             preparedStatement = connection.prepareStatement(triggerQuery.toString());
             preparedStatement.executeUpdate();
             // Close prepared statement
@@ -162,8 +163,8 @@ public class SQLiteManager {
      * @param values    insertion objects, each type will be added according to instance (String, Long etc..)
      * @return ID of the inserted row
      */
-    public static Long insertDataInTable(String tableName, Object[] values) {
-        long result = 0L;
+    public static Object insertDataInTable(String tableName, Object[] values) {
+        Object result = null;
         try {
             connection.setAutoCommit(true);
             // Construct sql statement : INSERT INTO <tablename> (?, ... )
@@ -180,7 +181,7 @@ public class SQLiteManager {
             // Get id of the row inserted
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
-                result = resultSet.getLong(1);
+                result = resultSet.getObject(1);
             }
             // Close result set
             resultSet.close();
@@ -189,6 +190,7 @@ public class SQLiteManager {
 
         } catch (SQLException e) {
 //            e.printStackTrace();
+            result = e.getLocalizedMessage().split("[()]")[1];
         }
         return result;
     }

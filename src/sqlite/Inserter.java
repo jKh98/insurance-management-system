@@ -19,7 +19,7 @@ public class Inserter {
      * @return new policy number
      */
     private static String addGenericPolicy(Map<String, Object> values) {
-        Long id;
+        Object id = null;
         // Insert a new policy to policy table
         id = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_POLICY, new Object[]{
                 null,
@@ -53,7 +53,7 @@ public class Inserter {
         valuesMap.put(Constants.TABLE_COLUMN_POLICY_TYPE, "travel");
         // Add new policy to policy data and get its new policy number
         String policyNo = addGenericPolicy(valuesMap);
-        Long result = 0L;
+        Object result = null;
         if (policyNo != null) {
             // Use received policyNo to add travel policy specific info
             result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_TRAVEL, new Object[]{
@@ -65,7 +65,7 @@ public class Inserter {
             });
         }
         // If result is inserted notify with a message
-        Printer.showPolicyAddedMessage(result, policyNo);
+        Printer.printPolicyAddedMessage(result, policyNo);
     }
 
     /**
@@ -79,7 +79,7 @@ public class Inserter {
         valuesMap.put(Constants.TABLE_COLUMN_POLICY_TYPE, "motor");
         // Add new policy to policy data and get its new policy number
         String policyNo = addGenericPolicy(valuesMap);
-        Long result = 0L;
+        Object result = null;
         if (policyNo != null) {
             // Use received policyNo to add motor policy specific info
             result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_MOTOR, new Object[]{
@@ -89,7 +89,7 @@ public class Inserter {
             });
         }
         // If result is inserted notify with a message
-        Printer.showPolicyAddedMessage(result, policyNo);
+        Printer.printPolicyAddedMessage(result, policyNo);
     }
 
     /**
@@ -101,7 +101,7 @@ public class Inserter {
      * @param values of medical policy and correlated beneficiary to add
      */
     public static void addMedicalPolicy(Map<String, Object> values) {
-        Long result = 0L;
+        Object result = null;
         Map<String, Object> valuesMap = new HashMap<>(values);
         valuesMap.put(Constants.TABLE_COLUMN_POLICY_TYPE, "medical");
         // Add new policy to policy data and get its new policy number
@@ -120,14 +120,14 @@ public class Inserter {
 
         }
         // If beneficiary was not added correctly delete the policy
-        if (result == 0F) {
+        if (result == null) {
             SQLiteManager.deleteDataFromTable(Constants.TABLE_NAME_POLICY,
                     new String[]{Constants.TABLE_COLUMN_POLICY_NO + " = ?",},
                     new Object[]{policyNo,}
             );
         }
         // If result is inserted notify with a message
-        Printer.showPolicyAddedMessage(result, policyNo);
+        Printer.printPolicyAddedMessage(result, policyNo);
     }
 
     /**
@@ -136,7 +136,7 @@ public class Inserter {
      * @param values of beneficiary to add
      */
     private static void addBeneficiary(Map<String, Object> values) {
-        Long result = 0L;
+        Object result = null;
         // Return ID of added beneficiary
         result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_BENEFICIARY, new Object[]{
                 null,
@@ -147,7 +147,7 @@ public class Inserter {
                 values.get(Constants.TABLE_COLUMN_POLICY_NO),
         });
         // If result is inserted notify with a message
-        Printer.showBeneficiaryAddedMessage(result);
+        Printer.printBeneficiaryAddedMessage(result);
     }
 
     /**
@@ -156,11 +156,15 @@ public class Inserter {
      * @param values of claim to add
      */
     public static void addClaim(Map<String, Object> values) {
-        SQLiteManager.insertDataInTable(Constants.TABLE_NAME_CLAIM, new Object[]{
+        Object result;
+        // Return ID of added beneficiary
+        result = SQLiteManager.insertDataInTable(Constants.TABLE_NAME_CLAIM, new Object[]{
                 null,
                 Constants.TABLE_COLUMN_INCURRED_DATE,
                 Constants.TABLE_COLUMN_POLICY_NO,
                 Constants.TABLE_COLUMN_CLAIMED_AMOUNT,
         });
+        // If result is inserted notify with a message
+        Printer.printClaimAddedMessage(result);
     }
 }
