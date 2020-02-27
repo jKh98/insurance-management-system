@@ -1,6 +1,6 @@
 package sqlite;
 
-import others.Constants;
+import others.Consts;
 
 import java.util.ArrayList;
 
@@ -22,20 +22,26 @@ public class Selector {
     public Selector(SQLiteManager manager) {
         this.manager = manager;
     }
+
+    private String[] tableNames;
+    private String[] selections;
+    private String[] conditions;
+    private Object[] values;
+
     /**
      * Selects and prints all available travel policies
      * Prints following: PolicyNo, EffectiveDate, ExpiryDate, Premium, IsValid, DepartureCountry, DestinationCountry, Family
-     *
+     * <p>
      * Query:
      * SELECT policy.policy_no,
-     *        DATE(policy.effective,'unixepoch'),
-     *        DATE(policy.expiry,'unixepoch'),
-     *        policy.premium,policy.is_valid,
-     *        travel.departure,
-     *        travel.destination,
-     *        travel.family
+     * DATE(policy.effective,'unixepoch'),
+     * DATE(policy.expiry,'unixepoch'),
+     * policy.premium,policy.is_valid,
+     * travel.departure,
+     * travel.destination,
+     * travel.family
      * FROM   policy,
-     *        travel
+     * travel
      * WHERE  policy.policy_no =  travel.policy_no
      */
     public void selectAllTravelPolicies() {
@@ -43,119 +49,132 @@ public class Selector {
         ArrayList<Object[]> result;
         result = manager.selectDataFromTable(
                 new String[]{
-                        Constants.TABLE_NAME_POLICY,
-                        Constants.TABLE_NAME_TRAVEL,
+                        Consts.TABLE_NAME_POLICY,
+                        Consts.TABLE_NAME_TRAVEL,
                 },
                 new String[]{
-                        Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_POLICY_NO,
-                        "DATE(" + Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_EFFECTIVE + ",'unixepoch')",
-                        "DATE(" + Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_EXPIRY + ",'unixepoch')",
-                        Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_PREMIUM,
-                        Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_IS_VALID,
-                        Constants.TABLE_NAME_TRAVEL + "." + Constants.TABLE_COLUMN_DEPARTURE,
-                        Constants.TABLE_NAME_TRAVEL + "." + Constants.TABLE_COLUMN_DESTINATION,
-                        Constants.TABLE_NAME_TRAVEL + "." + Constants.TABLE_COLUMN_FAMILY,
+                        DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO),
+                        Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EFFECTIVE) + ",'unixepoch'"),
+                        Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EXPIRY) + ",'unixepoch'"),
+                        DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_PREMIUM),
+                        DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_IS_VALID),
+                        DBUtils.dot(Consts.TABLE_NAME_TRAVEL, Consts.TABLE_COLUMN_DEPARTURE),
+                        DBUtils.dot(Consts.TABLE_NAME_TRAVEL, Consts.TABLE_COLUMN_DESTINATION),
+                        DBUtils.dot(Consts.TABLE_NAME_TRAVEL, Consts.TABLE_COLUMN_FAMILY),
                 },
-                new String[]{Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_POLICY_NO + " = ",
-                        Constants.TABLE_NAME_TRAVEL + "." + Constants.TABLE_COLUMN_POLICY_NO},
+                new String[]{DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO) + " = ",
+                        DBUtils.dot(Consts.TABLE_NAME_TRAVEL, Consts.TABLE_COLUMN_POLICY_NO)},
                 null
         );
         // Prints results in table form
         Printer.printAsList(new String[]{
-                Constants.TABLE_COLUMN_POLICY_NO, Constants.TABLE_COLUMN_EFFECTIVE, Constants.TABLE_COLUMN_EXPIRY,
-                Constants.TABLE_COLUMN_PREMIUM, Constants.TABLE_COLUMN_IS_VALID, Constants.TABLE_COLUMN_DEPARTURE,
-                Constants.TABLE_COLUMN_DESTINATION, Constants.TABLE_COLUMN_FAMILY,
+                Consts.TABLE_COLUMN_POLICY_NO, Consts.TABLE_COLUMN_EFFECTIVE, Consts.TABLE_COLUMN_EXPIRY,
+                Consts.TABLE_COLUMN_PREMIUM, Consts.TABLE_COLUMN_IS_VALID, Consts.TABLE_COLUMN_DEPARTURE,
+                Consts.TABLE_COLUMN_DESTINATION, Consts.TABLE_COLUMN_FAMILY,
         }, result);
     }
 
     /**
      * Selects and prints all available motor policies
      * Prints following: PolicyNo, EffectiveDate, ExpiryDate, Premium, IsValid, VehiclePrice
-     *
+     * <p>
      * Query:
      * SELECT   policy.policy_no,
-     *          DATE(policy.effective,'unixepoch'),
-     *          DATE(policy.expiry,'unixepoch'),
-     *          policy.premium,
-     *          policy.is_valid,
-     *          motor.vehicle_price
+     * DATE(policy.effective,'unixepoch'),
+     * DATE(policy.expiry,'unixepoch'),
+     * policy.premium,
+     * policy.is_valid,
+     * motor.vehicle_price
      * FROM     policy,
-     *          motor
+     * motor
      * WHERE    policy.policy_no =  motor.policy_no
      */
     public void selectAllMotorPolicies() {
         // Array list to store query result
         ArrayList<Object[]> result;
-        result = manager.selectDataFromTable(new String[]{
-                Constants.TABLE_NAME_POLICY,
-                Constants.TABLE_NAME_MOTOR,
-        }, new String[]{
-                Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_POLICY_NO,
-                "DATE(" + Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_EFFECTIVE + ",'unixepoch')",
-                "DATE(" + Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_EXPIRY + ",'unixepoch')",
-                Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_PREMIUM,
-                Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_IS_VALID,
-                Constants.TABLE_NAME_MOTOR + "." + Constants.TABLE_COLUMN_VEHICLE_PRICE,
-        }, new String[]{
-                Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_POLICY_NO + " = ",
-                Constants.TABLE_NAME_MOTOR + "." + Constants.TABLE_COLUMN_POLICY_NO,
-        }, null);
+        tableNames = new String[]{
+                Consts.TABLE_NAME_POLICY,
+                Consts.TABLE_NAME_MOTOR,
+        };
+        selections = new String[]{
+                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO),
+                Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EFFECTIVE) + ",'unixepoch'"),
+                Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EXPIRY) + ",'unixepoch'"),
+                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_PREMIUM),
+                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_IS_VALID),
+                DBUtils.dot(Consts.TABLE_NAME_MOTOR, Consts.TABLE_COLUMN_VEHICLE_PRICE),
+        };
+        conditions = new String[]{
+                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO) + " = ",
+                DBUtils.dot(Consts.TABLE_NAME_MOTOR, Consts.TABLE_COLUMN_POLICY_NO),
+        };
+
+        result = manager.selectDataFromTable(tableNames, selections, conditions, null);
         // Prints results in table form
         Printer.printAsList(new String[]{
-                Constants.TABLE_COLUMN_POLICY_NO, Constants.TABLE_COLUMN_EFFECTIVE, Constants.TABLE_COLUMN_EXPIRY,
-                Constants.TABLE_COLUMN_PREMIUM, Constants.TABLE_COLUMN_IS_VALID, Constants.TABLE_COLUMN_VEHICLE_PRICE,
+                Consts.TABLE_COLUMN_POLICY_NO, Consts.TABLE_COLUMN_EFFECTIVE, Consts.TABLE_COLUMN_EXPIRY,
+                Consts.TABLE_COLUMN_PREMIUM, Consts.TABLE_COLUMN_IS_VALID, Consts.TABLE_COLUMN_VEHICLE_PRICE,
         }, result);
     }
 
     /**
      * Selects and prints all available medical policies
      * Prints following: PolicyNo, EffectiveDate, ExpiryDate, Premium, IsValid, number of Beneficiaries
-     *
+     * <p>
      * Query:
      * SELECT   policy.policy_no,
-     *          DATE(policy.effective,'unixepoch'),
-     *          DATE(policy.expiry,'unixepoch'),
-     *          policy.premium,
-     *          policy.is_valid,
-     *          (SELECT  count(*) From beneficiary as b1  WHERE  b1.policy_no = policy.policy_no AND b1.relation <> 'self') AS dependents
+     * DATE(policy.effective,'unixepoch'),
+     * DATE(policy.expiry,'unixepoch'),
+     * policy.premium,
+     * policy.is_valid,
+     * (SELECT  count(*) From beneficiary as b1  WHERE  b1.policy_no = policy.policy_no AND b1.relation <> 'self') AS dependents
      * FROM     policy,
-     *          beneficiary
+     * beneficiary
      * WHERE    policy.policy_no =  beneficiary.policy_no
      */
     public void selectAllMedicalPolicies() {
         // Array list to store query result
         ArrayList<Object[]> result;
-        result = manager.selectDataFromTable(new String[]{
-                Constants.TABLE_NAME_POLICY,
-                Constants.TABLE_NAME_BENEFICIARY,
-        }, new String[]{
-                Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_POLICY_NO,
-                "DATE(" + Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_EFFECTIVE + ",'unixepoch')",
-                "DATE(" + Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_EXPIRY + ",'unixepoch')",
-                Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_PREMIUM,
-                Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_IS_VALID,
-                "(" + Constants.SQL_SELECT + " count(*) From " + Constants.TABLE_NAME_BENEFICIARY +
-                        " as b1 " + Constants.SQL_WHERE + " b1." + Constants.TABLE_COLUMN_POLICY_NO +
-                        " = " + Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_POLICY_NO +
-                        " AND b1." + Constants.TABLE_COLUMN_RELATION + " <> 'self') AS dependents ",
-        }, new String[]{
-                Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_POLICY_NO + " = ",
-                Constants.TABLE_NAME_BENEFICIARY + "." + Constants.TABLE_COLUMN_POLICY_NO,
-        }, null);
+        // Specify tables
+        tableNames = new String[]{
+                Consts.TABLE_NAME_POLICY,
+                Consts.TABLE_NAME_BENEFICIARY,
+        };
+        // Specify selections
+        selections = new String[]{
+                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO),
+                Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EFFECTIVE) + ",'unixepoch'"),
+                Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EXPIRY) + ",'unixepoch'"),
+                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_PREMIUM),
+                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_IS_VALID),
+                DBUtils.constructSelectQuery(new String[]{Consts.TABLE_NAME_BENEFICIARY},
+                        new String[]{Consts.SQL_COUNT + DBUtils.parenthesise(Consts.SQL_ALL)},
+                        new String[]{DBUtils.dot(Consts.TABLE_NAME_BENEFICIARY, Consts.TABLE_COLUMN_POLICY_NO)
+                                + " = " + DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO),
+                                " AND " + Consts.TABLE_COLUMN_RELATION + " <> 'self'"}),
+        };
+        // Specify conditions
+        conditions = new String[]{
+                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO) + " = ",
+                DBUtils.dot(Consts.TABLE_NAME_BENEFICIARY, Consts.TABLE_COLUMN_POLICY_NO),
+        };
+
+        // Execute query
+        result = manager.selectDataFromTable(tableNames, selections, conditions, null);
         // Prints results in table form
         Printer.printAsList(new String[]{
-                Constants.TABLE_COLUMN_POLICY_NO, Constants.TABLE_COLUMN_EFFECTIVE, Constants.TABLE_COLUMN_EXPIRY,
-                Constants.TABLE_COLUMN_PREMIUM, Constants.TABLE_COLUMN_IS_VALID, "dependencies",
+                Consts.TABLE_COLUMN_POLICY_NO, Consts.TABLE_COLUMN_EFFECTIVE, Consts.TABLE_COLUMN_EXPIRY,
+                Consts.TABLE_COLUMN_PREMIUM, Consts.TABLE_COLUMN_IS_VALID, "dependencies",
         }, result);
     }
 
     /**
      * Selects and prints all policy numbers with premium between lower and upper
      * Prints following: PolicyNo, Premium
-     *
+     * <p>
      * Query:
      * SELECT   policy_no,
-     *          premium
+     * premium
      * FROM     policy
      * WHERE    premium  BETWEEN  ? AND ?
      *
@@ -163,12 +182,12 @@ public class Selector {
      * @param upper upper bound of range
      */
     public void selectPoliciesPremiumRange(double lower, double upper) {
-        String[] selections = new String[]{Constants.TABLE_COLUMN_POLICY_NO, Constants.TABLE_COLUMN_PREMIUM};
+        tableNames = new String[]{Consts.TABLE_NAME_POLICY};
+        selections = new String[]{Consts.TABLE_COLUMN_POLICY_NO, Consts.TABLE_COLUMN_PREMIUM};
+        conditions = new String[]{Consts.TABLE_COLUMN_PREMIUM, Consts.SQL_BETWEEN, " ? AND ? "};
+        values = new Object[]{lower, upper};
         ArrayList<Object[]> result;
-        result = manager.selectDataFromTable(new String[]{Constants.TABLE_NAME_POLICY},
-                selections,
-                new String[]{Constants.TABLE_COLUMN_PREMIUM, Constants.SQL_BETWEEN, " ? AND ? "},
-                new Object[]{lower, upper});
+        result = manager.selectDataFromTable(tableNames, selections, conditions, values);
         // Prints results in table form
         Printer.printAsTable(selections, result);
     }
@@ -176,41 +195,57 @@ public class Selector {
     /**
      * Selects and prints all for each policy number, the number of claims, sum of claimed amounts, min and max claim amount
      * Prints following: PolicyNo, count, sum, min, max
-     *
+     * <p>
      * Query:
      * SELECT   policy.policy_no,
-     *          (SELECT     count(claimed_amount)
-     *           from       claim
-     *           where      policy.policy_no = claim.policy_no),
-     *
-     *          (SELECT     sum(claimed_amount)
-     *          from        claim
-     *          where       policy.policy_no = claim.policy_no),
-     *
-     *          (SELECT     min(claimed_amount)
-     *          from        claim
-     *          where       policy.policy_no = claim.policy_no),
-     *
-     *          (SELECT     max(claimed_amount)
-     *          from        claim
-     *          where       policy.policy_no = claim.policy_no)
-     *
+     * (SELECT     count(claimed_amount)
+     * from       claim
+     * where      policy.policy_no = claim.policy_no),
+     * <p>
+     * (SELECT     sum(claimed_amount)
+     * from        claim
+     * where       policy.policy_no = claim.policy_no),
+     * <p>
+     * (SELECT     min(claimed_amount)
+     * from        claim
+     * where       policy.policy_no = claim.policy_no),
+     * <p>
+     * (SELECT     max(claimed_amount)
+     * from        claim
+     * where       policy.policy_no = claim.policy_no)
+     * <p>
      * FROM     policy
      */
     public void selectPoliciesClaimsData() {
+        tableNames = new String[]{Consts.TABLE_NAME_POLICY};
+        selections = new String[]{
+                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO),
+                DBUtils.parenthesise(DBUtils.constructSelectQuery(
+                        new String[]{Consts.TABLE_NAME_CLAIM},
+                        new String[]{Consts.SQL_COUNT + DBUtils.parenthesise(Consts.TABLE_COLUMN_CLAIMED_AMOUNT)},
+                        new String[]{DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO) + " = " +
+                                DBUtils.dot(Consts.TABLE_NAME_CLAIM, Consts.TABLE_COLUMN_POLICY_NO)})),
+                DBUtils.parenthesise(DBUtils.constructSelectQuery(
+                        new String[]{Consts.TABLE_NAME_CLAIM},
+                        new String[]{Consts.SQL_SUM + DBUtils.parenthesise(Consts.TABLE_COLUMN_CLAIMED_AMOUNT)},
+                        new String[]{DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO) + " = " +
+                                DBUtils.dot(Consts.TABLE_NAME_CLAIM, Consts.TABLE_COLUMN_POLICY_NO)})),
+                DBUtils.parenthesise(DBUtils.constructSelectQuery(
+                        new String[]{Consts.TABLE_NAME_CLAIM},
+                        new String[]{Consts.SQL_MIN + DBUtils.parenthesise(Consts.TABLE_COLUMN_CLAIMED_AMOUNT)},
+                        new String[]{DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO) + " = " +
+                                DBUtils.dot(Consts.TABLE_NAME_CLAIM, Consts.TABLE_COLUMN_POLICY_NO)})),
+                DBUtils.parenthesise(DBUtils.constructSelectQuery(
+                        new String[]{Consts.TABLE_NAME_CLAIM},
+                        new String[]{Consts.SQL_MAX + DBUtils.parenthesise(Consts.TABLE_COLUMN_CLAIMED_AMOUNT)},
+                        new String[]{DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO) + " = " +
+                                DBUtils.dot(Consts.TABLE_NAME_CLAIM, Consts.TABLE_COLUMN_POLICY_NO)})),
+        };
         ArrayList<Object[]> result;
-        result = manager.selectDataFromTable(new String[]{Constants.TABLE_NAME_POLICY},
-                new String[]{
-                        "" + Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_POLICY_NO + "",
-                        "(" + Constants.SQL_SELECT + " " + Constants.SQL_COUNT + "(" + Constants.TABLE_COLUMN_CLAIMED_AMOUNT + ") from " + Constants.TABLE_NAME_CLAIM + " where " + Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_POLICY_NO + " = " + Constants.TABLE_NAME_CLAIM + "." + Constants.TABLE_COLUMN_POLICY_NO + ")",
-                        "(" + Constants.SQL_SELECT + " " + Constants.SQL_SUM + "(" + Constants.TABLE_COLUMN_CLAIMED_AMOUNT + ") from " + Constants.TABLE_NAME_CLAIM + " where " + Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_POLICY_NO + " = " + Constants.TABLE_NAME_CLAIM + "." + Constants.TABLE_COLUMN_POLICY_NO + ")",
-                        "(" + Constants.SQL_SELECT + " " + Constants.SQL_MIN + "(" + Constants.TABLE_COLUMN_CLAIMED_AMOUNT + ") from " + Constants.TABLE_NAME_CLAIM + " where " + Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_POLICY_NO + " = " + Constants.TABLE_NAME_CLAIM + "." + Constants.TABLE_COLUMN_POLICY_NO + ")",
-                        "(" + Constants.SQL_SELECT + " " + Constants.SQL_MAX + "(" + Constants.TABLE_COLUMN_CLAIMED_AMOUNT + ") from " + Constants.TABLE_NAME_CLAIM + " where " + Constants.TABLE_NAME_POLICY + "." + Constants.TABLE_COLUMN_POLICY_NO + " = " + Constants.TABLE_NAME_CLAIM + "." + Constants.TABLE_COLUMN_POLICY_NO + ")"
-                },
-                null, null);
+        result = manager.selectDataFromTable(tableNames, selections, null, null);
         // Prints results in table form
         Printer.printAsTable(new String[]{
-                Constants.TABLE_COLUMN_POLICY_NO, Constants.SQL_COUNT, Constants.SQL_SUM, Constants.SQL_MIN, Constants.SQL_MAX
+                Consts.TABLE_COLUMN_POLICY_NO, Consts.SQL_COUNT, Consts.SQL_SUM, Consts.SQL_MIN, Consts.SQL_MAX
         }, result);
     }
 }

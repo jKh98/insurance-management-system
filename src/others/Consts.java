@@ -1,6 +1,6 @@
 package others;
 
-public class Constants {
+public class Consts {
 
     // General values
     public static final String SQLITE_DIR_NAME = "sqlite";
@@ -23,6 +23,7 @@ public class Constants {
     public static final String SQL_SUM = "sum";
     public static final String SQL_MIN = "min";
     public static final String SQL_MAX = "max";
+    public static final String SQL_DATE = "DATE";
     public static final String PARAM_JDBC_DB_PREFIX = "jdbc:sqlite:";
     public static final String PARAM_JDBC_DB_ENABLE_FK = "PRAGMA foreign_keys = ON";
     public static final String MESSAGE_OPENED_DB = "Opened connection to database :";
@@ -53,7 +54,7 @@ public class Constants {
     public static final String TABLE_COLUMN_POLICY_NO = "policy_no";
 
     public static final String[] TABLE_COLUMN_VALUES_POLICY = new String[]
-            {Constants.TABLE_AUTO_ID
+            {Consts.TABLE_AUTO_ID
                     , TABLE_COLUMN_EFFECTIVE + " BIGINT NOT NULL"
                     , TABLE_COLUMN_EXPIRY + " BIGINT NOT NULL CHECK (" + TABLE_COLUMN_EXPIRY + " > " + TABLE_COLUMN_EFFECTIVE + ")"
                     , TABLE_COLUMN_PREMIUM + " DECIMAL NOT NULL"
@@ -77,13 +78,13 @@ public class Constants {
     public static final String TABLE_CONSTRAINT_TRAVEL = "fk_policy_no";
 
     public static final String[] TABLE_COLUMN_VALUES_TRAVEL = new String[]
-            {Constants.TABLE_AUTO_ID
+            {Consts.TABLE_AUTO_ID
                     , TABLE_COLUMN_POLICY_NO + " TEXT NOT NULL UNIQUE CHECK ( " + TABLE_COLUMN_POLICY_NO + " LIKE '%travel%')"
                     , TABLE_COLUMN_DEPARTURE + " TEXT NOT NULL"
                     , TABLE_COLUMN_DESTINATION + " TEXT NOT NULL"
                     , TABLE_COLUMN_FAMILY + " INTEGER NOT NULL CHECK (" + TABLE_COLUMN_FAMILY + " IN (0,1))"
                     , " CONSTRAINT " + TABLE_CONSTRAINT_TRAVEL + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_NO + ") REFERENCES " +
-                    Constants.TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
+                    Consts.TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
                     ") ON DELETE CASCADE"
             };
 
@@ -93,11 +94,11 @@ public class Constants {
     public static final String TABLE_CONSTRAINT_MOTOR = "fk_policy_no";
 
     public static final String[] TABLE_COLUMN_VALUES_MOTOR = new String[]
-            {Constants.TABLE_AUTO_ID
+            {Consts.TABLE_AUTO_ID
                     , TABLE_COLUMN_POLICY_NO + " TEXT NOT NULL UNIQUE CHECK ( " + TABLE_COLUMN_POLICY_NO + " LIKE '%motor%') "
                     , TABLE_COLUMN_VEHICLE_PRICE + " DECIMAL NOT NULL"
                     , " CONSTRAINT " + TABLE_CONSTRAINT_MOTOR + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_NO + ") REFERENCES " +
-                    Constants.TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
+                    Consts.TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
                     ") ON DELETE CASCADE"
             };
 
@@ -110,14 +111,14 @@ public class Constants {
     public static final String TABLE_CONSTRAINT_BENEFICIARY = "fk_policy_no";
 
     public static final String[] TABLE_COLUMN_VALUES_BENEFICIARY = new String[]
-            {Constants.TABLE_AUTO_ID
+            {Consts.TABLE_AUTO_ID
                     , TABLE_COLUMN_NAME + " TEXT NOT NULL"
                     , TABLE_COLUMN_RELATION + " TEXT NOT NULL CHECK (LOWER(" + TABLE_COLUMN_RELATION + ") IN ('self','spouse','son','daughter'))"
                     , TABLE_COLUMN_GENDER + " TEXT NOT NULL CHECK (LOWER(" + TABLE_COLUMN_GENDER + ") IN ('male','female'))"
                     , TABLE_COLUMN_BIRTH_DATE + " BIGINT NOT NULL"
                     , TABLE_COLUMN_POLICY_NO + " TEXT NOT NULL CHECK ( " + TABLE_COLUMN_POLICY_NO + " LIKE '%medical%')"
                     , " CONSTRAINT " + TABLE_CONSTRAINT_BENEFICIARY + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_NO + ") REFERENCES " +
-                    Constants.TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
+                    Consts.TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
                     ") ON DELETE CASCADE"
             };
 
@@ -128,12 +129,12 @@ public class Constants {
     public static final String TABLE_CONSTRAINT_CLAIM = "fk_policy_no";
 
     public static final String[] TABLE_COLUMN_VALUES_CLAIM = new String[]
-            {Constants.TABLE_AUTO_ID
+            {Consts.TABLE_AUTO_ID
                     , TABLE_COLUMN_POLICY_NO + " TEXT NOT NULL"
                     , TABLE_COLUMN_INCURRED_DATE + " BIGINT NOT NULL"
                     , TABLE_COLUMN_CLAIMED_AMOUNT + " DECIMAL NOT NULL"
                     , " CONSTRAINT " + TABLE_CONSTRAINT_CLAIM + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_NO + ") REFERENCES " +
-                    Constants.TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
+                    Consts.TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
                     ") ON DELETE CASCADE"
             };
 
@@ -199,5 +200,6 @@ public class Constants {
                     "WHEN NOT EXISTS (SELECT " + TABLE_COLUMN_POLICY_NO + " FROM " + TABLE_NAME_POLICY + " WHERE " + TABLE_COLUMN_POLICY_NO +
                             " = NEW." + TABLE_COLUMN_POLICY_NO + ") THEN RAISE (ABORT, 'Cannot submit a claim for Policy#  because it does not exist!')",
                     " END;END;"};
+
 }
 //' || New." + TABLE_COLUMN_POLICY_NO + " || '

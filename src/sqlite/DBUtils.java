@@ -1,5 +1,7 @@
 package sqlite;
 
+import others.Consts;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -48,5 +50,125 @@ public class DBUtils {
                 preparedStatement.setString(i++, (String) value);
             }
         }
+    }
+
+    /**
+     * Construct an SQL query for adding a new table to database
+     *
+     * @param tableName name of table to add
+     * @param columns   array of column names to add
+     * @return SQL create query
+     */
+    public static String constructTableQuery(String tableName, String[] columns) {
+        return Consts.SQL_CREATE_TABLE
+                + tableName
+                + parenthesise(argumentsDynamicConstructor(columns));
+    }
+
+    /**
+     * Construct an SQL Query string for inserting in a table and dynamically appends ? placeholders
+     * based on number of insertion columns
+     *
+     * @param tableName    name of table to insert to
+     * @param numOfColumns number of columns to insert
+     * @return SQL insert query
+     */
+    public static String constructInsertQuery(String tableName, int numOfColumns) {
+        return Consts.SQL_INSERT_INTO_TABLE
+                + tableName
+                + Consts.SQL_VALUES
+                + valuesPlaceholderDynamicConstructor(numOfColumns);
+    }
+
+    /**
+     * Constructs an SQL Query string for selecting a number of columns from a number of tables based
+     * on a number of conditions.
+     *
+     * @param tableNames an array of table names
+     * @param selections an array of column names for selection
+     * @param conditions an array of conditions for selections, possibly having binding parameters ?
+     * @return SQL select Query
+     */
+    public static String constructSelectQuery(String[] tableNames, String[] selections, String[] conditions) {
+        String selectionsString;
+        if (selections == null || selections.length == 0) {
+            selectionsString = Consts.SQL_ALL;
+        } else {
+            selectionsString = argumentsDynamicConstructor(selections);
+        }
+        // New string builder
+        StringBuilder selectQuery = new StringBuilder();
+        // Add select word
+        selectQuery.append(Consts.SQL_SELECT);
+        // Append list of selections
+        selectQuery.append(selectionsString);
+        // Append from
+        selectQuery.append(Consts.SQL_FROM);
+        // Append list of tables
+        selectQuery.append(argumentsDynamicConstructor(tableNames));
+
+        // Check if there are any selection conditions
+        if (conditions != null && conditions.length > 0) {
+            // Append where
+            selectQuery.append(Consts.SQL_WHERE);
+            // for each condition, append then pad with space
+            for (String condition : conditions) {
+                selectQuery.append(condition).append(" ");
+            }
+        }
+        return selectQuery.toString();
+    }
+
+    /**
+     * Dynamically builds "values(?, ... )" string of placeholders
+     * needed for an SQL prepared statement based on number of values
+     *
+     * @param size number of values characters
+     * @return "values(?, ... )" string with proper number of values
+     */
+    public static String valuesPlaceholderDynamicConstructor(int size) {
+
+        // Use string builder for higher performance when appending
+        StringBuilder valuesBuilder = new StringBuilder("(");
+        for (int i = 0; i < size; i++) {
+            valuesBuilder.append("?");
+
+            // Do not add "," after last "?"
+            if (i != size - 1) {
+                valuesBuilder.append(",");
+            }
+        }
+        String values = valuesBuilder.toString();
+        values += ")";
+        return values;
+    }
+
+    /**
+     * Dynamically builds (args1,arg2, ...) string of arguments
+     * Needed for SQL table columns for new tables
+     *
+     * @param args list of string arguments
+     * @return (arg1, arg2, ...) string with all arguments
+     */
+    public static String argumentsDynamicConstructor(String[] args) {
+
+        // Use string builder for higher performance when appending
+        StringBuilder arguments = new StringBuilder();
+        // Append values
+        for (String arg : args) {
+            arguments.append(arg);
+            arguments.append(",");
+        }
+        // Remove last comma
+        arguments.delete(arguments.length() - 1, arguments.length());
+        return arguments.toString();
+    }
+
+    public static String parenthesise(String arg) {
+        return "(" + arg + ")";
+    }
+
+    public static String dot(String table, String column) {
+        return table + "." + column;
     }
 }

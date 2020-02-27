@@ -1,7 +1,6 @@
 package sqlite;
 
-import others.Constants;
-import others.Utils;
+import others.Consts;
 
 import java.io.File;
 import java.sql.*;
@@ -52,7 +51,7 @@ public class SQLiteManager {
         String dbPathURL =
                 System.getProperty("user.home") +
                         File.separator +
-                        Constants.SQLITE_DIR_NAME +
+                        Consts.SQLITE_DIR_NAME +
                         File.separator;
 
         // Make directory if does not exist
@@ -62,9 +61,9 @@ public class SQLiteManager {
         }
         try {
             // Try connecting to the database
-            connection = DriverManager.getConnection(Constants.PARAM_JDBC_DB_PREFIX + dbPathURL + dbName);
+            connection = DriverManager.getConnection(Consts.PARAM_JDBC_DB_PREFIX + dbPathURL + dbName);
             if (connection != null) {
-                connection.createStatement().execute(Constants.PARAM_JDBC_DB_ENABLE_FK);
+                connection.createStatement().execute(Consts.PARAM_JDBC_DB_ENABLE_FK);
                 DatabaseMetaData meta = connection.getMetaData();
                 // Print driver name
                 Printer.printDriverName(meta.getDriverName());
@@ -105,9 +104,7 @@ public class SQLiteManager {
         try {
             connection.setAutoCommit(true);
             // Add column names by concatenation since they cannot be passed to the prepared statement
-            String tableQuery = Constants.SQL_CREATE_TABLE
-                    + tableName
-                    + Utils.argumentsDynamicConstructor(columns, true);
+            String tableQuery = DBUtils.constructTableQuery(tableName,columns);
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(tableQuery);
             preparedStatement.executeUpdate();
@@ -132,15 +129,15 @@ public class SQLiteManager {
         try {
             connection.setAutoCommit(true);
             //
-            StringBuilder triggerQuery = new StringBuilder(Constants.SQL_CREATE_TRIGGER
+            StringBuilder triggerQuery = new StringBuilder(Consts.SQL_CREATE_TRIGGER
                     + triggerName
                     + executeOn
                     + tableName);
-            triggerQuery.append(Constants.SQL_BEGIN);
+            triggerQuery.append(Consts.SQL_BEGIN);
             for (String statement : statements) {
                 triggerQuery.append(statement);
             }
-            triggerQuery.append(Constants.SQL_END);
+            triggerQuery.append(Consts.SQL_END);
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(triggerQuery.toString());
             preparedStatement.executeUpdate();
@@ -164,10 +161,7 @@ public class SQLiteManager {
         try {
             connection.setAutoCommit(true);
             // Construct sql statement : INSERT INTO <tablename> (?, ... )
-            String insertQuery = Constants.SQL_INSERT_INTO_TABLE
-                    + tableName
-                    + Constants.SQL_VALUES
-                    + Utils.valuesPlaceholderDynamicConstructor(values.length);
+            String insertQuery = DBUtils.constructInsertQuery(tableName, values.length);
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(insertQuery);
             // Bind values to prepared statement
@@ -203,28 +197,13 @@ public class SQLiteManager {
     public ArrayList<Object[]> selectDataFromTable(String[] tableNames, String[] selections, String[] conditions, Object[] values) {
         ArrayList<Object[]> result = new ArrayList<>();
         // Check if selecting specific column or all table columns
-        String selectionsString;
-        if (selections == null || selections.length == 0) {
-            selectionsString = Constants.SQL_ALL;
-        } else {
-            selectionsString = Utils.argumentsDynamicConstructor(selections, false);
-        }
         try {
             connection.setAutoCommit(true);
             // Construct sql statement : SELECT <selection1, ...> FROM <tablename1, ...> WHERE (...)
-            StringBuilder selectQuery = new StringBuilder(Constants.SQL_SELECT
-                    + selectionsString
-                    + Constants.SQL_FROM
-                    + Utils.argumentsDynamicConstructor(tableNames, false));
-            // Check if there are any selection conditions
-            if (conditions != null && conditions.length > 0) {
-                selectQuery.append(Constants.SQL_WHERE);
-                for (String condition : conditions) {
-                    selectQuery.append(condition).append(" ");
-                }
-            }
+            String selectQuery = DBUtils.constructSelectQuery(tableNames,selections,conditions);
             // Prepared statement for new table
-            preparedStatement = connection.prepareStatement(selectQuery.toString());
+            preparedStatement = connection.prepareStatement(selectQuery);
+            System.out.println(selectQuery);
             // Bind values to prepared statement
             if (values != null && values.length > 0)
                 DBUtils.bindValuesToPreparedStatement(preparedStatement, values);
@@ -251,6 +230,7 @@ public class SQLiteManager {
      * @param values     left hand side values of condition statements
      */
     void deleteDataFromTable(String tableName, String[] conditions, Object[] values) {
+        // @todo optimize this
         if (conditions == null || values == null) {
             return;
         }
@@ -259,11 +239,11 @@ public class SQLiteManager {
             connection.setAutoCommit(true);
             // Construct sql statement : DELETE FROM <tablename> WHERE (?, ... )
             StringBuilder deleteQuery = new StringBuilder(
-                    Constants.SQL_DELETE_FROM_TABLE
+                    Consts.SQL_DELETE_FROM_TABLE
                             + tableName);
             // Check if there are any selection conditions
             if (conditions.length > 0) {
-                deleteQuery.append(Constants.SQL_WHERE);
+                deleteQuery.append(Consts.SQL_WHERE);
                 for (String condition : conditions) {
                     deleteQuery.append(condition).append(" ");
                 }
