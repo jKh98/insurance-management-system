@@ -102,7 +102,7 @@ public class SQLiteManager {
         try {
             connection.setAutoCommit(true);
             // Add column names by concatenation since they cannot be passed to the prepared statement
-            String tableQuery = DBUtils.constructTableQuery(tableName,columns);
+            String tableQuery = DBUtils.constructTableQuery(tableName, columns);
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(tableQuery);
             preparedStatement.executeUpdate();
@@ -198,10 +198,9 @@ public class SQLiteManager {
         try {
             connection.setAutoCommit(true);
             // Construct sql statement : SELECT <selection1, ...> FROM <tablename1, ...> WHERE (...)
-            String selectQuery = DBUtils.constructSelectQuery(tableNames,selections,conditions);
+            String selectQuery = DBUtils.constructSelectQuery(tableNames, selections, conditions);
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(selectQuery);
-            System.out.println(selectQuery);
             // Bind values to prepared statement
             if (values != null && values.length > 0)
                 DBUtils.bindValuesToPreparedStatement(preparedStatement, values);

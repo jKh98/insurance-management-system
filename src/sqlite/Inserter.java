@@ -38,7 +38,7 @@ public class Inserter {
                 values.get(Consts.TABLE_COLUMN_EFFECTIVE),
                 values.get(Consts.TABLE_COLUMN_EXPIRY),
                 0.0,
-                values.get(Consts.TABLE_COLUMN_IS_VALID),
+//                0,
                 values.get(Consts.TABLE_COLUMN_POLICY_TYPE)
         });
         // Use returned policy id to get thew new policyNo
