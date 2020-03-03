@@ -118,6 +118,27 @@ public class DBUtils {
     }
 
     /**
+     * Constructs an SQL delete query based on table name and conditions
+     *
+     * @param tableName  name of table to delete from
+     * @param conditions deletion conditions
+     * @return SQL delete query
+     */
+    public static String constructDeleteQuery(String tableName, String[] conditions) {
+        StringBuilder deleteQuery = new StringBuilder(
+                Consts.SQL_DELETE_FROM_TABLE
+                        + tableName);
+        // Check if there are any selection conditions
+        if (conditions.length > 0) {
+            deleteQuery.append(Consts.SQL_WHERE);
+            for (String condition : conditions) {
+                deleteQuery.append(condition).append(" ");
+            }
+        }
+        return deleteQuery.toString();
+    }
+
+    /**
      * Dynamically builds "values(?, ... )" string of placeholders
      * needed for an SQL prepared statement based on number of values
      *
@@ -176,7 +197,7 @@ public class DBUtils {
      * Separates two strings with a dot
      * Used to achieve <tableName>.<columnName>
      *
-     * @param tableName table name
+     * @param tableName  table name
      * @param columnName column name
      * @return tableName.columnName
      */

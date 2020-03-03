@@ -138,6 +138,7 @@ public class SQLiteManager {
             triggerQuery.append(Consts.SQL_END);
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(triggerQuery.toString());
+            System.out.println(triggerQuery.toString());
             preparedStatement.executeUpdate();
             // Close prepared statement
             preparedStatement.close();
@@ -231,28 +232,16 @@ public class SQLiteManager {
         if (conditions == null || values == null) {
             return;
         }
-        boolean result = false;
         try {
             connection.setAutoCommit(true);
             // Construct sql statement : DELETE FROM <tablename> WHERE (?, ... )
-            StringBuilder deleteQuery = new StringBuilder(
-                    Consts.SQL_DELETE_FROM_TABLE
-                            + tableName);
-            // Check if there are any selection conditions
-            if (conditions.length > 0) {
-                deleteQuery.append(Consts.SQL_WHERE);
-                for (String condition : conditions) {
-                    deleteQuery.append(condition).append(" ");
-                }
-            }
+            String deleteQuery = DBUtils.constructDeleteQuery(tableName, conditions);
             // Prepared statement for new table
-            preparedStatement = connection.prepareStatement(deleteQuery.toString());
+            preparedStatement = connection.prepareStatement(deleteQuery);
             // Bind values to prepared statement
             if (conditions.length > 0) DBUtils.bindValuesToPreparedStatement(preparedStatement, values);
             // Execute Query and get result
             preparedStatement.executeUpdate();
-            // Store result in 2d Array
-            result = true;
             // Close prepared statement
             preparedStatement.close();
         } catch (SQLException e) {
