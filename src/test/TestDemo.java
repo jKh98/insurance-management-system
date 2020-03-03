@@ -86,7 +86,6 @@ public class TestDemo {
             {
                 put(Consts.TABLE_COLUMN_EFFECTIVE, TestValues.TRAVEL_1_EFFECTIVE);
                 put(Consts.TABLE_COLUMN_EXPIRY, TestValues.TRAVEL_1_EXPIRY);
-                put(Consts.TABLE_COLUMN_IS_VALID, TestValues.TRAVEL_1_IS_VALID);
                 put(Consts.TABLE_COLUMN_DEPARTURE, TestValues.TRAVEL_1_DEPARTURE);
                 put(Consts.TABLE_COLUMN_DESTINATION, TestValues.TRAVEL_1_DESTINATION);
                 put(Consts.TABLE_COLUMN_FAMILY, TestValues.TRAVEL_1_FAMILY);
@@ -97,7 +96,6 @@ public class TestDemo {
         inserter.addMotorPolicy(new HashMap<String, Object>() {{
             put(Consts.TABLE_COLUMN_EFFECTIVE, TestValues.MOTOR_1_EFFECTIVE);
             put(Consts.TABLE_COLUMN_EXPIRY, TestValues.MOTOR_1_EXPIRY);
-            put(Consts.TABLE_COLUMN_IS_VALID, TestValues.MOTOR_1_IS_VALID);
             put(Consts.TABLE_COLUMN_VEHICLE_PRICE, TestValues.MOTOR_1_VEHICLE_PRICE);
         }});
 
@@ -105,7 +103,6 @@ public class TestDemo {
         inserter.addMedicalPolicy(new HashMap<String, Object>() {{
             put(Consts.TABLE_COLUMN_EFFECTIVE, TestValues.MEDICAL_1_EFFECTIVE);
             put(Consts.TABLE_COLUMN_EXPIRY, TestValues.MEDICAL_1_EXPIRY);
-            put(Consts.TABLE_COLUMN_IS_VALID, TestValues.MEDICAL_1_IS_VALID);
             put(Consts.TABLE_COLUMN_NAME, TestValues.MEDICAL_1_NAME);
             put(Consts.TABLE_COLUMN_GENDER, TestValues.MEDICAL_1_GENDER);
             put(Consts.TABLE_COLUMN_RELATION, TestValues.MEDICAL_1_RELATION);
@@ -116,7 +113,6 @@ public class TestDemo {
         inserter.addTravelPolicy(new HashMap<String, Object>() {{
             put(Consts.TABLE_COLUMN_EFFECTIVE, TestValues.TRAVEL_2_EFFECTIVE);
             put(Consts.TABLE_COLUMN_EXPIRY, TestValues.TRAVEL_2_EXPIRY);
-            put(Consts.TABLE_COLUMN_IS_VALID, TestValues.TRAVEL_2_IS_VALID);
             put(Consts.TABLE_COLUMN_DEPARTURE, TestValues.TRAVEL_2_DEPARTURE);
             put(Consts.TABLE_COLUMN_DESTINATION, TestValues.TRAVEL_2_DESTINATION);
             put(Consts.TABLE_COLUMN_FAMILY, TestValues.TRAVEL_2_FAMILY);
@@ -127,7 +123,6 @@ public class TestDemo {
             {
                 put(Consts.TABLE_COLUMN_EFFECTIVE, TestValues.MOTOR_2_EFFECTIVE);
                 put(Consts.TABLE_COLUMN_EXPIRY, TestValues.MOTOR_2_EXPIRY);
-                put(Consts.TABLE_COLUMN_IS_VALID, TestValues.MOTOR_2_IS_VALID);
                 put(Consts.TABLE_COLUMN_VEHICLE_PRICE, TestValues.MOTOR_2_VEHICLE_PRICE);
             }
         });
@@ -136,7 +131,6 @@ public class TestDemo {
         inserter.addMedicalPolicy(new HashMap<String, Object>() {{
             put(Consts.TABLE_COLUMN_EFFECTIVE, TestValues.MEDICAL_2_EFFECTIVE);
             put(Consts.TABLE_COLUMN_EXPIRY, TestValues.MEDICAL_2_EXPIRY);
-            put(Consts.TABLE_COLUMN_IS_VALID, TestValues.MEDICAL_2_IS_VALID);
             put(Consts.TABLE_COLUMN_NAME, TestValues.MEDICAL_2_NAME);
             put(Consts.TABLE_COLUMN_GENDER, TestValues.MEDICAL_2_GENDER);
             put(Consts.TABLE_COLUMN_RELATION, TestValues.MEDICAL_2_RELATION);
@@ -148,7 +142,6 @@ public class TestDemo {
             {
                 put(Consts.TABLE_COLUMN_EFFECTIVE, TestValues.TRAVEL_3_EFFECTIVE);
                 put(Consts.TABLE_COLUMN_EXPIRY, TestValues.TRAVEL_3_EXPIRY);
-                put(Consts.TABLE_COLUMN_IS_VALID, TestValues.TRAVEL_3_IS_VALID);
                 put(Consts.TABLE_COLUMN_DEPARTURE, TestValues.TRAVEL_3_DEPARTURE);
                 put(Consts.TABLE_COLUMN_DESTINATION, TestValues.TRAVEL_3_DESTINATION);
                 put(Consts.TABLE_COLUMN_FAMILY, TestValues.TRAVEL_3_FAMILY);
@@ -159,7 +152,6 @@ public class TestDemo {
         inserter.addMedicalPolicy(new HashMap<String, Object>() {{
             put(Consts.TABLE_COLUMN_EFFECTIVE, TestValues.MEDICAL_3_EFFECTIVE);
             put(Consts.TABLE_COLUMN_EXPIRY, TestValues.MEDICAL_3_EXPIRY);
-            put(Consts.TABLE_COLUMN_IS_VALID, TestValues.MEDICAL_3_IS_VALID);
             put(Consts.TABLE_COLUMN_NAME, TestValues.MEDICAL_3_NAME);
             put(Consts.TABLE_COLUMN_GENDER, TestValues.MEDICAL_3_GENDER);
             put(Consts.TABLE_COLUMN_RELATION, TestValues.MEDICAL_3_RELATION);
