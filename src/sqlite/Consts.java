@@ -1,4 +1,4 @@
-package others;
+package sqlite;
 
 public class Consts {
 

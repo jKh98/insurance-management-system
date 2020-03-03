@@ -1,8 +1,6 @@
 package sqlite;
 
 
-import others.Consts;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +27,7 @@ public class Inserter {
      * Adds general policy regardless of type to policy table and returns new policy number
      * Access is private since user can only add one of the given policy types
      *
-     * @param values to add to tab;e
+     * @param values to add to table
      * @return new policy number
      */
     private String addGenericPolicy(Map<String, Object> values) {

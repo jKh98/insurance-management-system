@@ -1,8 +1,6 @@
 package sqlite;
 
 
-import others.Consts;
-
 import java.util.ArrayList;
 
 /**

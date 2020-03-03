@@ -1,6 +1,6 @@
 package test;
 
-import others.Consts;
+import sqlite.Consts;
 import sqlite.Inserter;
 import sqlite.SQLiteManager;
 import sqlite.Selector;
