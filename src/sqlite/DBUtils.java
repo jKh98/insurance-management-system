@@ -62,11 +62,11 @@ public class DBUtils {
     public static String constructTableQuery(String tableName, String[] columns) {
         return Consts.SQL_CREATE_TABLE
                 + tableName
-                + parenthesise(argumentsDynamicConstructor(columns));
+                + parenthesise(argumentsComaSeparator(columns));
     }
 
     /**
-     * Construct an SQL Query string for inserting in a table and dynamically appends ? placeholders
+     * Construct an SQL Query string for inserting in a table and dynamically append ? placeholders
      * based on number of insertion columns
      *
      * @param tableName    name of table to insert to
@@ -77,7 +77,7 @@ public class DBUtils {
         return Consts.SQL_INSERT_INTO_TABLE
                 + tableName
                 + Consts.SQL_VALUES
-                + valuesPlaceholderDynamicConstructor(numOfColumns);
+                + placeholderConstructor(numOfColumns);
     }
 
     /**
@@ -94,7 +94,7 @@ public class DBUtils {
         if (selections == null || selections.length == 0) {
             selectionsString = Consts.SQL_ALL;
         } else {
-            selectionsString = argumentsDynamicConstructor(selections);
+            selectionsString = argumentsComaSeparator(selections);
         }
         // New string builder
         StringBuilder selectQuery = new StringBuilder();
@@ -105,13 +105,13 @@ public class DBUtils {
         // Append from
         selectQuery.append(Consts.SQL_FROM);
         // Append list of tables
-        selectQuery.append(argumentsDynamicConstructor(tableNames));
+        selectQuery.append(argumentsComaSeparator(tableNames));
 
         // Check if there are any selection conditions
         if (conditions != null && conditions.length > 0) {
             // Append where
             selectQuery.append(Consts.SQL_WHERE);
-            // for each condition, append then pad with space
+            // for each condition, append it then pad with space
             for (String condition : conditions) {
                 selectQuery.append(condition).append(" ");
             }
@@ -126,10 +126,10 @@ public class DBUtils {
      * @param size number of values characters
      * @return "values(?, ... )" string with proper number of values
      */
-    public static String valuesPlaceholderDynamicConstructor(int size) {
+    private static String placeholderConstructor(int size) {
 
         // Use string builder for higher performance when appending
-        StringBuilder valuesBuilder = new StringBuilder("(");
+        StringBuilder valuesBuilder = new StringBuilder();
         for (int i = 0; i < size; i++) {
             valuesBuilder.append("?");
 
@@ -139,8 +139,7 @@ public class DBUtils {
             }
         }
         String values = valuesBuilder.toString();
-        values += ")";
-        return values;
+        return parenthesise(values);
     }
 
     /**
@@ -150,7 +149,7 @@ public class DBUtils {
      * @param args list of string arguments
      * @return (arg1, arg2, ...) string with all arguments
      */
-    public static String argumentsDynamicConstructor(String[] args) {
+    public static String argumentsComaSeparator(String[] args) {
 
         // Use string builder for higher performance when appending
         StringBuilder arguments = new StringBuilder();
@@ -164,11 +163,26 @@ public class DBUtils {
         return arguments.toString();
     }
 
+    /**
+     * Encloses String with parenthesis
+     *
+     * @param arg string to enclose
+     * @return enclosed string
+     */
     public static String parenthesise(String arg) {
         return "(" + arg + ")";
     }
 
-    public static String dot(String table, String column) {
-        return table + "." + column;
+
+    /**
+     * Separates two strings with a dot
+     * Used to achieve <tableName>.<columnName>
+     *
+     * @param tableName table name
+     * @param columnName column name
+     * @return tableName.columnName
+     */
+    public static String dot(String tableName, String columnName) {
+        return tableName + "." + columnName;
     }
 }

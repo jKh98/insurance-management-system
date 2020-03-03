@@ -2,7 +2,6 @@ package sqlite;
 
 
 import others.Consts;
-import others.Utils;
 
 import java.util.ArrayList;
 
@@ -86,7 +85,7 @@ class Printer {
         System.out.println("\n");
         if (result.size() > 0) {
             // Get column spacing based on number of columns
-            String spacing = Utils.getFormatSpacing(result.get(0).length);
+            String spacing = getFormatSpacing(result.get(0).length);
             // Print header
             System.out.format(spacing + "\n", (Object[]) header);
             // Print table data row by row
@@ -144,5 +143,19 @@ class Printer {
         } else {
             System.out.println(Consts.MESSAGE_INVALID_CLAIM);
         }
+    }
+
+    /**
+     * Returns a formatting string based on given table
+     *
+     * @param length number of table columns
+     * @return format string
+     */
+    private static String getFormatSpacing(int length) {
+        StringBuilder s = new StringBuilder("%-20s");
+        while (--length > 0) {
+            s.append("%-20s");
+        }
+        return s.toString();
     }
 }
