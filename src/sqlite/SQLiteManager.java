@@ -228,8 +228,7 @@ public class SQLiteManager {
      * @param values     left hand side values of condition statements
      */
     void deleteDataFromTable(String tableName, String[] conditions, Object[] values) {
-        // @todo optimize this
-        if (conditions == null || values == null) {
+        if (conditions == null) {
             return;
         }
         try {

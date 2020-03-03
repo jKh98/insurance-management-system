@@ -88,12 +88,7 @@ public class DBUtils {
      * @return SQL select Query
      */
     public static String constructSelectQuery(String[] tableNames, String[] selections, String[] conditions) {
-        String selectionsString;
-        if (selections == null || selections.length == 0) {
-            selectionsString = Consts.SQL_ALL;
-        } else {
-            selectionsString = argumentsComaSeparator(selections);
-        }
+        String selectionsString = argumentsComaSeparator(selections);
         // New string builder
         StringBuilder selectQuery = new StringBuilder();
         // Add select word
