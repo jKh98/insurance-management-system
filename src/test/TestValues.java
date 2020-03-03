@@ -45,7 +45,7 @@ public class TestValues {
 
     // Medical policy 2
     public static final long MEDICAL_2_EFFECTIVE = Instant.now().getEpochSecond();
-    public static final long MEDICAL_2_EXPIRY = Instant.now().getEpochSecond() + 22 * 86400; // expires after 22 days
+    public static final long MEDICAL_2_EXPIRY = Instant.now().getEpochSecond() + 22 * 86400; // expires after 22 days fails
     public static final String MEDICAL_2_NAME = "Sarah James";
     public static final String MEDICAL_2_GENDER = "female";
     public static final String MEDICAL_2_RELATION = "spouse";
@@ -82,7 +82,7 @@ public class TestValues {
     public static final double CLAIM_5_CLAIMED_AMOUNT = 1600;
     // Claim 1
     public static final String CLAIM_6_POLICY_NO = "2020-medical-3";
-    public static final long CLAIM_6_INCURRED = Instant.now().getEpochSecond() + 15 * 86400; // before 15 days
+    public static final long CLAIM_6_INCURRED = Instant.now().getEpochSecond() + 5 * 86400; // after 5 days
     public static final double CLAIM_6_CLAIMED_AMOUNT = 120;
     // Claim 1
     public static final String CLAIM_7_POLICY_NO = "2020-travel-4";
@@ -109,7 +109,7 @@ public class TestValues {
     public static final long CLAIM_12_INCURRED = Instant.now().getEpochSecond() - 2 * 86400; // before 2 days
     public static final double CLAIM_12_CLAIMED_AMOUNT = 400;
     // Claim 1
-    public static final String CLAIM_13_POLICY_NO = "2020-travel-7";
+    public static final String CLAIM_13_POLICY_NO = "2020-travel-1";
     public static final long CLAIM_13_INCURRED = Instant.now().getEpochSecond(); // same day
     public static final double CLAIM_13_CLAIMED_AMOUNT = 50;
     // Claim 1
