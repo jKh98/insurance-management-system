@@ -177,6 +177,6 @@ public class Inserter {
                 values.get(Consts.TABLE_COLUMN_CLAIMED_AMOUNT),
         });
         // If result is inserted notify with a message
-        Printer.printClaimAddedMessage(result);
+        Printer.printClaimAddedMessage(result, (String) values.get(Consts.TABLE_COLUMN_POLICY_NO));
     }
 }

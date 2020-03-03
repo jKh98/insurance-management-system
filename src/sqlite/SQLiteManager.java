@@ -215,7 +215,7 @@ public class SQLiteManager {
             preparedStatement.close();
 
         } catch (SQLException e) {
-//            e.printStackTrace();
+            System.out.println(e.getLocalizedMessage());
         }
         return result;
     }

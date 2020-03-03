@@ -131,16 +131,30 @@ class Printer {
         }
     }
 
-    public static void printClaimAddedMessage(Object result) {
+    public static void printClaimAddedMessage(Object result, String policyNo) {
         // If result is a number then insert returned an ID and hence was successful
         if (result instanceof Long || result instanceof Integer) {
             System.out.println(Consts.TABLE_NAME_CLAIM + Consts.MESSAGE_SUCCESSFULLY_ADDED);
         } else if (result instanceof String) {
             // if result is a string then it is definitely an error message
+            result = insertString((String) result,policyNo,'#');
             System.out.println(result);
         } else {
             System.out.println(Consts.MESSAGE_INVALID_CLAIM);
         }
+    }
+
+    private static String insertString(String original, String inserted, char after) {
+        StringBuilder newString = new StringBuilder();
+
+        for (int i = 0; i < original.length(); i++) {
+            newString.append(original.charAt(i));
+            if (original.charAt(i) == after) {
+                newString.append(inserted);
+            }
+        }
+        // return the modified String
+        return newString.toString();
     }
 
     /**

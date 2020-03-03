@@ -18,12 +18,13 @@ public class Consts {
     public static final String SQL_BEFORE_INSERT_ON = " BEFORE INSERT ON ";
     public static final String SQL_BEGIN = " BEGIN ";
     public static final String SQL_END = " END ";
-    public static final String SQL_BETWEEN = " BETWEEN";
+    public static final String SQL_BETWEEN = " BETWEEN ";
     public static final String SQL_COUNT = "count";
     public static final String SQL_SUM = "sum";
     public static final String SQL_MIN = "min";
     public static final String SQL_MAX = "max";
     public static final String SQL_DATE = "DATE";
+    public static final String SQL_IF_NULL = "IFNULL";
     public static final String PARAM_JDBC_DB_PREFIX = "jdbc:sqlite:";
     public static final String PARAM_JDBC_DB_ENABLE_FK = "PRAGMA foreign_keys = ON";
     public static final String MESSAGE_OPENED_DB = "Opened connection to database :";
