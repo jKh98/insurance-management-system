@@ -54,7 +54,7 @@ public class Selector {
                 Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EFFECTIVE) + ",'unixepoch'"),
                 Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EXPIRY) + ",'unixepoch'"),
                 DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_PREMIUM),
-//                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_IS_VALID),
+                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_IS_VALID),
                 DBUtils.dot(Consts.TABLE_NAME_TRAVEL, Consts.TABLE_COLUMN_DEPARTURE),
                 DBUtils.dot(Consts.TABLE_NAME_TRAVEL, Consts.TABLE_COLUMN_DESTINATION),
                 DBUtils.dot(Consts.TABLE_NAME_TRAVEL, Consts.TABLE_COLUMN_FAMILY),
@@ -68,7 +68,7 @@ public class Selector {
         Printer.printAsList(new String[]{
                 Consts.TABLE_COLUMN_POLICY_NO, Consts.TABLE_COLUMN_EFFECTIVE, Consts.TABLE_COLUMN_EXPIRY,
                 Consts.TABLE_COLUMN_PREMIUM,
-//                Consts.TABLE_COLUMN_IS_VALID,
+                Consts.TABLE_COLUMN_IS_VALID,
                 Consts.TABLE_COLUMN_DEPARTURE,
                 Consts.TABLE_COLUMN_DESTINATION, Consts.TABLE_COLUMN_FAMILY,
         }, result);
@@ -101,7 +101,7 @@ public class Selector {
                 Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EFFECTIVE) + ",'unixepoch'"),
                 Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EXPIRY) + ",'unixepoch'"),
                 DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_PREMIUM),
-//                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_IS_VALID),
+                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_IS_VALID),
                 DBUtils.dot(Consts.TABLE_NAME_MOTOR, Consts.TABLE_COLUMN_VEHICLE_PRICE),
         };
         conditions = new String[]{
@@ -114,7 +114,7 @@ public class Selector {
         Printer.printAsList(new String[]{
                 Consts.TABLE_COLUMN_POLICY_NO, Consts.TABLE_COLUMN_EFFECTIVE, Consts.TABLE_COLUMN_EXPIRY,
                 Consts.TABLE_COLUMN_PREMIUM,
-//                Consts.TABLE_COLUMN_IS_VALID,
+                Consts.TABLE_COLUMN_IS_VALID,
                 Consts.TABLE_COLUMN_VEHICLE_PRICE,
         }, result);
     }
@@ -148,7 +148,7 @@ public class Selector {
                 Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EFFECTIVE) + ",'unixepoch'"),
                 Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EXPIRY) + ",'unixepoch'"),
                 DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_PREMIUM),
-//                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_IS_VALID),
+                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_IS_VALID),
                 DBUtils.parenthesise(
                         DBUtils.constructSelectQuery(new String[]{Consts.TABLE_NAME_BENEFICIARY},
                         new String[]{Consts.SQL_COUNT + DBUtils.parenthesise(Consts.SQL_ALL)},
@@ -168,7 +168,7 @@ public class Selector {
         Printer.printAsList(new String[]{
                 Consts.TABLE_COLUMN_POLICY_NO, Consts.TABLE_COLUMN_EFFECTIVE, Consts.TABLE_COLUMN_EXPIRY,
                 Consts.TABLE_COLUMN_PREMIUM,
-//                Consts.TABLE_COLUMN_IS_VALID,
+                Consts.TABLE_COLUMN_IS_VALID,
                 "dependencies",
         }, result);
     }

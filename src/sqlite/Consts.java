@@ -50,7 +50,7 @@ public class Consts {
     public static final String TABLE_COLUMN_EFFECTIVE = "effective";
     public static final String TABLE_COLUMN_EXPIRY = "expiry";
     public static final String TABLE_COLUMN_PREMIUM = "premium";
-//    public static final String TABLE_COLUMN_IS_VALID = "is_valid";
+    public static final String TABLE_COLUMN_IS_VALID = "is_valid";
     public static final String TABLE_COLUMN_POLICY_TYPE = "policy_type";
     public static final String TABLE_COLUMN_POLICY_NO = "policy_no";
 
@@ -59,7 +59,7 @@ public class Consts {
                     , TABLE_COLUMN_EFFECTIVE + " BIGINT NOT NULL"
                     , TABLE_COLUMN_EXPIRY + " BIGINT NOT NULL CHECK (" + TABLE_COLUMN_EXPIRY + " > " + TABLE_COLUMN_EFFECTIVE + ")"
                     , TABLE_COLUMN_PREMIUM + " DECIMAL NOT NULL"
-//                    , TABLE_COLUMN_IS_VALID + " INTEGER NOT NULL CHECK (" + TABLE_COLUMN_IS_VALID + " IN (0,1)) default 0"
+                    , TABLE_COLUMN_IS_VALID + " INTEGER NOT NULL CHECK (" + TABLE_COLUMN_IS_VALID + " IN (0,1)) default 0"
                     , TABLE_COLUMN_POLICY_TYPE + " TEXT NOT NULL CHECK (" +
                     "(LOWER(" + TABLE_COLUMN_POLICY_TYPE + ") = 'travel' " +
                     "AND ((" + TABLE_COLUMN_EXPIRY + " - " + TABLE_COLUMN_EFFECTIVE + ")/86400 <= 30)) " +
@@ -203,4 +203,3 @@ public class Consts {
                     " END;END;"};
 
 }
-//' || New." + TABLE_COLUMN_POLICY_NO + " || '
