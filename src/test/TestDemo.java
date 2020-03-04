@@ -15,24 +15,32 @@ public class TestDemo {
 
     public static void main(String[] args) {
         // 1. Connect to database
+        System.out.println("\n##### Connecting to database #####\n");
         SQLiteManager manager = new SQLiteManager("test.db");
         TableAdder tableAdder = new TableAdder(manager);
         TriggerAdder triggerAdder = new TriggerAdder(manager);
         Inserter inserter = new Inserter(manager);
         Selector selector = new Selector(manager);
         // 2. Add tables if they do not exist
+        System.out.println("\n##### Setting up tables #####\n");
         setUpTables(tableAdder);
         // 3. Add corresponding table triggers if they do not exist
+        System.out.println("\n##### Adding table triggers #####\n");
         setUpTableTriggers(triggerAdder);
         // 4. Insert test table values for travel, motor and medical policies
+        System.out.println("\n##### Inserting test travel, motor and medical policies records #####\n");
         insertTestPolicyRecords(inserter);
         // 5. Select all policy records and print
+        System.out.println("\n##### Printing test travel, motor and medical policies records #####\n");
         selectTestPolicyRecords(selector);
         // 6. Insert test claim records
+        System.out.println("\n##### Inserting test claims records #####\n");
         insertTestClaimRecords(inserter);
         // 7. Select claim related data for each policy
+        System.out.println("\n##### Printing claims data per policy #####\n");
         selector.selectPoliciesClaimsData();
         // 7. Close database
+        System.out.println("\n##### Disconnecting to database #####\n");
         manager.disconnectAndCloseDB();
     }
 
@@ -89,12 +97,12 @@ public class TestDemo {
     /**
      * Insert test records into database tables by calling specific insert methods
      *
-     * @param inserter
+     * @param inserter insert helper class
      */
     private static void insertTestPolicyRecords(Inserter inserter) {
 
         // 1. Insert Travel policy 1 (successful)
-        inserter.addTravelPolicy(new HashMap<String, Object>() {
+        inserter.addTravelPolicy(new HashMap<>() {
             {
                 put(TABLE_COLUMN_EFFECTIVE, TestValues.TRAVEL_1_EFFECTIVE);
                 put(TABLE_COLUMN_EXPIRY, TestValues.TRAVEL_1_EXPIRY);
@@ -105,14 +113,14 @@ public class TestDemo {
         });
 
         // 2. Insert Motor policy 1 (successful)
-        inserter.addMotorPolicy(new HashMap<String, Object>() {{
+        inserter.addMotorPolicy(new HashMap<>() {{
             put(TABLE_COLUMN_EFFECTIVE, TestValues.MOTOR_1_EFFECTIVE);
             put(TABLE_COLUMN_EXPIRY, TestValues.MOTOR_1_EXPIRY);
             put(TABLE_COLUMN_VEHICLE_PRICE, TestValues.MOTOR_1_VEHICLE_PRICE);
         }});
 
         // 3. Insert Medical policy 1 (successful)
-        inserter.addMedicalPolicy(new HashMap<String, Object>() {{
+        inserter.addMedicalPolicy(new HashMap<>() {{
             put(TABLE_COLUMN_EFFECTIVE, TestValues.MEDICAL_1_EFFECTIVE);
             put(TABLE_COLUMN_EXPIRY, TestValues.MEDICAL_1_EXPIRY);
             put(TABLE_COLUMN_NAME, TestValues.MEDICAL_1_NAME);
@@ -122,7 +130,7 @@ public class TestDemo {
         }});
 
         // 4. Insert Travel policy 2 (successful)
-        inserter.addTravelPolicy(new HashMap<String, Object>() {{
+        inserter.addTravelPolicy(new HashMap<>() {{
             put(TABLE_COLUMN_EFFECTIVE, TestValues.TRAVEL_2_EFFECTIVE);
             put(TABLE_COLUMN_EXPIRY, TestValues.TRAVEL_2_EXPIRY);
             put(TABLE_COLUMN_DEPARTURE, TestValues.TRAVEL_2_DEPARTURE);
@@ -131,7 +139,7 @@ public class TestDemo {
         }});
 
         // 5. Insert Motor policy 2 (successful)
-        inserter.addMotorPolicy(new HashMap<String, Object>() {
+        inserter.addMotorPolicy(new HashMap<>() {
             {
                 put(TABLE_COLUMN_EFFECTIVE, TestValues.MOTOR_2_EFFECTIVE);
                 put(TABLE_COLUMN_EXPIRY, TestValues.MOTOR_2_EXPIRY);
@@ -140,7 +148,7 @@ public class TestDemo {
         });
 
         // 6. Insert Medical policy 2 (successful)
-        inserter.addMedicalPolicy(new HashMap<String, Object>() {{
+        inserter.addMedicalPolicy(new HashMap<>() {{
             put(TABLE_COLUMN_EFFECTIVE, TestValues.MEDICAL_2_EFFECTIVE);
             put(TABLE_COLUMN_EXPIRY, TestValues.MEDICAL_2_EXPIRY);
             put(TABLE_COLUMN_NAME, TestValues.MEDICAL_2_NAME);
@@ -150,7 +158,7 @@ public class TestDemo {
         }});
 
         // 7. Insert Travel policy 3 (failure)
-        inserter.addTravelPolicy(new HashMap<String, Object>() {
+        inserter.addTravelPolicy(new HashMap<>() {
             {
                 put(TABLE_COLUMN_EFFECTIVE, TestValues.TRAVEL_3_EFFECTIVE);
                 put(TABLE_COLUMN_EXPIRY, TestValues.TRAVEL_3_EXPIRY);
@@ -161,7 +169,7 @@ public class TestDemo {
         });
 
         // 8. Insert Medical policy 3 (failure)
-        inserter.addMedicalPolicy(new HashMap<String, Object>() {{
+        inserter.addMedicalPolicy(new HashMap<>() {{
             put(TABLE_COLUMN_EFFECTIVE, TestValues.MEDICAL_3_EFFECTIVE);
             put(TABLE_COLUMN_EXPIRY, TestValues.MEDICAL_3_EXPIRY);
             put(TABLE_COLUMN_NAME, TestValues.MEDICAL_3_NAME);
@@ -175,7 +183,7 @@ public class TestDemo {
     /**
      * Selects and prints records related to policies based on requirements by calling policy-type specific selector methods
      *
-     * @param selector
+     * @param selector select helper class
      */
     private static void selectTestPolicyRecords(Selector selector) {
         // 1. select and print all travel policies
@@ -195,7 +203,7 @@ public class TestDemo {
         // Insert 15 claims claim
         for (int i = 0; i < 15; i++) {
             int finalI = i;
-            inserter.addClaim(new HashMap<String, Object>() {{
+            inserter.addClaim(new HashMap<>() {{
                 put(TABLE_COLUMN_POLICY_NO, TestValues.CLAIM_ALL_POLICY_NO[finalI]);
                 put(TABLE_COLUMN_INCURRED_DATE, TestValues.CLAIM_ALL_INCURRED[finalI]);
                 put(TABLE_COLUMN_CLAIMED_AMOUNT, TestValues.CLAIM_ALL_CLAIMED_AMOUNT[finalI]);

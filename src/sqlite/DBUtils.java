@@ -4,14 +4,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import static sqlite.Consts.*;
 
-
+/**
+ * General methods for database queries
+ */
 public class DBUtils {
     /**
      * Extracts result set data after execution of a query into a 2D array
      *
      * @param resultSet query results
      * @return 2d array containing query results
-     * @throws SQLException
+     * @throws SQLException except on any error related to result set
      */
     public static ArrayList<Object[]> resultSetToArray(ResultSet resultSet) throws SQLException {
         ArrayList<Object[]> table = new ArrayList<>();
@@ -30,7 +32,7 @@ public class DBUtils {
      *
      * @param preparedStatement prepared statement to bind values to
      * @param values            values to be bind
-     * @throws SQLException
+     * @throws SQLException except on any error related to result set
      */
     public static void bindValuesToPreparedStatement(PreparedStatement preparedStatement, Object[] values) throws SQLException {
         int i = 1;

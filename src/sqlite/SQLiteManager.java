@@ -106,7 +106,6 @@ public class SQLiteManager {
             String tableQuery = DBUtils.constructTableQuery(tableName, columns);
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(tableQuery);
-            System.out.println(tableQuery);
             preparedStatement.executeUpdate();
             // Close prepared statement
             preparedStatement.close();

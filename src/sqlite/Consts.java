@@ -1,5 +1,8 @@
 package sqlite;
 
+/**
+ * Constant fields
+ */
 public class Consts {
 
     // General values

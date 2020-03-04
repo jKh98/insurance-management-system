@@ -33,7 +33,7 @@ public class Inserter {
      * @return new policy number
      */
     private String addGenericPolicy(Map<String, Object> values) {
-        Object id = null;
+        Object id;
         // Insert a new policy to policy table
         id = manager.insertDataInTable(TABLE_NAME_POLICY, new Object[]{
                 null,
@@ -150,7 +150,7 @@ public class Inserter {
      * @param values of beneficiary to add
      */
     private void addBeneficiary(Map<String, Object> values) {
-        Object result = null;
+        Object result;
         // Return ID of added beneficiary
         result = manager.insertDataInTable(TABLE_NAME_BENEFICIARY, new Object[]{
                 null,

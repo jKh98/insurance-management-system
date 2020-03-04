@@ -38,7 +38,7 @@ class Printer {
     /**
      * Prints table added message
      *
-     * @param tableName
+     * @param tableName name of added table
      */
     static void printTableAddedMessage(String tableName) {
         System.out.println(tableName + MESSAGE_TABLE_ADDED);
@@ -47,8 +47,8 @@ class Printer {
     /**
      * Prints trigger added to table message
      *
-     * @param tableName
-     * @param triggerName
+     * @param tableName   name of table to which trigger was added
+     * @param triggerName name of added trigger
      */
     static void printTriggerAddedMessage(String tableName, String triggerName) {
         System.out.println(MESSAGE_TRIGGER + triggerName + MESSAGE_TRIGGER_ADDED + tableName);
@@ -133,6 +133,12 @@ class Printer {
         }
     }
 
+    /**
+     * Print message if claim is added, error otherwise with reason
+     *
+     * @param result   result of query
+     * @param policyNo policy number to include in error message (does not exit, invalid)
+     */
     static void printClaimAddedMessage(Object result, String policyNo) {
         // If result is a number then insert returned an ID and hence was successful
         if (result instanceof Long || result instanceof Integer) {
@@ -146,6 +152,14 @@ class Printer {
         }
     }
 
+    /**
+     * Inserts a string after a specific character in another string
+     *
+     * @param original string to insert into
+     * @param inserted the string to insert
+     * @param after    character to insert after
+     * @return a new string consisting of original with a string inserted after a specific char
+     */
     private static String insertString(String original, String inserted, char after) {
         StringBuilder newString = new StringBuilder();
 
