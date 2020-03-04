@@ -4,6 +4,8 @@ package sqlite;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import static sqlite.Consts.*;
+
 
 /**
  * Class to handle table-specific insertions
@@ -17,7 +19,7 @@ public class Inserter {
     /**
      * Constructor that sets up the SQLiteManager object
      *
-     * @param manager
+     * @param manager SQLite manager object
      */
     public Inserter(SQLiteManager manager) {
         this.manager = manager;
@@ -33,19 +35,19 @@ public class Inserter {
     private String addGenericPolicy(Map<String, Object> values) {
         Object id = null;
         // Insert a new policy to policy table
-        id = manager.insertDataInTable(Consts.TABLE_NAME_POLICY, new Object[]{
+        id = manager.insertDataInTable(TABLE_NAME_POLICY, new Object[]{
                 null,
-                values.get(Consts.TABLE_COLUMN_EFFECTIVE),
-                values.get(Consts.TABLE_COLUMN_EXPIRY),
+                values.get(TABLE_COLUMN_EFFECTIVE),
+                values.get(TABLE_COLUMN_EXPIRY),
                 0.0,
                 0,
-                values.get(Consts.TABLE_COLUMN_POLICY_TYPE)
+                values.get(TABLE_COLUMN_POLICY_TYPE)
         });
         // Use returned policy id to get thew new policyNo
         ArrayList<Object[]> result = manager.selectDataFromTable(
-                new String[]{Consts.TABLE_NAME_POLICY,},
-                new String[]{Consts.TABLE_COLUMN_POLICY_NO,},
-                new String[]{Consts.TABLE_COLUMN_ID + " = ?",},
+                new String[]{TABLE_NAME_POLICY,},
+                new String[]{TABLE_COLUMN_POLICY_NO,},
+                new String[]{TABLE_COLUMN_ID + " = ?",},
                 new Object[]{id}
         );
         // Return new policy number from result if found
@@ -62,18 +64,18 @@ public class Inserter {
      */
     public void addTravelPolicy(Map<String, Object> values) {
         Map<String, Object> valuesMap = new HashMap<>(values);
-        valuesMap.put(Consts.TABLE_COLUMN_POLICY_TYPE, "travel");
+        valuesMap.put(TABLE_COLUMN_POLICY_TYPE, "travel");
         // Add new policy to policy data and get its new policy number
         String policyNo = addGenericPolicy(valuesMap);
         Object result = null;
         if (policyNo != null) {
             // Use received policyNo to add travel policy specific info
-            result = manager.insertDataInTable(Consts.TABLE_NAME_TRAVEL, new Object[]{
+            result = manager.insertDataInTable(TABLE_NAME_TRAVEL, new Object[]{
                     null,
                     policyNo,
-                    valuesMap.get(Consts.TABLE_COLUMN_DEPARTURE),
-                    valuesMap.get(Consts.TABLE_COLUMN_DESTINATION),
-                    valuesMap.get(Consts.TABLE_COLUMN_FAMILY),
+                    valuesMap.get(TABLE_COLUMN_DEPARTURE),
+                    valuesMap.get(TABLE_COLUMN_DESTINATION),
+                    valuesMap.get(TABLE_COLUMN_FAMILY),
             });
         }
         // If result is inserted notify with a message
@@ -88,16 +90,16 @@ public class Inserter {
      */
     public void addMotorPolicy(Map<String, Object> values) {
         Map<String, Object> valuesMap = new HashMap<>(values);
-        valuesMap.put(Consts.TABLE_COLUMN_POLICY_TYPE, "motor");
+        valuesMap.put(TABLE_COLUMN_POLICY_TYPE, "motor");
         // Add new policy to policy data and get its new policy number
         String policyNo = addGenericPolicy(valuesMap);
         Object result = null;
         if (policyNo != null) {
             // Use received policyNo to add motor policy specific info
-            result = manager.insertDataInTable(Consts.TABLE_NAME_MOTOR, new Object[]{
+            result = manager.insertDataInTable(TABLE_NAME_MOTOR, new Object[]{
                     null,
                     policyNo,
-                    valuesMap.get(Consts.TABLE_COLUMN_VEHICLE_PRICE),
+                    valuesMap.get(TABLE_COLUMN_VEHICLE_PRICE),
             });
         }
         // If result is inserted notify with a message
@@ -115,26 +117,26 @@ public class Inserter {
     public void addMedicalPolicy(Map<String, Object> values) {
         Object result = null;
         Map<String, Object> valuesMap = new HashMap<>(values);
-        valuesMap.put(Consts.TABLE_COLUMN_POLICY_TYPE, "medical");
+        valuesMap.put(TABLE_COLUMN_POLICY_TYPE, "medical");
         // Add new policy to policy data and get its new policy number
         String policyNo = addGenericPolicy(valuesMap);
         if (policyNo != null) {
             // Use received policyNo to add beneficiary since each medical policy
             // requires at least one beneficiary
-            result = manager.insertDataInTable(Consts.TABLE_NAME_BENEFICIARY, new Object[]{
+            result = manager.insertDataInTable(TABLE_NAME_BENEFICIARY, new Object[]{
                     null,
-                    values.get(Consts.TABLE_COLUMN_NAME),
-                    values.get(Consts.TABLE_COLUMN_RELATION),
-                    values.get(Consts.TABLE_COLUMN_GENDER),
-                    values.get(Consts.TABLE_COLUMN_BIRTH_DATE),
+                    values.get(TABLE_COLUMN_NAME),
+                    values.get(TABLE_COLUMN_RELATION),
+                    values.get(TABLE_COLUMN_GENDER),
+                    values.get(TABLE_COLUMN_BIRTH_DATE),
                     policyNo,
             });
 
         }
         // If beneficiary was not added correctly delete the policy
         if (result == null) {
-            manager.deleteDataFromTable(Consts.TABLE_NAME_POLICY,
-                    new String[]{Consts.TABLE_COLUMN_POLICY_NO + " = ?",},
+            manager.deleteDataFromTable(TABLE_NAME_POLICY,
+                    new String[]{TABLE_COLUMN_POLICY_NO + " = ?",},
                     new Object[]{policyNo,}
             );
         }
@@ -150,13 +152,13 @@ public class Inserter {
     private void addBeneficiary(Map<String, Object> values) {
         Object result = null;
         // Return ID of added beneficiary
-        result = manager.insertDataInTable(Consts.TABLE_NAME_BENEFICIARY, new Object[]{
+        result = manager.insertDataInTable(TABLE_NAME_BENEFICIARY, new Object[]{
                 null,
-                values.get(Consts.TABLE_COLUMN_NAME),
-                values.get(Consts.TABLE_COLUMN_RELATION),
-                values.get(Consts.TABLE_COLUMN_GENDER),
-                values.get(Consts.TABLE_COLUMN_BIRTH_DATE),
-                values.get(Consts.TABLE_COLUMN_POLICY_NO),
+                values.get(TABLE_COLUMN_NAME),
+                values.get(TABLE_COLUMN_RELATION),
+                values.get(TABLE_COLUMN_GENDER),
+                values.get(TABLE_COLUMN_BIRTH_DATE),
+                values.get(TABLE_COLUMN_POLICY_NO),
         });
         // If result is inserted notify with a message
         Printer.printBeneficiaryAddedMessage(result);
@@ -170,13 +172,13 @@ public class Inserter {
     public void addClaim(Map<String, Object> values) {
         Object result;
         // Return ID of added beneficiary
-        result = manager.insertDataInTable(Consts.TABLE_NAME_CLAIM, new Object[]{
+        result = manager.insertDataInTable(TABLE_NAME_CLAIM, new Object[]{
                 null,
-                values.get(Consts.TABLE_COLUMN_POLICY_NO),
-                values.get(Consts.TABLE_COLUMN_INCURRED_DATE),
-                values.get(Consts.TABLE_COLUMN_CLAIMED_AMOUNT),
+                values.get(TABLE_COLUMN_POLICY_NO),
+                values.get(TABLE_COLUMN_INCURRED_DATE),
+                values.get(TABLE_COLUMN_CLAIMED_AMOUNT),
         });
         // If result is inserted notify with a message
-        Printer.printClaimAddedMessage(result, (String) values.get(Consts.TABLE_COLUMN_POLICY_NO));
+        Printer.printClaimAddedMessage(result, (String) values.get(TABLE_COLUMN_POLICY_NO));
     }
 }

@@ -2,6 +2,8 @@ package sqlite;
 
 import java.sql.*;
 import java.util.ArrayList;
+import static sqlite.Consts.*;
+
 
 public class DBUtils {
     /**
@@ -58,7 +60,7 @@ public class DBUtils {
      * @return SQL create query
      */
     public static String constructTableQuery(String tableName, String[] columns) {
-        return Consts.SQL_CREATE_TABLE
+        return SQL_CREATE_TABLE
                 + tableName
                 + parenthesise(argumentsComaSeparator(columns));
     }
@@ -72,9 +74,9 @@ public class DBUtils {
      * @return SQL insert query
      */
     public static String constructInsertQuery(String tableName, int numOfColumns) {
-        return Consts.SQL_INSERT_INTO_TABLE
+        return SQL_INSERT_INTO_TABLE
                 + tableName
-                + Consts.SQL_VALUES
+                + SQL_VALUES
                 + placeholderConstructor(numOfColumns);
     }
 
@@ -92,18 +94,18 @@ public class DBUtils {
         // New string builder
         StringBuilder selectQuery = new StringBuilder();
         // Add select word
-        selectQuery.append(Consts.SQL_SELECT);
+        selectQuery.append(SQL_SELECT);
         // Append list of selections
         selectQuery.append(selectionsString);
         // Append from
-        selectQuery.append(Consts.SQL_FROM);
+        selectQuery.append(SQL_FROM);
         // Append list of tables
         selectQuery.append(argumentsComaSeparator(tableNames));
 
         // Check if there are any selection conditions
         if (conditions != null && conditions.length > 0) {
             // Append where
-            selectQuery.append(Consts.SQL_WHERE);
+            selectQuery.append(SQL_WHERE);
             // for each condition, append it then pad with space
             for (String condition : conditions) {
                 selectQuery.append(condition).append(" ");
@@ -121,11 +123,11 @@ public class DBUtils {
      */
     public static String constructDeleteQuery(String tableName, String[] conditions) {
         StringBuilder deleteQuery = new StringBuilder(
-                Consts.SQL_DELETE_FROM_TABLE
+                SQL_DELETE_FROM_TABLE
                         + tableName);
         // Check if there are any selection conditions
         if (conditions.length > 0) {
-            deleteQuery.append(Consts.SQL_WHERE);
+            deleteQuery.append(SQL_WHERE);
             for (String condition : conditions) {
                 deleteQuery.append(condition).append(" ");
             }

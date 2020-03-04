@@ -2,6 +2,7 @@ package sqlite;
 
 
 import java.util.ArrayList;
+import static sqlite.Consts.*;
 
 /**
  * Contains methods used to print messages, errors, and query results
@@ -14,7 +15,7 @@ class Printer {
      * @param driverName jdbc driver
      */
     public static void printDriverName(String driverName) {
-        System.out.println(Consts.MESSAGE_DB_DRIVER + driverName);
+        System.out.println(MESSAGE_DB_DRIVER + driverName);
     }
 
     /**
@@ -23,14 +24,14 @@ class Printer {
      * @param url database url
      */
     public static void printDBConnection(String url) {
-        System.out.println(Consts.MESSAGE_OPENED_DB + url);
+        System.out.println(MESSAGE_OPENED_DB + url);
     }
 
     /**
      * Prints DB close message
      */
     public static void printCloseDBMessage() {
-        System.out.println(Consts.MESSAGE_CLOSED_DB);
+        System.out.println(MESSAGE_CLOSED_DB);
     }
 
     /**
@@ -39,7 +40,7 @@ class Printer {
      * @param tableName
      */
     public static void printTableAddedMessage(String tableName) {
-        System.out.println(tableName + Consts.MESSAGE_TABLE_ADDED);
+        System.out.println(tableName + MESSAGE_TABLE_ADDED);
     }
 
     /**
@@ -49,7 +50,7 @@ class Printer {
      * @param triggerName
      */
     public static void printTriggerAddedMessage(String tableName, String triggerName) {
-        System.out.println(Consts.MESSAGE_TRIGGER + triggerName + Consts.MESSAGE_TRIGGER_ADDED + tableName);
+        System.out.println(MESSAGE_TRIGGER + triggerName + MESSAGE_TRIGGER_ADDED + tableName);
     }
 
     /**
@@ -69,7 +70,7 @@ class Printer {
                 System.out.println("\n");
             }
         } else {
-            System.out.println(Consts.MESSAGE_NO_RESULTS);
+            System.out.println(MESSAGE_NO_RESULTS);
         }
     }
 
@@ -91,7 +92,7 @@ class Printer {
                 System.out.format(spacing + "\n", row);
             }
         } else {
-            System.out.println(Consts.MESSAGE_NO_RESULTS);
+            System.out.println(MESSAGE_NO_RESULTS);
         }
         System.out.println("\n");
     }
@@ -105,12 +106,12 @@ class Printer {
     static void printPolicyAddedMessage(Object result, String policyNo) {
         // If result is a number then insert returned an ID and hence was successful
         if ((result instanceof Long || result instanceof Integer) && policyNo != null) {
-            System.out.println(Consts.TABLE_NAME_POLICY + Consts.MESSAGE_SPACE + policyNo + Consts.MESSAGE_SUCCESSFULLY_ADDED);
+            System.out.println(TABLE_NAME_POLICY + MESSAGE_SPACE + policyNo + MESSAGE_SUCCESSFULLY_ADDED);
         } else if (result instanceof String) {
             // if result is a string then it is definitely an error message
             System.out.println(result);
         } else {
-            System.out.println(Consts.MESSAGE_INVALID_POLICY);
+            System.out.println(MESSAGE_INVALID_POLICY);
         }
     }
 
@@ -122,25 +123,25 @@ class Printer {
     public static void printBeneficiaryAddedMessage(Object result) {
         // If result is a number then insert returned an ID and hence was successful
         if (result instanceof Long || result instanceof Integer) {
-            System.out.println(Consts.TABLE_NAME_BENEFICIARY + Consts.MESSAGE_SUCCESSFULLY_ADDED);
+            System.out.println(TABLE_NAME_BENEFICIARY + MESSAGE_SUCCESSFULLY_ADDED);
         } else if (result instanceof String) {
             // if result is a string then it is definitely an error message
             System.out.println(result);
         } else {
-            System.out.println(Consts.MESSAGE_INVALID_BENEFICIARY);
+            System.out.println(MESSAGE_INVALID_BENEFICIARY);
         }
     }
 
     public static void printClaimAddedMessage(Object result, String policyNo) {
         // If result is a number then insert returned an ID and hence was successful
         if (result instanceof Long || result instanceof Integer) {
-            System.out.println(Consts.TABLE_NAME_CLAIM + Consts.MESSAGE_SUCCESSFULLY_ADDED);
+            System.out.println(TABLE_NAME_CLAIM + MESSAGE_SUCCESSFULLY_ADDED);
         } else if (result instanceof String) {
             // if result is a string then it is definitely an error message
             result = insertString((String) result,policyNo,'#');
             System.out.println(result);
         } else {
-            System.out.println(Consts.MESSAGE_INVALID_CLAIM);
+            System.out.println(MESSAGE_INVALID_CLAIM);
         }
     }
 

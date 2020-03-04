@@ -3,7 +3,7 @@ package sqlite;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
-
+import static sqlite.Consts.*;
 
 /**
  * Class to manage SQLite database
@@ -49,7 +49,7 @@ public class SQLiteManager {
         String dbPathURL =
                 System.getProperty("user.home") +
                         File.separator +
-                        Consts.SQLITE_DIR_NAME +
+                        SQLITE_DIR_NAME +
                         File.separator;
 
         // Make directory if does not exist
@@ -59,9 +59,9 @@ public class SQLiteManager {
         }
         try {
             // Try connecting to the database
-            connection = DriverManager.getConnection(Consts.PARAM_JDBC_DB_PREFIX + dbPathURL + dbName);
+            connection = DriverManager.getConnection(PARAM_JDBC_DB_PREFIX + dbPathURL + dbName);
             if (connection != null) {
-                connection.createStatement().execute(Consts.PARAM_JDBC_DB_ENABLE_FK);
+                connection.createStatement().execute(PARAM_JDBC_DB_ENABLE_FK);
                 DatabaseMetaData meta = connection.getMetaData();
                 // Print driver name
                 Printer.printDriverName(meta.getDriverName());
@@ -105,6 +105,7 @@ public class SQLiteManager {
             String tableQuery = DBUtils.constructTableQuery(tableName, columns);
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(tableQuery);
+            System.out.println(tableQuery);
             preparedStatement.executeUpdate();
             // Close prepared statement
             preparedStatement.close();
@@ -127,15 +128,15 @@ public class SQLiteManager {
         try {
             connection.setAutoCommit(true);
             //
-            StringBuilder triggerQuery = new StringBuilder(Consts.SQL_CREATE_TRIGGER
+            StringBuilder triggerQuery = new StringBuilder(SQL_CREATE_TRIGGER
                     + triggerName
                     + executeOn
                     + tableName);
-            triggerQuery.append(Consts.SQL_BEGIN);
+            triggerQuery.append(SQL_BEGIN);
             for (String statement : statements) {
                 triggerQuery.append(statement);
             }
-            triggerQuery.append(Consts.SQL_END);
+            triggerQuery.append(SQL_END);
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(triggerQuery.toString());
             System.out.println(triggerQuery.toString());

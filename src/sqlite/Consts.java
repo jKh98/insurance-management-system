@@ -54,18 +54,6 @@ public class Consts {
     public static final String TABLE_COLUMN_POLICY_TYPE = "policy_type";
     public static final String TABLE_COLUMN_POLICY_NO = "policy_no";
 
-    public static final String[] TABLE_COLUMN_VALUES_POLICY = new String[]
-            {Consts.TABLE_AUTO_ID
-                    , TABLE_COLUMN_EFFECTIVE + " BIGINT NOT NULL"
-                    , TABLE_COLUMN_EXPIRY + " BIGINT NOT NULL"
-                    , TABLE_COLUMN_PREMIUM + " DECIMAL NOT NULL"
-                    , TABLE_COLUMN_IS_VALID + " INTEGER NOT NULL CHECK (" + TABLE_COLUMN_IS_VALID + " IN (0,1)) default 1"
-                    , TABLE_COLUMN_POLICY_TYPE + " TEXT NOT NULL CHECK (LOWER(" + TABLE_COLUMN_POLICY_TYPE + ") IN  ('travel', 'motor', 'medical'))"
-                    , TABLE_COLUMN_POLICY_NO + " TEXT UNIQUE NOT NULL GENERATED ALWAYS AS " +
-                    "( STRFTIME('%Y',datetime(" + TABLE_COLUMN_EFFECTIVE + ", 'unixepoch')) || '-' || "
-                    + TABLE_COLUMN_POLICY_TYPE + " || '-' || " + TABLE_COLUMN_ID + " ) STORED"
-            };
-
     // *************************** Parameters for travel table ***************************
     public static final String TABLE_NAME_TRAVEL = "travel";
     public static final String TABLE_COLUMN_DEPARTURE = "departure";
@@ -73,30 +61,10 @@ public class Consts {
     public static final String TABLE_COLUMN_FAMILY = "family";
     public static final String TABLE_CONSTRAINT_TRAVEL = "fk_policy_no";
 
-    public static final String[] TABLE_COLUMN_VALUES_TRAVEL = new String[]
-            {Consts.TABLE_AUTO_ID
-                    , TABLE_COLUMN_POLICY_NO + " TEXT NOT NULL UNIQUE CHECK ( " + TABLE_COLUMN_POLICY_NO + " LIKE '%travel%')"
-                    , TABLE_COLUMN_DEPARTURE + " TEXT NOT NULL"
-                    , TABLE_COLUMN_DESTINATION + " TEXT NOT NULL"
-                    , TABLE_COLUMN_FAMILY + " INTEGER NOT NULL CHECK (" + TABLE_COLUMN_FAMILY + " IN (0,1))"
-                    , " CONSTRAINT " + TABLE_CONSTRAINT_TRAVEL + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_NO + ") REFERENCES " +
-                    Consts.TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
-                    ") ON DELETE CASCADE"
-            };
-
     // *************************** Parameters for motor table ***************************
     public static final String TABLE_NAME_MOTOR = "motor";
     public static final String TABLE_COLUMN_VEHICLE_PRICE = "vehicle_price";
     public static final String TABLE_CONSTRAINT_MOTOR = "fk_policy_no";
-
-    public static final String[] TABLE_COLUMN_VALUES_MOTOR = new String[]
-            {Consts.TABLE_AUTO_ID
-                    , TABLE_COLUMN_POLICY_NO + " TEXT NOT NULL UNIQUE CHECK ( " + TABLE_COLUMN_POLICY_NO + " LIKE '%motor%') "
-                    , TABLE_COLUMN_VEHICLE_PRICE + " DECIMAL NOT NULL"
-                    , " CONSTRAINT " + TABLE_CONSTRAINT_MOTOR + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_NO + ") REFERENCES " +
-                    Consts.TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
-                    ") ON DELETE CASCADE"
-            };
 
     // *************************** Parameters for beneficiary table ***************************
     public static final String TABLE_NAME_BENEFICIARY = "beneficiary";
@@ -106,33 +74,11 @@ public class Consts {
     public static final String TABLE_COLUMN_BIRTH_DATE = "birth_date";
     public static final String TABLE_CONSTRAINT_BENEFICIARY = "fk_policy_no";
 
-    public static final String[] TABLE_COLUMN_VALUES_BENEFICIARY = new String[]
-            {Consts.TABLE_AUTO_ID
-                    , TABLE_COLUMN_NAME + " TEXT NOT NULL"
-                    , TABLE_COLUMN_RELATION + " TEXT NOT NULL CHECK (LOWER(" + TABLE_COLUMN_RELATION + ") IN ('self','spouse','son','daughter'))"
-                    , TABLE_COLUMN_GENDER + " TEXT NOT NULL CHECK (LOWER(" + TABLE_COLUMN_GENDER + ") IN ('male','female'))"
-                    , TABLE_COLUMN_BIRTH_DATE + " BIGINT NOT NULL"
-                    , TABLE_COLUMN_POLICY_NO + " TEXT NOT NULL CHECK ( " + TABLE_COLUMN_POLICY_NO + " LIKE '%medical%')"
-                    , " CONSTRAINT " + TABLE_CONSTRAINT_BENEFICIARY + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_NO + ") REFERENCES " +
-                    Consts.TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
-                    ") ON DELETE CASCADE"
-            };
-
     // *************************** Parameters for claim table ***************************
     public static final String TABLE_NAME_CLAIM = "claim";
     public static final String TABLE_COLUMN_INCURRED_DATE = "incurred_date";
     public static final String TABLE_COLUMN_CLAIMED_AMOUNT = "claimed_amount";
     public static final String TABLE_CONSTRAINT_CLAIM = "fk_policy_no";
-
-    public static final String[] TABLE_COLUMN_VALUES_CLAIM = new String[]
-            {Consts.TABLE_AUTO_ID
-                    , TABLE_COLUMN_POLICY_NO + " TEXT NOT NULL"
-                    , TABLE_COLUMN_INCURRED_DATE + " BIGINT NOT NULL"
-                    , TABLE_COLUMN_CLAIMED_AMOUNT + " DECIMAL NOT NULL"
-                    , " CONSTRAINT " + TABLE_CONSTRAINT_CLAIM + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_NO + ") REFERENCES " +
-                    Consts.TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
-                    ") ON DELETE CASCADE"
-            };
 
     // *************************** Parameters for travel triggers ***************************
     public static final String TRIGGER_TRAVEL_PREMIUM = "travel_premium";

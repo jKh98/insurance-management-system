@@ -1,6 +1,8 @@
 package sqlite;
 
 import java.util.ArrayList;
+import static sqlite.Consts.*;
+
 
 /**
  * Contains methods used to select and print specific data from specific tables usually based on requirements
@@ -15,7 +17,7 @@ public class Selector {
     /**
      * Constructor that sets up the manager object
      *
-     * @param manager
+     * @param manager SQLite manager object
      */
     public Selector(SQLiteManager manager) {
         this.manager = manager;
@@ -46,31 +48,31 @@ public class Selector {
         // Array list to store query result
         ArrayList<Object[]> result;
         tableNames = new String[]{
-                Consts.TABLE_NAME_POLICY,
-                Consts.TABLE_NAME_TRAVEL,
+                TABLE_NAME_POLICY,
+                TABLE_NAME_TRAVEL,
         };
         selections = new String[]{
-                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO),
-                Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EFFECTIVE) + ",'unixepoch'"),
-                Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EXPIRY) + ",'unixepoch'"),
-                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_PREMIUM),
-                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_IS_VALID),
-                DBUtils.dot(Consts.TABLE_NAME_TRAVEL, Consts.TABLE_COLUMN_DEPARTURE),
-                DBUtils.dot(Consts.TABLE_NAME_TRAVEL, Consts.TABLE_COLUMN_DESTINATION),
-                DBUtils.dot(Consts.TABLE_NAME_TRAVEL, Consts.TABLE_COLUMN_FAMILY),
+                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO),
+                SQL_DATE + DBUtils.parenthesise(DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_EFFECTIVE) + ",'unixepoch'"),
+                SQL_DATE + DBUtils.parenthesise(DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_EXPIRY) + ",'unixepoch'"),
+                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_PREMIUM),
+                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_IS_VALID),
+                DBUtils.dot(TABLE_NAME_TRAVEL, TABLE_COLUMN_DEPARTURE),
+                DBUtils.dot(TABLE_NAME_TRAVEL, TABLE_COLUMN_DESTINATION),
+                DBUtils.dot(TABLE_NAME_TRAVEL, TABLE_COLUMN_FAMILY),
         };
-        conditions = new String[]{DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO) + " = ",
-                DBUtils.dot(Consts.TABLE_NAME_TRAVEL, Consts.TABLE_COLUMN_POLICY_NO)};
+        conditions = new String[]{DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO) + " = ",
+                DBUtils.dot(TABLE_NAME_TRAVEL, TABLE_COLUMN_POLICY_NO)};
 
         result = manager.selectDataFromTable(tableNames, selections, conditions, null
         );
         // Prints results in table form
         Printer.printAsList(new String[]{
-                Consts.TABLE_COLUMN_POLICY_NO, Consts.TABLE_COLUMN_EFFECTIVE, Consts.TABLE_COLUMN_EXPIRY,
-                Consts.TABLE_COLUMN_PREMIUM,
-                Consts.TABLE_COLUMN_IS_VALID,
-                Consts.TABLE_COLUMN_DEPARTURE,
-                Consts.TABLE_COLUMN_DESTINATION, Consts.TABLE_COLUMN_FAMILY,
+                TABLE_COLUMN_POLICY_NO, TABLE_COLUMN_EFFECTIVE, TABLE_COLUMN_EXPIRY,
+                TABLE_COLUMN_PREMIUM,
+                TABLE_COLUMN_IS_VALID,
+                TABLE_COLUMN_DEPARTURE,
+                TABLE_COLUMN_DESTINATION, TABLE_COLUMN_FAMILY,
         }, result);
     }
 
@@ -93,29 +95,29 @@ public class Selector {
         // Array list to store query result
         ArrayList<Object[]> result;
         tableNames = new String[]{
-                Consts.TABLE_NAME_POLICY,
-                Consts.TABLE_NAME_MOTOR,
+                TABLE_NAME_POLICY,
+                TABLE_NAME_MOTOR,
         };
         selections = new String[]{
-                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO),
-                Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EFFECTIVE) + ",'unixepoch'"),
-                Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EXPIRY) + ",'unixepoch'"),
-                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_PREMIUM),
-                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_IS_VALID),
-                DBUtils.dot(Consts.TABLE_NAME_MOTOR, Consts.TABLE_COLUMN_VEHICLE_PRICE),
+                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO),
+                SQL_DATE + DBUtils.parenthesise(DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_EFFECTIVE) + ",'unixepoch'"),
+                SQL_DATE + DBUtils.parenthesise(DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_EXPIRY) + ",'unixepoch'"),
+                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_PREMIUM),
+                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_IS_VALID),
+                DBUtils.dot(TABLE_NAME_MOTOR, TABLE_COLUMN_VEHICLE_PRICE),
         };
         conditions = new String[]{
-                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO) + " = ",
-                DBUtils.dot(Consts.TABLE_NAME_MOTOR, Consts.TABLE_COLUMN_POLICY_NO),
+                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO) + " = ",
+                DBUtils.dot(TABLE_NAME_MOTOR, TABLE_COLUMN_POLICY_NO),
         };
 
         result = manager.selectDataFromTable(tableNames, selections, conditions, null);
         // Prints results in table form
         Printer.printAsList(new String[]{
-                Consts.TABLE_COLUMN_POLICY_NO, Consts.TABLE_COLUMN_EFFECTIVE, Consts.TABLE_COLUMN_EXPIRY,
-                Consts.TABLE_COLUMN_PREMIUM,
-                Consts.TABLE_COLUMN_IS_VALID,
-                Consts.TABLE_COLUMN_VEHICLE_PRICE,
+                TABLE_COLUMN_POLICY_NO, TABLE_COLUMN_EFFECTIVE, TABLE_COLUMN_EXPIRY,
+                TABLE_COLUMN_PREMIUM,
+                TABLE_COLUMN_IS_VALID,
+                TABLE_COLUMN_VEHICLE_PRICE,
         }, result);
     }
 
@@ -139,36 +141,36 @@ public class Selector {
         ArrayList<Object[]> result;
         // Specify tables
         tableNames = new String[]{
-                Consts.TABLE_NAME_POLICY,
-                Consts.TABLE_NAME_BENEFICIARY,
+                TABLE_NAME_POLICY,
+                TABLE_NAME_BENEFICIARY,
         };
         // Specify selections
         selections = new String[]{
-                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO),
-                Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EFFECTIVE) + ",'unixepoch'"),
-                Consts.SQL_DATE + DBUtils.parenthesise(DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_EXPIRY) + ",'unixepoch'"),
-                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_PREMIUM),
-                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_IS_VALID),
+                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO),
+                SQL_DATE + DBUtils.parenthesise(DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_EFFECTIVE) + ",'unixepoch'"),
+                SQL_DATE + DBUtils.parenthesise(DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_EXPIRY) + ",'unixepoch'"),
+                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_PREMIUM),
+                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_IS_VALID),
                 DBUtils.parenthesise(
-                        DBUtils.constructSelectQuery(new String[]{Consts.TABLE_NAME_BENEFICIARY},
-                        new String[]{Consts.SQL_COUNT + DBUtils.parenthesise(Consts.SQL_ALL)},
-                        new String[]{DBUtils.dot(Consts.TABLE_NAME_BENEFICIARY, Consts.TABLE_COLUMN_POLICY_NO)
-                                + " = " + DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO),
-                                " AND " + Consts.TABLE_COLUMN_RELATION + " <> 'self'"})),
+                        DBUtils.constructSelectQuery(new String[]{TABLE_NAME_BENEFICIARY},
+                        new String[]{SQL_COUNT + DBUtils.parenthesise(SQL_ALL)},
+                        new String[]{DBUtils.dot(TABLE_NAME_BENEFICIARY, TABLE_COLUMN_POLICY_NO)
+                                + " = " + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO),
+                                " AND " + TABLE_COLUMN_RELATION + " <> 'self'"})),
         };
         // Specify conditions
         conditions = new String[]{
-                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO) + " = ",
-                DBUtils.dot(Consts.TABLE_NAME_BENEFICIARY, Consts.TABLE_COLUMN_POLICY_NO),
+                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO) + " = ",
+                DBUtils.dot(TABLE_NAME_BENEFICIARY, TABLE_COLUMN_POLICY_NO),
         };
 
         // Execute query
         result = manager.selectDataFromTable(tableNames, selections, conditions, null);
         // Prints results in table form
         Printer.printAsList(new String[]{
-                Consts.TABLE_COLUMN_POLICY_NO, Consts.TABLE_COLUMN_EFFECTIVE, Consts.TABLE_COLUMN_EXPIRY,
-                Consts.TABLE_COLUMN_PREMIUM,
-                Consts.TABLE_COLUMN_IS_VALID,
+                TABLE_COLUMN_POLICY_NO, TABLE_COLUMN_EFFECTIVE, TABLE_COLUMN_EXPIRY,
+                TABLE_COLUMN_PREMIUM,
+                TABLE_COLUMN_IS_VALID,
                 "dependencies",
         }, result);
     }
@@ -187,9 +189,9 @@ public class Selector {
      * @param upper upper bound of range
      */
     public void selectPoliciesPremiumRange(double lower, double upper) {
-        tableNames = new String[]{Consts.TABLE_NAME_POLICY};
-        selections = new String[]{Consts.TABLE_COLUMN_POLICY_NO, Consts.TABLE_COLUMN_PREMIUM};
-        conditions = new String[]{Consts.TABLE_COLUMN_PREMIUM, Consts.SQL_BETWEEN, " ? AND ? "};
+        tableNames = new String[]{TABLE_NAME_POLICY};
+        selections = new String[]{TABLE_COLUMN_POLICY_NO, TABLE_COLUMN_PREMIUM};
+        conditions = new String[]{TABLE_COLUMN_PREMIUM, SQL_BETWEEN, " ? AND ? "};
         values = new Object[]{lower, upper};
         ArrayList<Object[]> result;
         result = manager.selectDataFromTable(tableNames, selections, conditions, values);
@@ -222,44 +224,44 @@ public class Selector {
      * FROM     policy
      */
     public void selectPoliciesClaimsData() {
-        tableNames = new String[]{Consts.TABLE_NAME_POLICY};
+        tableNames = new String[]{TABLE_NAME_POLICY};
         selections = new String[]{
-                DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO),
+                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO),
                 DBUtils.parenthesise(
                         DBUtils.constructSelectQuery(
-                        new String[]{Consts.TABLE_NAME_CLAIM},
-                        new String[]{Consts.SQL_IF_NULL + DBUtils.parenthesise(Consts.SQL_COUNT +
-                                DBUtils.parenthesise(Consts.TABLE_COLUMN_CLAIMED_AMOUNT) + ",0")},
-                        new String[]{DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO) + " = " +
-                                DBUtils.dot(Consts.TABLE_NAME_CLAIM, Consts.TABLE_COLUMN_POLICY_NO)}
+                        new String[]{TABLE_NAME_CLAIM},
+                        new String[]{SQL_IF_NULL + DBUtils.parenthesise(SQL_COUNT +
+                                DBUtils.parenthesise(TABLE_COLUMN_CLAIMED_AMOUNT) + ",0")},
+                        new String[]{DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO) + " = " +
+                                DBUtils.dot(TABLE_NAME_CLAIM, TABLE_COLUMN_POLICY_NO)}
                                 )),
                 DBUtils.parenthesise(
                         DBUtils.constructSelectQuery(
-                        new String[]{Consts.TABLE_NAME_CLAIM},
-                        new String[]{Consts.SQL_IF_NULL + DBUtils.parenthesise(Consts.SQL_SUM +
-                                DBUtils.parenthesise(Consts.TABLE_COLUMN_CLAIMED_AMOUNT) + ",0")},
-                        new String[]{DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO) + " = " +
-                                DBUtils.dot(Consts.TABLE_NAME_CLAIM, Consts.TABLE_COLUMN_POLICY_NO)})),
+                        new String[]{TABLE_NAME_CLAIM},
+                        new String[]{SQL_IF_NULL + DBUtils.parenthesise(SQL_SUM +
+                                DBUtils.parenthesise(TABLE_COLUMN_CLAIMED_AMOUNT) + ",0")},
+                        new String[]{DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO) + " = " +
+                                DBUtils.dot(TABLE_NAME_CLAIM, TABLE_COLUMN_POLICY_NO)})),
                 DBUtils.parenthesise(
                         DBUtils.constructSelectQuery(
-                        new String[]{Consts.TABLE_NAME_CLAIM},
-                        new String[]{Consts.SQL_IF_NULL + DBUtils.parenthesise(Consts.SQL_MIN +
-                                DBUtils.parenthesise(Consts.TABLE_COLUMN_CLAIMED_AMOUNT) + ",0")},
-                        new String[]{DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO) + " = " +
-                                DBUtils.dot(Consts.TABLE_NAME_CLAIM, Consts.TABLE_COLUMN_POLICY_NO)})),
+                        new String[]{TABLE_NAME_CLAIM},
+                        new String[]{SQL_IF_NULL + DBUtils.parenthesise(SQL_MIN +
+                                DBUtils.parenthesise(TABLE_COLUMN_CLAIMED_AMOUNT) + ",0")},
+                        new String[]{DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO) + " = " +
+                                DBUtils.dot(TABLE_NAME_CLAIM, TABLE_COLUMN_POLICY_NO)})),
                 DBUtils.parenthesise(
                         DBUtils.constructSelectQuery(
-                        new String[]{Consts.TABLE_NAME_CLAIM},
-                        new String[]{Consts.SQL_IF_NULL + DBUtils.parenthesise(Consts.SQL_MAX +
-                                DBUtils.parenthesise(Consts.TABLE_COLUMN_CLAIMED_AMOUNT) + ",0")},
-                        new String[]{DBUtils.dot(Consts.TABLE_NAME_POLICY, Consts.TABLE_COLUMN_POLICY_NO) + " = " +
-                                DBUtils.dot(Consts.TABLE_NAME_CLAIM, Consts.TABLE_COLUMN_POLICY_NO)})),
+                        new String[]{TABLE_NAME_CLAIM},
+                        new String[]{SQL_IF_NULL + DBUtils.parenthesise(SQL_MAX +
+                                DBUtils.parenthesise(TABLE_COLUMN_CLAIMED_AMOUNT) + ",0")},
+                        new String[]{DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO) + " = " +
+                                DBUtils.dot(TABLE_NAME_CLAIM, TABLE_COLUMN_POLICY_NO)})),
         };
         ArrayList<Object[]> result;
         result = manager.selectDataFromTable(tableNames, selections, null, null);
         // Prints results in table form
         Printer.printAsTable(new String[]{
-                Consts.TABLE_COLUMN_POLICY_NO, Consts.SQL_COUNT, Consts.SQL_SUM, Consts.SQL_MIN, Consts.SQL_MAX
+                TABLE_COLUMN_POLICY_NO, SQL_COUNT, SQL_SUM, SQL_MIN, SQL_MAX
         }, result);
     }
 }
