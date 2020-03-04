@@ -3,6 +3,7 @@ package sqlite;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
+
 import static sqlite.Consts.*;
 
 /**
@@ -98,7 +99,7 @@ public class SQLiteManager {
      * @param tableName name of table to be added
      * @param columns   columns of table including name, constraints and checks
      */
-    public void addTableToDB(String tableName, String[] columns) {
+    void addTableToDB(String tableName, String[] columns) {
         try {
             connection.setAutoCommit(true);
             // Add column names by concatenation since they cannot be passed to the prepared statement
@@ -124,7 +125,7 @@ public class SQLiteManager {
      * @param executeOn   could be : 'before insert on', 'before update on' ...
      * @param statements  SQL statements to be executed with the trigger
      */
-    public void addTriggerToTable(String tableName, String triggerName, String executeOn, String[] statements) {
+    void addTriggerToTable(String tableName, String triggerName, String executeOn, String[] statements) {
         try {
             connection.setAutoCommit(true);
             //
@@ -138,7 +139,6 @@ public class SQLiteManager {
             }
             triggerQuery.append(SQL_END);
             // Prepared statement for new table
-            System.out.println(triggerQuery.toString());
             preparedStatement = connection.prepareStatement(triggerQuery.toString());
             preparedStatement.executeUpdate();
             // Close prepared statement
@@ -156,7 +156,7 @@ public class SQLiteManager {
      * @param values    insertion objects, each type will be added according to instance (String, Long etc..)
      * @return ID of the inserted row, or database raised error
      */
-    public Object insertDataInTable(String tableName, Object[] values) {
+    Object insertDataInTable(String tableName, Object[] values) {
         Object result = null;
         try {
             connection.setAutoCommit(true);
@@ -194,7 +194,7 @@ public class SQLiteManager {
      * @param values     left hand side values of condition statements
      * @return 2d array of query results
      */
-    public ArrayList<Object[]> selectDataFromTable(String[] tableNames, String[] selections, String[] conditions, Object[] values) {
+    ArrayList<Object[]> selectDataFromTable(String[] tableNames, String[] selections, String[] conditions, Object[] values) {
         ArrayList<Object[]> result = new ArrayList<>();
         // Check if selecting specific column or all table columns
         try {

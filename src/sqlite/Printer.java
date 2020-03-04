@@ -2,6 +2,7 @@ package sqlite;
 
 
 import java.util.ArrayList;
+
 import static sqlite.Consts.*;
 
 /**
@@ -14,7 +15,7 @@ class Printer {
      *
      * @param driverName jdbc driver
      */
-    public static void printDriverName(String driverName) {
+    static void printDriverName(String driverName) {
         System.out.println(MESSAGE_DB_DRIVER + driverName);
     }
 
@@ -23,14 +24,14 @@ class Printer {
      *
      * @param url database url
      */
-    public static void printDBConnection(String url) {
+    static void printDBConnection(String url) {
         System.out.println(MESSAGE_OPENED_DB + url);
     }
 
     /**
      * Prints DB close message
      */
-    public static void printCloseDBMessage() {
+    static void printCloseDBMessage() {
         System.out.println(MESSAGE_CLOSED_DB);
     }
 
@@ -39,7 +40,7 @@ class Printer {
      *
      * @param tableName
      */
-    public static void printTableAddedMessage(String tableName) {
+    static void printTableAddedMessage(String tableName) {
         System.out.println(tableName + MESSAGE_TABLE_ADDED);
     }
 
@@ -49,7 +50,7 @@ class Printer {
      * @param tableName
      * @param triggerName
      */
-    public static void printTriggerAddedMessage(String tableName, String triggerName) {
+    static void printTriggerAddedMessage(String tableName, String triggerName) {
         System.out.println(MESSAGE_TRIGGER + triggerName + MESSAGE_TRIGGER_ADDED + tableName);
     }
 
@@ -59,7 +60,7 @@ class Printer {
      * @param header table header or column names
      * @param result 2D array containing query result
      */
-    public static void printAsList(String[] header, ArrayList<Object[]> result) {
+    static void printAsList(String[] header, ArrayList<Object[]> result) {
         System.out.println("\n");
         if (result.size() > 0) {
             // Print table data row by row
@@ -80,7 +81,7 @@ class Printer {
      * @param header table header or column names
      * @param result 2D array containing query result
      */
-    public static void printAsTable(String[] header, ArrayList<Object[]> result) {
+    static void printAsTable(String[] header, ArrayList<Object[]> result) {
         System.out.println("\n");
         if (result.size() > 0) {
             // Get column spacing based on number of columns
@@ -120,7 +121,7 @@ class Printer {
      *
      * @param result result of INSERT query.
      */
-    public static void printBeneficiaryAddedMessage(Object result) {
+    static void printBeneficiaryAddedMessage(Object result) {
         // If result is a number then insert returned an ID and hence was successful
         if (result instanceof Long || result instanceof Integer) {
             System.out.println(TABLE_NAME_BENEFICIARY + MESSAGE_SUCCESSFULLY_ADDED);
@@ -132,13 +133,13 @@ class Printer {
         }
     }
 
-    public static void printClaimAddedMessage(Object result, String policyNo) {
+    static void printClaimAddedMessage(Object result, String policyNo) {
         // If result is a number then insert returned an ID and hence was successful
         if (result instanceof Long || result instanceof Integer) {
             System.out.println(TABLE_NAME_CLAIM + MESSAGE_SUCCESSFULLY_ADDED);
         } else if (result instanceof String) {
             // if result is a string then it is definitely an error message
-            result = insertString((String) result,policyNo,'#');
+            result = insertString((String) result, policyNo, '#');
             System.out.println(result);
         } else {
             System.out.println(MESSAGE_INVALID_CLAIM);
