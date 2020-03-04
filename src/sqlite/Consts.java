@@ -57,18 +57,13 @@ public class Consts {
     public static final String[] TABLE_COLUMN_VALUES_POLICY = new String[]
             {Consts.TABLE_AUTO_ID
                     , TABLE_COLUMN_EFFECTIVE + " BIGINT NOT NULL"
-                    , TABLE_COLUMN_EXPIRY + " BIGINT NOT NULL CHECK (" + TABLE_COLUMN_EXPIRY + " > " + TABLE_COLUMN_EFFECTIVE + ")"
+                    , TABLE_COLUMN_EXPIRY + " BIGINT NOT NULL"
                     , TABLE_COLUMN_PREMIUM + " DECIMAL NOT NULL"
-                    , TABLE_COLUMN_IS_VALID + " INTEGER NOT NULL CHECK (" + TABLE_COLUMN_IS_VALID + " IN (0,1)) default 0"
-                    , TABLE_COLUMN_POLICY_TYPE + " TEXT NOT NULL CHECK (" +
-                    "(LOWER(" + TABLE_COLUMN_POLICY_TYPE + ") = 'travel' " +
-                    "AND ((" + TABLE_COLUMN_EXPIRY + " - " + TABLE_COLUMN_EFFECTIVE + ")/86400 <= 30)) " +
-                    "OR LOWER(" + TABLE_COLUMN_POLICY_TYPE + ") = 'motor' " +
-                    "OR LOWER(" + TABLE_COLUMN_POLICY_TYPE + ") = 'medical')"
+                    , TABLE_COLUMN_IS_VALID + " INTEGER NOT NULL CHECK (" + TABLE_COLUMN_IS_VALID + " IN (0,1)) default 1"
+                    , TABLE_COLUMN_POLICY_TYPE + " TEXT NOT NULL CHECK (LOWER(" + TABLE_COLUMN_POLICY_TYPE + ") IN  ('travel', 'motor', 'medical'))"
                     , TABLE_COLUMN_POLICY_NO + " TEXT UNIQUE NOT NULL GENERATED ALWAYS AS " +
                     "( STRFTIME('%Y',datetime(" + TABLE_COLUMN_EFFECTIVE + ", 'unixepoch')) || '-' || "
                     + TABLE_COLUMN_POLICY_TYPE + " || '-' || " + TABLE_COLUMN_ID + " ) STORED"
-
             };
 
     // *************************** Parameters for travel table ***************************
@@ -149,6 +144,15 @@ public class Consts {
                     "END ",
                     "WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ";",
             };
+
+    public static final String TRIGGER_TRAVEL_VALIDATE = "travel_validate";
+    public static final String[] TRIGGER_STATEMENTS_TRAVEL_VALIDATE = new String[]
+            {"UPDATE " + TABLE_NAME_POLICY + " SET " + TABLE_COLUMN_IS_VALID,
+                    "= (case when " + TABLE_NAME_POLICY + "." + TABLE_COLUMN_EFFECTIVE + " > " + TABLE_NAME_POLICY + "." + TABLE_COLUMN_EXPIRY + " or ",
+                    " (" + TABLE_NAME_POLICY + "." + TABLE_COLUMN_EXPIRY + " - " + TABLE_NAME_POLICY + "." + TABLE_COLUMN_EFFECTIVE + ")/86400 > 30 then 0",
+                    " else 1 end)",
+                    " where new." + TABLE_COLUMN_POLICY_NO + " = " + TABLE_NAME_POLICY + "." + TABLE_COLUMN_POLICY_NO + ";",};
+
     public static final String TRIGGER_TRAVEL_DELETE = "travel_delete";
     public static final String[] TRIGGER_STATEMENTS_TRAVEL_DELETE = new String[]
             {"DELETE FROM " + TABLE_NAME_POLICY + " WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "OLD." + TABLE_COLUMN_POLICY_NO + ";",};
@@ -160,6 +164,13 @@ public class Consts {
                     " SET " + TABLE_COLUMN_PREMIUM + " = 0.2*NEW." + TABLE_COLUMN_VEHICLE_PRICE,
                     " WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ";",
             };
+    public static final String TRIGGER_MOTOR_VALIDATE = "motor_validate";
+    public static final String[] TRIGGER_STATEMENTS_MOTOR_VALIDATE = new String[]
+            {"UPDATE " + TABLE_NAME_POLICY + " SET " + TABLE_COLUMN_IS_VALID,
+                    "= (case when " + TABLE_NAME_POLICY + "." + TABLE_COLUMN_EFFECTIVE + " > " + TABLE_NAME_POLICY + "." + TABLE_COLUMN_EXPIRY + " then 0",
+                    " else 1 end)",
+                    " where new." + TABLE_COLUMN_POLICY_NO + " = " + TABLE_NAME_POLICY + "." + TABLE_COLUMN_POLICY_NO + ";",};
+
     public static final String TRIGGER_MOTOR_DELETE = "motor_delete";
     public static final String[] TRIGGER_STATEMENTS_MOTOR_DELETE = new String[]
             {"DELETE FROM " + TABLE_NAME_POLICY + " WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "OLD." + TABLE_COLUMN_POLICY_NO + ";",};
@@ -174,9 +185,17 @@ public class Consts {
                     " END) FROM " + TABLE_NAME_BENEFICIARY + " AS T WHERE T." + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ")",
                     " WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ";",
             };
+
+    public static final String TRIGGER_MEDICAL_VALIDATE = "medical_validate";
+    public static final String[] TRIGGER_STATEMENTS_MEDICAL_VALIDATE = new String[]
+            {"    update policy set is_valid",
+                    " = (case when policy.effective > policy.expiry or",
+                    " (select count(*) from beneficiary where beneficiary.policy_no = policy.policy_no)<1 then 0 else 1 end)",
+                    " where new.policy_no = policy.policy_no;",};
+
     public static final String TRIGGER_MEDICAL_DELETE = "medical_delete";
     public static final String[] TRIGGER_STATEMENTS_MEDICAL_DELETE = new String[]
-            {"DELETE FROM " + TABLE_NAME_POLICY + " WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "OLD." + TABLE_COLUMN_POLICY_NO,
+            {"UPDATE " + TABLE_NAME_POLICY + " set is_valid = 0 WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "OLD." + TABLE_COLUMN_POLICY_NO,
                     " AND (SELECT COUNT(*) FROM " + TABLE_NAME_BENEFICIARY + " as T ",
                     "WHERE T." + TABLE_COLUMN_POLICY_NO + " = OLD." + TABLE_COLUMN_POLICY_NO + ") < 1;",};
     public static final String TRIGGER_MEDICAL_ONE_SELF = "medical_self";

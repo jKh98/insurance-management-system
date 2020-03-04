@@ -106,28 +106,36 @@ public class TestDemo {
         //      END
         manager.addTriggerToTable(Consts.TABLE_NAME_TRAVEL, Consts.TRIGGER_TRAVEL_PREMIUM, Consts.SQL_AFTER_INSERT_ON, Consts.TRIGGER_STATEMENTS_TRAVEL_PREMIUM);
 
-        // 2. Travel delete trigger that deletes travel policy from policy table
+        // 2. Travel validate trigger that checks if new policy is valid
+        //
+        manager.addTriggerToTable(Consts.TABLE_NAME_TRAVEL, Consts.TRIGGER_TRAVEL_VALIDATE, Consts.SQL_AFTER_INSERT_ON, Consts.TRIGGER_STATEMENTS_TRAVEL_VALIDATE);
+
+        // 3. Travel delete trigger that deletes travel policy from policy table
         // CREATE TRIGGER IF NOT EXISTS travel_delete
         //      AFTER DELETE ON travel BEGIN
         //          DELETE FROM policy WHERE policy_no = OLD.policy_no;
         //      END
         manager.addTriggerToTable(Consts.TABLE_NAME_TRAVEL, Consts.TRIGGER_TRAVEL_DELETE, Consts.SQL_AFTER_DELETE_ON, Consts.TRIGGER_STATEMENTS_TRAVEL_DELETE);
 
-        // 3. Motor premium trigger that computes motor policy premium
+        // 4. Motor premium trigger that computes motor policy premium
         // CREATE TRIGGER IF NOT EXISTS motor_premium
         //      AFTER INSERT ON motor BEGIN
         //          UPDATE policy SET premium = 0.2*NEW.vehicle_price WHERE policy_no = NEW.policy_no;
         //      END
         manager.addTriggerToTable(Consts.TABLE_NAME_MOTOR, Consts.TRIGGER_MOTOR_PREMIUM, Consts.SQL_AFTER_INSERT_ON, Consts.TRIGGER_STATEMENTS_MOTOR_PREMIUM);
 
-        // 4. Motor delete trigger that deletes motor policy from policy table
+        // 5. Motor validate trigger that checks if new policy is valid
+        //
+        manager.addTriggerToTable(Consts.TABLE_NAME_MOTOR, Consts.TRIGGER_MOTOR_VALIDATE, Consts.SQL_AFTER_INSERT_ON, Consts.TRIGGER_STATEMENTS_MOTOR_VALIDATE);
+
+        // 6. Motor delete trigger that deletes motor policy from policy table
         // CREATE TRIGGER IF NOT EXISTS motor_delete
         //      AFTER DELETE ON motor BEGIN
         //          DELETE FROM policy WHERE policy_no = OLD.policy_no;
         //      END
         manager.addTriggerToTable(Consts.TABLE_NAME_MOTOR, Consts.TRIGGER_MOTOR_DELETE, Consts.SQL_AFTER_DELETE_ON, Consts.TRIGGER_STATEMENTS_MOTOR_DELETE);
 
-        // 5. Medical premium trigger that computes medical policy premium
+        // 7. Medical premium trigger that computes medical policy premium
         // CREATE TRIGGER IF NOT EXISTS medical_premium
         //      AFTER INSERT ON beneficiary BEGIN
         //          UPDATE policy SET premium = (
@@ -141,7 +149,11 @@ public class TestDemo {
         //      END
         manager.addTriggerToTable(Consts.TABLE_NAME_BENEFICIARY, Consts.TRIGGER_MEDICAL_PREMIUM, Consts.SQL_AFTER_INSERT_ON, Consts.TRIGGER_STATEMENTS_MEDICAL_PREMIUM);
 
-        // 6. Medical delete trigger that deletes travel policy from policy table
+        // 8. Medical validate trigger that checks if new policy is valid
+        //
+        manager.addTriggerToTable(Consts.TABLE_NAME_BENEFICIARY, Consts.TRIGGER_MEDICAL_VALIDATE, Consts.SQL_AFTER_INSERT_ON, Consts.TRIGGER_STATEMENTS_MEDICAL_VALIDATE);
+
+        // 9. Medical delete trigger that deletes travel policy from policy table
         // CREATE TRIGGER IF NOT EXISTS medical_delete
         //      AFTER DELETE ON beneficiary BEGIN
         //          DELETE FROM policy WHERE policy_no = OLD.policy_no AND
@@ -149,7 +161,7 @@ public class TestDemo {
         //      END
         manager.addTriggerToTable(Consts.TABLE_NAME_BENEFICIARY, Consts.TRIGGER_MEDICAL_DELETE, Consts.SQL_AFTER_DELETE_ON, Consts.TRIGGER_STATEMENTS_MEDICAL_DELETE);
 
-        // 7. Medical self trigger that makes sure there is one self per policy_no
+        // 10. Medical self trigger that makes sure there is one self per policy_no
         // CREATE TRIGGER IF NOT EXISTS medical_self
         //      BEFORE INSERT ON beneficiary BEGIN
         //          SELECT
@@ -161,7 +173,7 @@ public class TestDemo {
         //      END
         manager.addTriggerToTable(Consts.TABLE_NAME_BENEFICIARY, Consts.TRIGGER_MEDICAL_ONE_SELF, Consts.SQL_BEFORE_INSERT_ON, Consts.TRIGGER_STATEMENTS_MEDICAL_SELF);
 
-        // 8. Claim abort trigger that makes sure incurred date is within expiry and effective and that policy number is valid
+        // 11. Claim abort trigger that makes sure incurred date is within expiry and effective and that policy number is valid
         // CREATE TRIGGER IF NOT EXISTS claim_abort
         //      BEFORE INSERT ON claim BEGIN
         //          SELECT CASE WHEN  NEW.incurred_date NOT BETWEEN (SELECT effective FROM policy WHERE policy_no = NEW.policy_no ) AND
