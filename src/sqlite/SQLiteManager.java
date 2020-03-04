@@ -138,8 +138,8 @@ public class SQLiteManager {
             }
             triggerQuery.append(SQL_END);
             // Prepared statement for new table
-            preparedStatement = connection.prepareStatement(triggerQuery.toString());
             System.out.println(triggerQuery.toString());
+            preparedStatement = connection.prepareStatement(triggerQuery.toString());
             preparedStatement.executeUpdate();
             // Close prepared statement
             preparedStatement.close();

@@ -1,7 +1,9 @@
 package test;
 
 import sqlite.*;
+
 import static sqlite.Consts.*;
+
 import java.util.HashMap;
 
 
@@ -21,7 +23,7 @@ public class TestDemo {
         // 2. Add tables if they do not exist
         setUpTables(tableAdder);
         // 3. Add corresponding table triggers if they do not exist
-        setUpTableTriggers(manager);
+        setUpTableTriggers(triggerAdder);
         // 4. Insert test table values for travel, motor and medical policies
         insertTestPolicyRecords(inserter);
         // 5. Select all policy records and print
@@ -37,7 +39,7 @@ public class TestDemo {
     /**
      * Sets up all database tables based on designed schema
      *
-     * @param tableAdder
+     * @param tableAdder table adder helper
      */
     private static void setUpTables(TableAdder tableAdder) {
 
@@ -56,99 +58,32 @@ public class TestDemo {
     /**
      * Sets up all database triggers on tables based on design specifications
      *
-     * @param manager
+     * @param triggerAdder trigger adder helper
      */
-    private static void setUpTableTriggers(SQLiteManager manager) {
+    private static void setUpTableTriggers(TriggerAdder triggerAdder) {
 
         // 1. Travel premium trigger that computes travel policy premium
-        // CREATE TRIGGER IF NOT EXISTS travel_premium
-        //      AFTER INSERT ON travel BEGIN
-        //          UPDATE policy SET premium =
-        //          CASE WHEN NEW.family = 1 THEN 10*(expiry - effective)/86400
-        //               WHEN NEW.family = 0 THEN 5*(expiry - effective)/86400 END
-        //          WHERE policy_no = NEW.policy_no;
-        //      END
-        manager.addTriggerToTable(TABLE_NAME_TRAVEL, TRIGGER_TRAVEL_PREMIUM, SQL_AFTER_INSERT_ON, TRIGGER_STATEMENTS_TRAVEL_PREMIUM);
-
+        triggerAdder.addTravelPremiumTrigger();
         // 2. Travel validate trigger that checks if new policy is valid
-        //
-        manager.addTriggerToTable(TABLE_NAME_TRAVEL, TRIGGER_TRAVEL_VALIDATE, SQL_AFTER_INSERT_ON, TRIGGER_STATEMENTS_TRAVEL_VALIDATE);
-
+        triggerAdder.addTravelValidationTrigger();
         // 3. Travel delete trigger that deletes travel policy from policy table
-        // CREATE TRIGGER IF NOT EXISTS travel_delete
-        //      AFTER DELETE ON travel BEGIN
-        //          DELETE FROM policy WHERE policy_no = OLD.policy_no;
-        //      END
-        manager.addTriggerToTable(TABLE_NAME_TRAVEL, TRIGGER_TRAVEL_DELETE, SQL_AFTER_DELETE_ON, TRIGGER_STATEMENTS_TRAVEL_DELETE);
-
+        triggerAdder.addTravelDeletionTrigger();
         // 4. Motor premium trigger that computes motor policy premium
-        // CREATE TRIGGER IF NOT EXISTS motor_premium
-        //      AFTER INSERT ON motor BEGIN
-        //          UPDATE policy SET premium = 0.2*NEW.vehicle_price WHERE policy_no = NEW.policy_no;
-        //      END
-        manager.addTriggerToTable(TABLE_NAME_MOTOR, TRIGGER_MOTOR_PREMIUM, SQL_AFTER_INSERT_ON, TRIGGER_STATEMENTS_MOTOR_PREMIUM);
-
+        triggerAdder.addMotorPremiumTrigger();
         // 5. Motor validate trigger that checks if new policy is valid
-        //
-        manager.addTriggerToTable(TABLE_NAME_MOTOR, TRIGGER_MOTOR_VALIDATE, SQL_AFTER_INSERT_ON, TRIGGER_STATEMENTS_MOTOR_VALIDATE);
-
+        triggerAdder.addMotorValidationTrigger();
         // 6. Motor delete trigger that deletes motor policy from policy table
-        // CREATE TRIGGER IF NOT EXISTS motor_delete
-        //      AFTER DELETE ON motor BEGIN
-        //          DELETE FROM policy WHERE policy_no = OLD.policy_no;
-        //      END
-        manager.addTriggerToTable(TABLE_NAME_MOTOR, TRIGGER_MOTOR_DELETE, SQL_AFTER_DELETE_ON, TRIGGER_STATEMENTS_MOTOR_DELETE);
-
+        triggerAdder.addMotorDeletionTrigger();
         // 7. Medical premium trigger that computes medical policy premium
-        // CREATE TRIGGER IF NOT EXISTS medical_premium
-        //      AFTER INSERT ON beneficiary BEGIN
-        //          UPDATE policy SET premium = (
-        //              SELECT SUM(
-        //                  CASE WHEN (STRFTIME('%Y','now') - STRFTIME('%Y',datetime(T.birth_date, 'unixepoch'))) < 10 THEN 15
-        //                       WHEN (STRFTIME('%Y','now') - STRFTIME('%Y',datetime(T.birth_date, 'unixepoch'))) BETWEEN 11 AND 45 THEN 30
-        //                       WHEN (STRFTIME('%Y','now') - STRFTIME('%Y',datetime(T.birth_date, 'unixepoch'))) > 45 THEN 45  END)
-        //              FROM beneficiary AS T
-        //              WHERE T.policy_no = NEW.policy_no)
-        //          WHERE policy_no = NEW.policy_no;
-        //      END
-        manager.addTriggerToTable(TABLE_NAME_BENEFICIARY, TRIGGER_MEDICAL_PREMIUM, SQL_AFTER_INSERT_ON, TRIGGER_STATEMENTS_MEDICAL_PREMIUM);
-
+        triggerAdder.addMedicalPremiumTrigger();
         // 8. Medical validate trigger that checks if new policy is valid
-        //
-        manager.addTriggerToTable(TABLE_NAME_BENEFICIARY, TRIGGER_MEDICAL_VALIDATE, SQL_AFTER_INSERT_ON, TRIGGER_STATEMENTS_MEDICAL_VALIDATE);
-
+        triggerAdder.addMedicalValidationTrigger();
         // 9. Medical delete trigger that deletes travel policy from policy table
-        // CREATE TRIGGER IF NOT EXISTS medical_delete
-        //      AFTER DELETE ON beneficiary BEGIN
-        //          DELETE FROM policy WHERE policy_no = OLD.policy_no AND
-        //              (SELECT COUNT(*) FROM beneficiary as T WHERE T.policy_no = OLD.policy_no) < 1;
-        //      END
-        manager.addTriggerToTable(TABLE_NAME_BENEFICIARY, TRIGGER_MEDICAL_DELETE, SQL_AFTER_DELETE_ON, TRIGGER_STATEMENTS_MEDICAL_DELETE);
-
+        triggerAdder.addMedicalDeletionTrigger();
         // 10. Medical self trigger that makes sure there is one self per policy_no
-        // CREATE TRIGGER IF NOT EXISTS medical_self
-        //      BEFORE INSERT ON beneficiary BEGIN
-        //          SELECT
-        //              CASE WHEN  NEW.relation = 'self' AND
-        //                  (SELECT COUNT(*) FROM beneficiary WHERE beneficiary.policy_no = NEW.policy_no AND beneficiary.relation = 'self')>0
-        //              THEN RAISE (ABORT, 'Can only have one beneficiary as self')
-        //              END;
-        //          END;
-        //      END
-        manager.addTriggerToTable(TABLE_NAME_BENEFICIARY, TRIGGER_MEDICAL_ONE_SELF, SQL_BEFORE_INSERT_ON, TRIGGER_STATEMENTS_MEDICAL_SELF);
-
+        triggerAdder.addMedicalOneSelfTrigger();
         // 11. Claim abort trigger that makes sure incurred date is within expiry and effective and that policy number is valid
-        // CREATE TRIGGER IF NOT EXISTS claim_abort
-        //      BEFORE INSERT ON claim BEGIN
-        //          SELECT CASE WHEN  NEW.incurred_date NOT BETWEEN (SELECT effective FROM policy WHERE policy_no = NEW.policy_no ) AND
-        //                          (SELECT expiry FROM policy WHERE policy_no = NEW.policy_no )
-        //                          THEN RAISE (ABORT, 'Claim is rejected because Policy# is inactive or expired!')
-        //                      WHEN NOT EXISTS (SELECT policy_no FROM policy WHERE policy_no = NEW.policy_no)
-        //                          THEN RAISE (ABORT, 'Cannot submit a claim for Policy#  because it does not exist!')
-        //                  END;
-        //           END;
-        //      END
-        manager.addTriggerToTable(TABLE_NAME_CLAIM, TRIGGER_CLAIM_ABORT, SQL_BEFORE_INSERT_ON, TRIGGER_STATEMENTS_CLAIM_ABORT);
+        triggerAdder.addClaimAbortTrigger();
     }
 
     /**
