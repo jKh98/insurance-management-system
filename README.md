@@ -7,4 +7,4 @@ policy has a list of related beneficiary with at least one associated beneficiar
 A beneficiary type is charactarized by name of the person, their relationship (self, spouse ...), their birth date and gender. A medical policy may have only one beneficiary as self.
 
 # requirements
-Add sqlite-jdbc-3.31.1.jar library as a dependency available for download at https://jar-download.com/artifacts/io.github.willena/sqlite-jdbc/3.31.1/source-code
+Add sqlite-jdbc-3.31.1.jar library as a dependency available in ./lib forlder or download at https://jar-download.com/artifacts/io.github.willena/sqlite-jdbc/3.31.1/source-code
