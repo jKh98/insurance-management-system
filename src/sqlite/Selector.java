@@ -61,8 +61,8 @@ public class Selector {
                 DBUtils.dot(TABLE_NAME_TRAVEL, TABLE_COLUMN_DESTINATION),
                 DBUtils.dot(TABLE_NAME_TRAVEL, TABLE_COLUMN_FAMILY),
         };
-        conditions = new String[]{DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO) + " = ",
-                DBUtils.dot(TABLE_NAME_TRAVEL, TABLE_COLUMN_POLICY_NO)};
+        conditions = new String[]{DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_ID) + " = ",
+                DBUtils.dot(TABLE_NAME_TRAVEL, TABLE_COLUMN_POLICY_ID)};
 
         result = manager.selectDataFromTable(tableNames, selections, conditions, null
         );
@@ -107,8 +107,8 @@ public class Selector {
                 DBUtils.dot(TABLE_NAME_MOTOR, TABLE_COLUMN_VEHICLE_PRICE),
         };
         conditions = new String[]{
-                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO) + " = ",
-                DBUtils.dot(TABLE_NAME_MOTOR, TABLE_COLUMN_POLICY_NO),
+                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_ID) + " = ",
+                DBUtils.dot(TABLE_NAME_MOTOR, TABLE_COLUMN_POLICY_ID),
         };
 
         result = manager.selectDataFromTable(tableNames, selections, conditions, null);
@@ -154,14 +154,14 @@ public class Selector {
                 DBUtils.parenthesise(
                         DBUtils.constructSelectQuery(new String[]{TABLE_NAME_BENEFICIARY},
                         new String[]{SQL_COUNT + DBUtils.parenthesise(SQL_ALL)},
-                        new String[]{DBUtils.dot(TABLE_NAME_BENEFICIARY, TABLE_COLUMN_POLICY_NO)
-                                + " = " + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO),
+                        new String[]{DBUtils.dot(TABLE_NAME_BENEFICIARY, TABLE_COLUMN_POLICY_ID)
+                                + " = " + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_ID),
                                 " AND " + TABLE_COLUMN_RELATION + " <> 'self'"})),
         };
         // Specify conditions
         conditions = new String[]{
-                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO) + " = ",
-                DBUtils.dot(TABLE_NAME_BENEFICIARY, TABLE_COLUMN_POLICY_NO),
+                DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_ID) + " = ",
+                DBUtils.dot(TABLE_NAME_BENEFICIARY, TABLE_COLUMN_POLICY_ID),
         };
 
         // Execute query
