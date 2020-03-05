@@ -68,15 +68,17 @@ public class TableAdder {
     public void addTravelTable() {
         tableName = TABLE_NAME_TRAVEL;
         columns = new String[]{TABLE_AUTO_ID
-                , TABLE_COLUMN_POLICY_NO + " TEXT NOT NULL UNIQUE CHECK ( " + TABLE_COLUMN_POLICY_NO + " LIKE '%travel%')"
+                , TABLE_COLUMN_POLICY_ID + " INTEGER NOT NULL UNIQUE "
                 , TABLE_COLUMN_DEPARTURE + " TEXT NOT NULL"
                 , TABLE_COLUMN_DESTINATION + " TEXT NOT NULL"
                 , TABLE_COLUMN_FAMILY + " INTEGER NOT NULL CHECK (" + TABLE_COLUMN_FAMILY + " IN (0,1))"
-                , " CONSTRAINT " + TABLE_CONSTRAINT_TRAVEL + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_NO + ") REFERENCES " +
-                TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
+                , " CONSTRAINT " + TABLE_CONSTRAINT_TRAVEL + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_ID + ") REFERENCES " +
+                TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_ID +
                 ") ON DELETE CASCADE"
         };
         manager.addTableToDB(tableName, columns);
+
+//        CHECK ( " + TABLE_COLUMN_POLICY_NO + " LIKE '%travel%')
     }
 
     /**
@@ -94,14 +96,14 @@ public class TableAdder {
     public void addMotorTable() {
         tableName = TABLE_NAME_MOTOR;
         columns = new String[]{TABLE_AUTO_ID
-                , TABLE_COLUMN_POLICY_NO + " TEXT NOT NULL UNIQUE CHECK ( " + TABLE_COLUMN_POLICY_NO + " LIKE '%motor%') "
+                , TABLE_COLUMN_POLICY_ID + " TEXT NOT NULL UNIQUE"
                 , TABLE_COLUMN_VEHICLE_PRICE + " DECIMAL NOT NULL"
-                , " CONSTRAINT " + TABLE_CONSTRAINT_MOTOR + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_NO + ") REFERENCES " +
-                TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
+                , " CONSTRAINT " + TABLE_CONSTRAINT_MOTOR + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_ID + ") REFERENCES " +
+                TABLE_NAME_POLICY + "(" + TABLE_COLUMN_ID +
                 ") ON DELETE CASCADE"
         };
         manager.addTableToDB(tableName, columns);
-
+//        CHECK ( " + TABLE_COLUMN_POLICY_NO + " LIKE '%motor%')
     }
 
     /**
@@ -126,12 +128,13 @@ public class TableAdder {
                 , TABLE_COLUMN_RELATION + " TEXT NOT NULL CHECK (LOWER(" + TABLE_COLUMN_RELATION + ") IN ('self','spouse','son','daughter'))"
                 , TABLE_COLUMN_GENDER + " TEXT NOT NULL CHECK (LOWER(" + TABLE_COLUMN_GENDER + ") IN ('male','female'))"
                 , TABLE_COLUMN_BIRTH_DATE + " BIGINT NOT NULL"
-                , TABLE_COLUMN_POLICY_NO + " TEXT NOT NULL CHECK ( " + TABLE_COLUMN_POLICY_NO + " LIKE '%medical%')"
-                , " CONSTRAINT " + TABLE_CONSTRAINT_BENEFICIARY + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_NO + ") REFERENCES " +
-                TABLE_NAME_POLICY + "(" + TABLE_COLUMN_POLICY_NO +
+                , TABLE_COLUMN_POLICY_ID + " TEXT NOT NULL "
+                , " CONSTRAINT " + TABLE_CONSTRAINT_BENEFICIARY + " FOREIGN KEY  (" + TABLE_COLUMN_POLICY_ID + ") REFERENCES " +
+                TABLE_NAME_POLICY + "(" + TABLE_COLUMN_ID +
                 ") ON DELETE CASCADE"
         };
         manager.addTableToDB(tableName, columns);
+//        CHECK ( " + TABLE_COLUMN_POLICY_NO + " LIKE '%medical%')
     }
 
     /**

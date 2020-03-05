@@ -59,6 +59,7 @@ public class Consts {
 
     // *************************** Parameters for travel table ***************************
     public static final String TABLE_NAME_TRAVEL = "travel";
+    public static final String TABLE_COLUMN_POLICY_ID = "policy_id";
     public static final String TABLE_COLUMN_DEPARTURE = "departure";
     public static final String TABLE_COLUMN_DESTINATION = "destination";
     public static final String TABLE_COLUMN_FAMILY = "family";
