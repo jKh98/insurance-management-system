@@ -63,12 +63,12 @@ public class Consts {
     public static final String TABLE_COLUMN_DEPARTURE = "departure";
     public static final String TABLE_COLUMN_DESTINATION = "destination";
     public static final String TABLE_COLUMN_FAMILY = "family";
-    public static final String TABLE_CONSTRAINT_TRAVEL = "fk_policy_no";
+    public static final String TABLE_CONSTRAINT_TRAVEL = "fk_policy_id";
 
     // *************************** Parameters for motor table ***************************
     public static final String TABLE_NAME_MOTOR = "motor";
     public static final String TABLE_COLUMN_VEHICLE_PRICE = "vehicle_price";
-    public static final String TABLE_CONSTRAINT_MOTOR = "fk_policy_no";
+    public static final String TABLE_CONSTRAINT_MOTOR = "fk_policy_id";
 
     // *************************** Parameters for beneficiary table ***************************
     public static final String TABLE_NAME_BENEFICIARY = "beneficiary";
@@ -76,7 +76,7 @@ public class Consts {
     public static final String TABLE_COLUMN_RELATION = "relation";
     public static final String TABLE_COLUMN_GENDER = "gender";
     public static final String TABLE_COLUMN_BIRTH_DATE = "birth_date";
-    public static final String TABLE_CONSTRAINT_BENEFICIARY = "fk_policy_no";
+    public static final String TABLE_CONSTRAINT_BENEFICIARY = "fk_policy_id";
 
     // *************************** Parameters for claim table ***************************
     public static final String TABLE_NAME_CLAIM = "claim";

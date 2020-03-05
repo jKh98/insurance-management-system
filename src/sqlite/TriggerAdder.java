@@ -50,7 +50,7 @@ public class TriggerAdder {
                 "WHEN " + DBUtils.dot("NEW", TABLE_COLUMN_FAMILY) + " = 1 THEN 10*(" + TABLE_COLUMN_EXPIRY + " - " + TABLE_COLUMN_EFFECTIVE + ")/86400 ",
                 "WHEN " + DBUtils.dot("NEW", TABLE_COLUMN_FAMILY) + " = 0 THEN 5*(" + TABLE_COLUMN_EXPIRY + " - " + TABLE_COLUMN_EFFECTIVE + ")/86400 ",
                 "END ",
-                "WHERE " + TABLE_COLUMN_POLICY_NO + " = " + DBUtils.dot("NEW", TABLE_COLUMN_POLICY_NO) + ";",
+                "WHERE " + TABLE_COLUMN_ID + " = " + DBUtils.dot("NEW", TABLE_COLUMN_POLICY_ID) + ";",
         };
         manager.addTriggerToTable(tableName, triggerName, executeOn, statements);
     }
@@ -79,7 +79,7 @@ public class TriggerAdder {
                 "= (case when " + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_EFFECTIVE) + " > " + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_EXPIRY) + " or ",
                 " (" + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_EXPIRY) + " - " + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_EFFECTIVE) + ")/86400 > 30 then 0",
                 " else 1 end)",
-                " where " + DBUtils.dot("NEW", TABLE_COLUMN_POLICY_NO) + " = " + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO) + ";",
+                " where " + DBUtils.dot("NEW", TABLE_COLUMN_POLICY_ID) + " = " + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_ID) + ";",
         };
         manager.addTriggerToTable(tableName, triggerName, executeOn, statements);
 
@@ -101,7 +101,7 @@ public class TriggerAdder {
         triggerName = TRIGGER_TRAVEL_DELETE;
         executeOn = SQL_AFTER_DELETE_ON;
         statements = new String[]{
-                DBUtils.constructDeleteQuery(TABLE_NAME_POLICY, new String[]{TABLE_COLUMN_POLICY_NO + " = " + DBUtils.dot("OLD", TABLE_COLUMN_POLICY_NO) + ";"})
+                DBUtils.constructDeleteQuery(TABLE_NAME_POLICY, new String[]{TABLE_COLUMN_ID + " = " + DBUtils.dot("OLD", TABLE_COLUMN_POLICY_ID) + ";"})
         };
         manager.addTriggerToTable(tableName, triggerName, executeOn, statements);
 
@@ -125,7 +125,7 @@ public class TriggerAdder {
         statements = new String[]{
                 "UPDATE " + TABLE_NAME_POLICY,
                 " SET " + TABLE_COLUMN_PREMIUM + " = 0.2*" + DBUtils.dot("NEW", TABLE_COLUMN_VEHICLE_PRICE),
-                " WHERE " + TABLE_COLUMN_POLICY_NO + " = " + DBUtils.dot("NEW", TABLE_COLUMN_POLICY_NO) + ";",
+                " WHERE " + TABLE_COLUMN_ID + " = " + DBUtils.dot("NEW", TABLE_COLUMN_POLICY_ID) + ";",
         };
         manager.addTriggerToTable(tableName, triggerName, executeOn, statements);
     }
@@ -152,8 +152,8 @@ public class TriggerAdder {
                 "= (case when " + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_EFFECTIVE) + " > " +
                         DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_EXPIRY) + " then 0",
                 " else 1 end)",
-                " where " + DBUtils.dot("NEW", TABLE_COLUMN_POLICY_NO) + " = "
-                        + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO) + ";",
+                " where " + DBUtils.dot("NEW", TABLE_COLUMN_POLICY_ID) + " = "
+                        + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_ID) + ";",
         };
         manager.addTriggerToTable(tableName, triggerName, executeOn, statements);
     }
@@ -174,7 +174,7 @@ public class TriggerAdder {
         triggerName = TRIGGER_MOTOR_DELETE;
         executeOn = SQL_AFTER_DELETE_ON;
         statements = new String[]{
-                DBUtils.constructDeleteQuery(TABLE_NAME_POLICY, new String[]{TABLE_COLUMN_POLICY_NO + " = " + DBUtils.dot("OLD", TABLE_COLUMN_POLICY_NO) + ";"})
+                DBUtils.constructDeleteQuery(TABLE_NAME_POLICY, new String[]{TABLE_COLUMN_ID + " = " + DBUtils.dot("OLD", TABLE_COLUMN_POLICY_ID) + ";"})
         };
         manager.addTriggerToTable(tableName, triggerName, executeOn, statements);
     }
@@ -214,9 +214,9 @@ public class TriggerAdder {
                                         " WHEN (STRFTIME('%Y','now') - STRFTIME('%Y',datetime(" + DBUtils.dot("T", TABLE_COLUMN_BIRTH_DATE) + ", 'unixepoch'))) > 45 THEN 45 " +
                                         " END)"},
                         new String[]{
-                                DBUtils.dot("T", TABLE_COLUMN_POLICY_NO)
-                                        + " = " + DBUtils.dot("NEW", TABLE_COLUMN_POLICY_NO)})),
-                " WHERE " + TABLE_COLUMN_POLICY_NO + " = " + "NEW." + TABLE_COLUMN_POLICY_NO + ";",
+                                DBUtils.dot("T", TABLE_COLUMN_POLICY_ID)
+                                        + " = " + DBUtils.dot("NEW", TABLE_COLUMN_POLICY_ID)})),
+                " WHERE " + TABLE_COLUMN_ID + " = " + "NEW." + TABLE_COLUMN_POLICY_ID + ";",
         };
         manager.addTriggerToTable(tableName, triggerName, executeOn, statements);
     }
@@ -250,10 +250,10 @@ public class TriggerAdder {
                         new String[]{TABLE_NAME_BENEFICIARY},
                         new String[]{SQL_COUNT + DBUtils.parenthesise(SQL_ALL)},
                         new String[]{
-                                DBUtils.dot(TABLE_NAME_BENEFICIARY, TABLE_COLUMN_POLICY_NO)
-                                        + " = " + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO)})) + "< 1",
+                                DBUtils.dot(TABLE_NAME_BENEFICIARY, TABLE_COLUMN_POLICY_ID)
+                                        + " = " + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_ID)})) + "< 1",
                 " then 0 else 1 end)",
-                " where " + DBUtils.dot("NEW", TABLE_COLUMN_POLICY_NO) + " = " + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_POLICY_NO) + ";",
+                " where " + DBUtils.dot("NEW", TABLE_COLUMN_POLICY_ID) + " = " + DBUtils.dot(TABLE_NAME_POLICY, TABLE_COLUMN_ID) + ";",
         };
         manager.addTriggerToTable(tableName, triggerName, executeOn, statements);
     }
@@ -278,14 +278,14 @@ public class TriggerAdder {
         executeOn = SQL_AFTER_DELETE_ON;
         statements = new String[]{
                 "UPDATE " + TABLE_NAME_POLICY + " set " + TABLE_COLUMN_IS_VALID + " = 0 WHERE "
-                        + TABLE_COLUMN_POLICY_NO + " = " + DBUtils.dot("OLD", TABLE_COLUMN_POLICY_NO),
+                        + TABLE_COLUMN_ID + " = " + DBUtils.dot("OLD", TABLE_COLUMN_POLICY_ID),
                 " AND ",
                 DBUtils.parenthesise(DBUtils.constructSelectQuery(
                         new String[]{TABLE_NAME_BENEFICIARY + " as T"},
                         new String[]{SQL_COUNT + DBUtils.parenthesise(SQL_ALL)},
                         new String[]{
-                                DBUtils.dot("T", TABLE_COLUMN_POLICY_NO)
-                                        + " = " + DBUtils.dot("OLD", TABLE_COLUMN_POLICY_NO)})) + "< 1 ;",
+                                DBUtils.dot("T", TABLE_COLUMN_POLICY_ID)
+                                        + " = " + DBUtils.dot("OLD", TABLE_COLUMN_POLICY_ID)})) + "< 1 ;",
         };
         manager.addTriggerToTable(tableName, triggerName, executeOn, statements);
     }
@@ -318,7 +318,7 @@ public class TriggerAdder {
                         new String[]{TABLE_NAME_BENEFICIARY},
                         new String[]{SQL_COUNT + DBUtils.parenthesise(SQL_ALL)},
                         new String[]{
-                                DBUtils.dot(TABLE_NAME_BENEFICIARY, TABLE_COLUMN_POLICY_NO) + " =  " + DBUtils.dot("NEW", TABLE_COLUMN_POLICY_NO),
+                                DBUtils.dot(TABLE_NAME_BENEFICIARY, TABLE_COLUMN_POLICY_ID) + " =  " + DBUtils.dot("NEW", TABLE_COLUMN_POLICY_ID),
                                 " AND " + DBUtils.dot(TABLE_NAME_BENEFICIARY, TABLE_COLUMN_RELATION) + " = 'self'"})) + " > 0 ",
                 "THEN RAISE (ABORT, 'Can only have one beneficiary as self') END;END;"
         };
