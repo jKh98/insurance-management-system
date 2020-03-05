@@ -30,14 +30,14 @@ public class TriggerAdder {
      * <p>
      * Statement:
      * CREATE TRIGGER IF NOT EXISTS travel_premium
-     * AFTER INSERT
-     * ON travel
+     *     AFTER INSERT
+     *     ON travel
      * BEGIN
-     * UPDATE policy
-     * SET premium = CASE
-     * WHEN NEW.family = 1 THEN 10 * (expiry - effective) / 86400
-     * WHEN NEW.family = 0 THEN 5 * (expiry - effective) / 86400 END
-     * WHERE policy_no = NEW.policy_no;
+     *     UPDATE policy
+     *     SET premium = CASE
+     *                       WHEN NEW.family = 1 THEN 10 * (expiry - effective) / 86400
+     *                       WHEN NEW.family = 0 THEN 5 * (expiry - effective) / 86400 END
+     *     WHERE id = NEW.policy_id;
      * END;
      */
     public void addTravelPremiumTrigger() {
@@ -60,14 +60,14 @@ public class TriggerAdder {
      * <p>
      * Statement:
      * CREATE TRIGGER IF NOT EXISTS travel_validate
-     * AFTER INSERT
-     * ON travel
+     *     AFTER INSERT
+     *     ON travel
      * BEGIN
-     * UPDATE policy
-     * SET is_valid= (case
-     * when policy.effective > policy.expiry or (policy.expiry - policy.effective) / 86400 > 30 then 0
-     * else 1 end)
-     * where NEW.policy_no = policy.policy_no;
+     *     UPDATE policy
+     *     SET is_valid= (case
+     *                        when policy.effective > policy.expiry or (policy.expiry - policy.effective) / 86400 > 30 then 0
+     *                        else 1 end)
+     *     where NEW.policy_id = policy.id;
      * END;
      */
     public void addTravelValidationTrigger() {
@@ -90,10 +90,10 @@ public class TriggerAdder {
      * <p>
      * Statement:
      * CREATE TRIGGER IF NOT EXISTS travel_delete
-     * AFTER DELETE
-     * ON travel
+     *     AFTER DELETE
+     *     ON travel
      * BEGIN
-     * DELETE FROM policy WHERE policy_no = OLD.policy_no;
+     *     DELETE FROM policy WHERE id = OLD.policy_id;
      * END;
      */
     public void addTravelDeletionTrigger() {
@@ -112,10 +112,10 @@ public class TriggerAdder {
      * <p>
      * Statement:
      * CREATE TRIGGER IF NOT EXISTS motor_premium
-     * AFTER INSERT
-     * ON motor
+     *     AFTER INSERT
+     *     ON motor
      * BEGIN
-     * UPDATE policy SET premium = 0.2 * NEW.vehicle_price WHERE policy_no = NEW.policy_no;
+     *     UPDATE policy SET premium = 0.2 * NEW.vehicle_price WHERE id = NEW.policy_id;
      * END;
      */
     public void addMotorPremiumTrigger() {
@@ -135,12 +135,12 @@ public class TriggerAdder {
      * <p>
      * Statement:
      * CREATE TRIGGER IF NOT EXISTS motor_validate
-     * AFTER INSERT
-     * ON motor
+     *     AFTER INSERT
+     *     ON motor
      * BEGIN
-     * UPDATE policy
-     * SET is_valid= (case when policy.effective > policy.expiry then 0 else 1 end)
-     * where NEW.policy_no = policy.policy_no;
+     *     UPDATE policy
+     *     SET is_valid= (case when policy.effective > policy.expiry then 0 else 1 end)
+     *     where NEW.policy_id = policy.id;
      * END;
      */
     public void addMotorValidationTrigger() {
@@ -163,10 +163,10 @@ public class TriggerAdder {
      * <p>
      * Statement:
      * CREATE TRIGGER IF NOT EXISTS motor_delete
-     * AFTER DELETE
-     * ON motor
+     *     AFTER DELETE
+     *     ON motor
      * BEGIN
-     * DELETE FROM policy WHERE policy_no = OLD.policy_no;
+     *     DELETE FROM policy WHERE id = OLD.policy_id;
      * END;
      */
     public void addMotorDeletionTrigger() {
@@ -184,20 +184,20 @@ public class TriggerAdder {
      * <p>
      * Statement:
      * CREATE TRIGGER IF NOT EXISTS medical_premium
-     * AFTER INSERT
-     * ON beneficiary
+     *     AFTER INSERT
+     *     ON beneficiary
      * BEGIN
-     * UPDATE policy
-     * SET premium = (SELECT SUM(CASE
-     * WHEN (STRFTIME('%Y', 'now') - STRFTIME('%Y', datetime(T.birth_date, 'unixepoch'))) <
-     * 10 THEN 15
-     * WHEN (STRFTIME('%Y', 'now') -
-     * STRFTIME('%Y', datetime(T.birth_date, 'unixepoch'))) BETWEEN 11 AND 45 THEN 30
-     * WHEN (STRFTIME('%Y', 'now') - STRFTIME('%Y', datetime(T.birth_date, 'unixepoch'))) >
-     * 45 THEN 45 END)
-     * FROM beneficiary AS T
-     * WHERE T.policy_no = NEW.policy_no)
-     * WHERE policy_no = NEW.policy_no;
+     *     UPDATE policy
+     *     SET premium = (SELECT SUM(CASE
+     *                                   WHEN (STRFTIME('%Y', 'now') - STRFTIME('%Y', datetime(T.birth_date, 'unixepoch'))) <
+     *                                        10 THEN 15
+     *                                   WHEN (STRFTIME('%Y', 'now') -
+     *                                         STRFTIME('%Y', datetime(T.birth_date, 'unixepoch'))) BETWEEN 11 AND 45 THEN 30
+     *                                   WHEN (STRFTIME('%Y', 'now') - STRFTIME('%Y', datetime(T.birth_date, 'unixepoch'))) >
+     *                                        45 THEN 45 END)
+     *                    FROM beneficiary AS T
+     *                    WHERE T.policy_id = NEW.policy_id)
+     *     WHERE id = NEW.policy_id;
      * END;
      */
     public void addMedicalPremiumTrigger() {
@@ -226,16 +226,15 @@ public class TriggerAdder {
      * <p>
      * Statement:
      * CREATE TRIGGER IF NOT EXISTS medical_validate
-     * AFTER INSERT
-     * ON beneficiary
+     *     AFTER INSERT
+     *     ON beneficiary
      * BEGIN
-     * UPDATE policy
-     * set is_valid = (case
-     * when policy.effective > policy.expiry or
-     * (SELECT count(*) FROM beneficiary WHERE beneficiary.policy_no = policy.policy_no) < 1
-     * then 0
-     * else 1 end)
-     * where NEW.policy_no = policy.policy_no;
+     *     UPDATE policy
+     *     set is_valid = (case
+     *                         when policy.effective > policy.expiry or
+     *                              (SELECT count(*) FROM beneficiary WHERE beneficiary.policy_id = policy.id) < 1 then 0
+     *                         else 1 end)
+     *     where NEW.policy_id = policy.id;
      * END;
      */
     public void addMedicalValidationTrigger() {
@@ -263,13 +262,13 @@ public class TriggerAdder {
      * <p>
      * Statement:
      * CREATE TRIGGER IF NOT EXISTS medical_delete
-     * AFTER DELETE
-     * ON beneficiary
+     *     AFTER DELETE
+     *     ON beneficiary
      * BEGIN
-     * UPDATE policy
-     * set is_valid = 0
-     * WHERE policy_no = OLD.policy_no
-     * AND (SELECT count(*) FROM beneficiary as T WHERE T.policy_no = OLD.policy_no) < 1;
+     *     UPDATE policy
+     *     set is_valid = 0
+     *     WHERE id = OLD.policy_id
+     *       AND (SELECT count(*) FROM beneficiary as T WHERE T.policy_id = OLD.policy_id) < 1;
      * END;
      */
     public void addMedicalDeletionTrigger() {
@@ -295,15 +294,15 @@ public class TriggerAdder {
      * <p>
      * Statement:
      * CREATE TRIGGER IF NOT EXISTS medical_self
-     * BEFORE INSERT
-     * ON beneficiary
+     *     BEFORE INSERT
+     *     ON beneficiary
      * BEGIN
-     * SELECT CASE
-     * WHEN NEW.relation = 'self' AND (SELECT count(*)
-     * FROM beneficiary
-     * WHERE beneficiary.policy_no = NEW.policy_no
-     * AND beneficiary.relation = 'self') > 0
-     * THEN RAISE(ABORT, 'Can only have one beneficiary as self') END;
+     *     SELECT CASE
+     *                WHEN NEW.relation = 'self' AND (SELECT count(*)
+     *                                                FROM beneficiary
+     *                                                WHERE beneficiary.policy_id = NEW.policy_id
+     *                                                  AND beneficiary.relation = 'self') > 0
+     *                    THEN RAISE(ABORT, 'Can only have one beneficiary as self') END;
      * END;
      * END;
      */
@@ -330,14 +329,14 @@ public class TriggerAdder {
      * <p>
      * Statement:
      * CREATE TRIGGER IF NOT EXISTS claim_abort
-     * BEFORE INSERT
-     * ON claim
+     *     BEFORE INSERT
+     *     ON claim
      * BEGIN
-     * SELECT CASE
-     * WHEN NEW.incurred_date NOT BETWEEN (SELECT effective FROM policy WHERE policy_no = NEW.policy_no) AND (SELECT expiry FROM policy WHERE policy_no = NEW.policy_no)
-     * THEN RAISE(ABORT, 'Claim is rejected because Policy# is inactive or expired!')
-     * WHEN NOT EXISTS(SELECT policy_no FROM policy WHERE policy_no = NEW.policy_no) THEN RAISE(ABORT,
-     * 'Cannot submit a claim for Policy#  because it does not exist!') END;
+     *     SELECT CASE
+     *                WHEN NEW.incurred_date NOT BETWEEN (SELECT effective FROM policy WHERE policy_no = NEW.policy_no) AND (SELECT expiry FROM policy WHERE policy_no = NEW.policy_no)
+     *                    THEN RAISE(ABORT, 'Claim is rejected because Policy# is inactive or expired!')
+     *                WHEN NOT EXISTS(SELECT policy_no FROM policy WHERE policy_no = NEW.policy_no) THEN RAISE(ABORT,
+     *                                                                                                         'Cannot submit a claim for Policy#  because it does not exist!') END;
      * END;
      * END;
      */

@@ -2,6 +2,9 @@ package test;
 
 import java.time.Instant;
 
+/**
+ *  Class that contains test record values
+ */
 public class TestValues {
 
     // Travel policy 1

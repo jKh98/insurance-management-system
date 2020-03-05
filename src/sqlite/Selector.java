@@ -34,15 +34,16 @@ public class Selector {
      * <p>
      * Query:
      * SELECT policy.policy_no,
-     * DATE(policy.effective,'unixepoch'),
-     * DATE(policy.expiry,'unixepoch'),
-     * policy.premium,policy.is_valid,
-     * travel.departure,
-     * travel.destination,
-     * travel.family
-     * FROM   policy,
-     * travel
-     * WHERE  policy.policy_no =  travel.policy_no
+     *        DATE(policy.effective, 'unixepoch'),
+     *        DATE(policy.expiry, 'unixepoch'),
+     *        policy.premium,
+     *        policy.is_valid,
+     *        travel.departure,
+     *        travel.destination,
+     *        travel.family
+     * FROM policy,
+     *      travel
+     * WHERE policy.id = travel.policy_id;
      */
     public void selectAllTravelPolicies() {
         // Array list to store query result
@@ -81,15 +82,15 @@ public class Selector {
      * Prints following: PolicyNo, EffectiveDate, ExpiryDate, Premium, IsValid, VehiclePrice
      * <p>
      * Query:
-     * SELECT   policy.policy_no,
-     * DATE(policy.effective,'unixepoch'),
-     * DATE(policy.expiry,'unixepoch'),
-     * policy.premium,
-     * policy.is_valid,
-     * motor.vehicle_price
-     * FROM     policy,
-     * motor
-     * WHERE    policy.policy_no =  motor.policy_no
+     * SELECT policy.policy_no,
+     *        DATE(policy.effective, 'unixepoch'),
+     *        DATE(policy.expiry, 'unixepoch'),
+     *        policy.premium,
+     *        policy.is_valid,
+     *        motor.vehicle_price
+     * FROM policy,
+     *      motor
+     * WHERE policy.id = motor.policy_id;
      */
     public void selectAllMotorPolicies() {
         // Array list to store query result
@@ -126,15 +127,15 @@ public class Selector {
      * Prints following: PolicyNo, EffectiveDate, ExpiryDate, Premium, IsValid, number of Beneficiaries
      * <p>
      * Query:
-     * SELECT   policy.policy_no,
-     * DATE(policy.effective,'unixepoch'),
-     * DATE(policy.expiry,'unixepoch'),
-     * policy.premium,
-     * policy.is_valid,
-     * (SELECT  count(*) From beneficiary as b1  WHERE  b1.policy_no = policy.policy_no AND b1.relation <> 'self') AS dependents
-     * FROM     policy,
-     * beneficiary
-     * WHERE    policy.policy_no =  beneficiary.policy_no
+     * SELECT policy.policy_no,
+     *        DATE(policy.effective, 'unixepoch'),
+     *        DATE(policy.expiry, 'unixepoch'),
+     *        policy.premium,
+     *        policy.is_valid,
+     *        (SELECT count(*) FROM beneficiary WHERE beneficiary.policy_id = policy.id AND relation <> 'self')
+     * FROM policy,
+     *      beneficiary
+     * WHERE policy.id = beneficiary.policy_id;
      */
     public void selectAllMedicalPolicies() {
         // Array list to store query result
@@ -180,10 +181,9 @@ public class Selector {
      * Prints following: PolicyNo, Premium
      * <p>
      * Query:
-     * SELECT   policy_no,
-     * premium
-     * FROM     policy
-     * WHERE    premium  BETWEEN  ? AND ?
+     * SELECT policy_no, premium
+     * FROM policy
+     * WHERE premium BETWEEN ? AND ?;
      *
      * @param lower lower bound of range
      * @param upper upper bound of range
@@ -204,24 +204,12 @@ public class Selector {
      * Prints following: PolicyNo, count, sum, min, max
      * <p>
      * Query:
-     * SELECT   policy.policy_no,
-     * (SELECT     IFNULL(count(claimed_amount),0)
-     * from        claim
-     * where       policy.policy_no = claim.policy_no),
-     * <p>
-     * (SELECT     IFNULL(sum(claimed_amount),0)
-     * from        claim
-     * where       policy.policy_no = claim.policy_no),
-     * <p>
-     * (SELECT     IFNULL(min(claimed_amount),0)
-     * from        claim
-     * where       policy.policy_no = claim.policy_no),
-     * <p>
-     * (SELECT     IFNULL(max(claimed_amount),0)
-     * from        claim
-     * where       policy.policy_no = claim.policy_no)
-     * <p>
-     * FROM     policy
+     * SELECT policy.policy_no,
+     *        (SELECT IFNULL(count(claimed_amount), 0) FROM claim WHERE policy.policy_no = claim.policy_no),
+     *        (SELECT IFNULL(sum(claimed_amount), 0) FROM claim WHERE policy.policy_no = claim.policy_no),
+     *        (SELECT IFNULL(min(claimed_amount), 0) FROM claim WHERE policy.policy_no = claim.policy_no),
+     *        (SELECT IFNULL(max(claimed_amount), 0) FROM claim WHERE policy.policy_no = claim.policy_no)
+     * FROM policy;
      */
     public void selectPoliciesClaimsData() {
         tableNames = new String[]{TABLE_NAME_POLICY};
