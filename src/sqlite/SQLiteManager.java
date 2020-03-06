@@ -137,7 +137,6 @@ public class SQLiteManager {
                 triggerQuery.append(statement);
             }
             triggerQuery.append(SQL_END);
-            System.out.println(triggerQuery.toString());
             // Prepared statement for new table
             preparedStatement = connection.prepareStatement(triggerQuery.toString());
             preparedStatement.executeUpdate();
@@ -207,7 +206,6 @@ public class SQLiteManager {
             if (values != null && values.length > 0)
                 DBUtils.bindValuesToPreparedStatement(preparedStatement, values);
             // Execute Query and get result
-            System.out.println(selectQuery);
             ResultSet resultSet = preparedStatement.executeQuery();
             // Store result in 2d Array
             result = DBUtils.resultSetToArray(resultSet);
