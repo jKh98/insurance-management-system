@@ -9,5 +9,5 @@ A beneficiary type is charactarized by name of the person, their relationship (s
 The following java console application builds an SQLite databse based on the described system, adds tables and triggers then inserts and selects test data.
 
 # requirements
-. Requires JRE 8 available at (https://www.oracle.com/java/technologies/javase-jre8-downloads.html) 
-. Add sqlite-jdbc-3.31.1.jar library as a dependency available in ./lib forlder or download at https://jar-download.com/artifacts/io.github.willena/sqlite-jdbc/3.31.1/source-code
+* Requires JRE 8 available at (https://www.oracle.com/java/technologies/javase-jre8-downloads.html) 
+* Add sqlite-jdbc-3.31.1.jar library as a dependency available in ./lib forlder or download at https://jar-download.com/artifacts/io.github.willena/sqlite-jdbc/3.31.1/source-code
